@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 int** generateTerrain(int width, int height) {
     // Allocate memory for the rows.
@@ -32,7 +33,7 @@ int** generateTerrain(int width, int height) {
             exit(1);
         }
     }
-
+    /*
     srand(time(NULL));
 
     for (int i = 0; i < width; i++)
@@ -41,7 +42,23 @@ int** generateTerrain(int width, int height) {
         terrain[i][groundLevel] = 1;
         printf("%d %d\n", i, groundLevel);
     }
+    */
 
+    // Set the frequency and amplitude for the sine wave terrain.
+    double frequency = 2 * M_PI / width;
+    double amplitude = height / 4;
+
+    for (int x = 0; x < width; x++) {
+        int h = (int)(height/2 + amplitude * sin(x * frequency));
+
+        for (int y = 0; y < height; y++) {
+            if (y < h) {
+                terrain[x][y] = 0; // air
+            } else {
+                terrain[x][y] = 1; // solid ground
+            }
+        }
+    }
     return terrain;
 }
 

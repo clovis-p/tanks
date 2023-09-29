@@ -15,10 +15,14 @@ void render(SDL_Window** win, SDL_Renderer** ren, int** terrain)
 
     for (int i = 0; i < 1280; i++)
     {
+        int isBelowGround = 0;
         for (int j = 0; j < 720; j++)
         {
-            if (terrain[i][j] == 1)
+            if (terrain[i][j] == 1 || isBelowGround)
+            {
                 SDL_RenderDrawPoint(*ren, i, j);
+                isBelowGround = 1;
+            }
         }
     }
 
