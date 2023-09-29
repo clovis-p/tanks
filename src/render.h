@@ -5,6 +5,6 @@
 #ifndef SDLTEST_RENDER_H
 #define SDLTEST_RENDER_H
 
-void render(SDL_Window** win, SDL_Renderer** ren);
+void render(SDL_Window** win, SDL_Renderer** ren, int** terrain);
 
 #endif //SDLTEST_RENDER_H

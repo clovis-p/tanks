@@ -1,40 +1,55 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
+#include "main.h"
 #include "render.h"
 #include "events.h"
+#include "terraingen.h"
 
-int init(SDL_Window** win, SDL_Renderer** ren);
+const int RESOLUTION_X = 1280;
+const int RESOLUTION_Y = 720;
+
+int initSDL(SDL_Window** win, SDL_Renderer** ren);
 void quitSDL(SDL_Window** win, SDL_Renderer** ren);
+void initGame(int*** terrain);
 
 int main(int argc, char *argv[])
 {
-    SDL_Window* win;
-    SDL_Renderer* ren;
+    SDL_Window *win;
+    SDL_Renderer *ren;
+    int **terrain;
 
     int quit = 0;
 
-    if (init(&win, &ren) < 0)
+    if (initSDL(&win, &ren) < 0)
     {
         return 1;
     }
 
+    initGame(&terrain);
+
     while (!quit)
     {
         SDL_Delay(10);
-        render(&win, &ren);
+        render(&win, &ren, terrain);
         handleEvents(&quit);
     }
 
+    freeTerrain(terrain, RESOLUTION_X);
     quitSDL(&win, &ren);
     return 0;
 }
 
-int init(SDL_Window** win, SDL_Renderer** ren)
+void initGame(int*** terrain)
+{
+    *terrain = generateTerrain(RESOLUTION_X, RESOLUTION_Y);
+}
+
+int initSDL(SDL_Window** win, SDL_Renderer** ren)
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        printf("Failed to init SDL: %s\n", SDL_GetError());
+        printf("Failed to initSDL SDL: %s\n", SDL_GetError());
         return -1;
     }
 
