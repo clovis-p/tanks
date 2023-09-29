@@ -53,7 +53,7 @@ int initSDL(SDL_Window** win, SDL_Renderer** ren)
         return -1;
     }
 
-    *win = SDL_CreateWindow("test",
+    *win = SDL_CreateWindow("tanks",
                             SDL_WINDOWPOS_CENTERED,
                             SDL_WINDOWPOS_CENTERED,
                             1280, 720,
