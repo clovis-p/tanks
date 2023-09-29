@@ -49,7 +49,7 @@ int initSDL(SDL_Window** win, SDL_Renderer** ren)
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        printf("Failed to initSDL SDL: %s\n", SDL_GetError());
+        printf("Failed to init SDL SDL: %s\n", SDL_GetError());
         return -1;
     }
 
