@@ -9,9 +9,9 @@
 
 void render(SDL_Window** win, SDL_Renderer** ren, int** terrain)
 {
-    SDL_SetRenderDrawColor(*ren, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(*ren, 135, 206, 235, 255);
     SDL_RenderClear(*ren);
-    SDL_SetRenderDrawColor(*ren, 255, 255, 255, 255);
+    SDL_SetRenderDrawColor(*ren, 34, 139, 34, 255);
 
     for (int i = 0; i < 1280; i++)
     {
