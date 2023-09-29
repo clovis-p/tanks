@@ -2,8 +2,10 @@
 #include <SDL2/SDL.h>
 
 #include "render.h"
+#include "events.h"
 
 int init(SDL_Window** win, SDL_Renderer** ren);
+void quitSDL(SDL_Window** win, SDL_Renderer** ren);
 
 int main(int argc, char *argv[])
 {
@@ -17,16 +19,14 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    while (quit < 200)
+    while (!quit)
     {
         SDL_Delay(10);
         render(&win, &ren);
-        quit++;
+        handleEvents(&quit);
     }
 
-    SDL_DestroyWindow(win);
-    SDL_DestroyRenderer(ren);
-    SDL_Quit();
+    quitSDL(&win, &ren);
     return 0;
 }
 
@@ -61,3 +61,9 @@ int init(SDL_Window** win, SDL_Renderer** ren)
     return 0;
 }
 
+void quitSDL(SDL_Window** win, SDL_Renderer** ren)
+{
+    SDL_DestroyRenderer(*ren);
+    SDL_DestroyWindow(*win);
+    SDL_Quit();
+}
