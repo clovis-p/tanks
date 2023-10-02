@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 
 #include "render.h"
+//#include "array.h"
 
 void render(SDL_Window** win, SDL_Renderer** ren, int** terrain)
 {
@@ -27,4 +28,24 @@ void render(SDL_Window** win, SDL_Renderer** ren, int** terrain)
     }
 
     SDL_RenderPresent(*ren);
+}
+
+void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x, int y, int width, int height, SDL_Color fg, SDL_Color bg)
+{
+    for (int i = 0; i < width; i++)
+    {
+        for (int j = 0; j < height; j++)
+        {
+            if (array[i][j] == 1)
+            {
+                SDL_SetRenderDrawColor(*ren, fg.r, fg.g, fg.b, fg.a);
+                SDL_RenderDrawPoint(*ren, i + x, j + y);
+            }
+            else if (bg.a != 0)
+            {
+                SDL_SetRenderDrawColor(*ren, bg.r, bg.g, bg.b, bg.a);
+                SDL_RenderDrawPoint(*ren, i + x, j + y);
+            }
+        }
+    }
 }
