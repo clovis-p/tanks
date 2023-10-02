@@ -19,6 +19,13 @@ void handleEvents(int *quit, int **terrain, textures_s *textures)
         *quit = 1;
     }
 
+    if (!terrain[textures->tank1.rect.x + textures->tank1.rect.w / 2][textures->tank1.rect.y + textures->tank1.rect.y + textures->tank1.rect.h / 2])
+    {
+        textures->tank1.rect.y++;
+        printf("tank: %d, %d\n", textures->tank1.rect.x, textures->tank1.rect.y);
+        printf("terrain: %d\n", terrain[textures->tank1.rect.x + textures->tank1.rect.w / 2][textures->tank1.rect.y + textures->tank1.rect.y + textures->tank1.rect.h / 2]);
+    }
+
     if (keyStates[SDL_SCANCODE_D])
     {
         textures->tank1.rect.x += 1;
