@@ -11,13 +11,15 @@ const int RESOLUTION_Y = 720;
 
 int initSDL(SDL_Window** win, SDL_Renderer** ren);
 void quitSDL(SDL_Window** win, SDL_Renderer** ren);
-void initGame(int*** terrain);
+void quitGame(textures_s* textures);
+void initGame(SDL_Renderer** ren, int*** terrain, textures_s* textures);
 
 int main(int argc, char *argv[])
 {
     SDL_Window *win;
     SDL_Renderer *ren;
     int **terrain;
+    textures_s textures;
 
     int quit = 0;
 
@@ -26,12 +28,12 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    initGame(&terrain);
+    initGame(&ren, &terrain, &textures);
 
     while (!quit)
     {
         SDL_Delay(10);
-        render(&win, &ren, terrain);
+        render(&win, &ren, terrain, &textures);
         handleEvents(&quit);
     }
 
@@ -40,9 +42,25 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void initGame(int*** terrain)
+void initGame(SDL_Renderer** ren, int*** terrain, textures_s* textures)
 {
     *terrain = generateTerrain(RESOLUTION_X, RESOLUTION_Y);
+
+    SDL_Surface* buffer = SDL_LoadBMP("../resources/images/red_tank.bmp");
+    if (buffer == NULL)
+    {
+        printf("Failed to load image: %s\n", SDL_GetError());
+    }
+    textures->tank1.texture = SDL_CreateTextureFromSurface(*ren, buffer);
+    SDL_FreeSurface(buffer);
+    SDL_QueryTexture(textures->tank1.texture, NULL, NULL, &textures->tank1.rect.w, &textures->tank1.rect.h);
+    textures->tank1.rect.x = 0;
+    textures->tank1.rect.y = 0;
+}
+
+void quitGame(textures_s* textures)
+{
+    SDL_DestroyTexture(textures->tank1.texture);
 }
 
 int initSDL(SDL_Window** win, SDL_Renderer** ren)

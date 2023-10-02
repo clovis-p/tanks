@@ -5,10 +5,11 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
+#include "main.h"
 #include "render.h"
 //#include "array.h"
 
-void render(SDL_Window** win, SDL_Renderer** ren, int** terrain)
+void render(SDL_Window** win, SDL_Renderer** ren, int** terrain, textures_s* textures)
 {
     SDL_SetRenderDrawColor(*ren, 135, 206, 235, 255);
     SDL_RenderClear(*ren);
@@ -26,6 +27,8 @@ void render(SDL_Window** win, SDL_Renderer** ren, int** terrain)
             }
         }
     }
+
+    SDL_RenderCopyEx(*ren, textures->tank1.texture, NULL, &textures->tank1.rect, 0, NULL, SDL_FLIP_NONE);
 
     SDL_RenderPresent(*ren);
 }
