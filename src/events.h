@@ -5,6 +5,6 @@
 #ifndef TANKS_EVENTS_H
 #define TANKS_EVENTS_H
 
-void handleEvents(int* quit);
+void handleEvents(int* quit, int** terrain, textures_s* textures);
 
 #endif //TANKS_EVENTS_H

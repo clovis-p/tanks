@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     {
         SDL_Delay(10);
         render(&win, &ren, terrain, &textures);
-        handleEvents(&quit);
+        handleEvents(&quit, terrain, &textures);
     }
 
     freeTerrain(terrain, RESOLUTION_X);
