@@ -7,28 +7,18 @@
 
 #include "main.h"
 #include "render.h"
-//#include "array.h"
 
-void render(SDL_Window** win, SDL_Renderer** ren, int** terrain, textures_s* textures)
-{
+int angle = 0;
+
+void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s* textures) {
     SDL_SetRenderDrawColor(*ren, 135, 206, 235, 255);
     SDL_RenderClear(*ren);
     SDL_SetRenderDrawColor(*ren, 34, 139, 34, 255);
 
-    for (int i = 0; i < 1280; i++)
-    {
-        int isBelowGround = 0;
-        for (int j = 0; j < 720; j++)
-        {
-            if (terrain[i][j] == 1 || isBelowGround)
-            {
-                SDL_RenderDrawPoint(*ren, i, j);
-                isBelowGround = 1;
-            }
-        }
-    }
+    SDL_RenderDrawPoints(*ren, terrain->sdlGroundPoints, terrain->groundPointsCount);
 
-    SDL_RenderCopyEx(*ren, textures->tank1.texture, NULL, &textures->tank1.rect, 0, NULL, SDL_FLIP_NONE);
+    angle++;
+    SDL_RenderCopyEx(*ren, textures->tank1.texture, NULL, &textures->tank1.rect, angle, NULL, SDL_FLIP_NONE);
 
     SDL_RenderPresent(*ren);
 }

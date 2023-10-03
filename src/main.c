@@ -11,15 +11,17 @@ const int RESOLUTION_Y = 720;
 
 int initSDL(SDL_Window** win, SDL_Renderer** ren);
 void quitSDL(SDL_Window** win, SDL_Renderer** ren);
-void quitGame(textures_s* textures);
-void initGame(SDL_Renderer** ren, int*** terrain, textures_s* textures);
+void quitGame(textures_s* textures, terrain_s** terrain);
+void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures);
 
 int main(int argc, char *argv[])
 {
     SDL_Window *win;
     SDL_Renderer *ren;
-    int **terrain;
+    terrain_s *terrain;
+
     textures_s textures;
+    int ticks = 0;
 
     int quit = 0;
 
@@ -32,17 +34,25 @@ int main(int argc, char *argv[])
 
     while (!quit)
     {
+        //ticks = SDL_GetTicks();
         SDL_Delay(10);
+        //printf("SDL_Delay: %d\n", SDL_GetTicks() - ticks);
+
+        //ticks = SDL_GetTicks();
         render(&win, &ren, terrain, &textures);
+        //printf("render: %d\n", SDL_GetTicks() - ticks);
+
+        //ticks = SDL_GetTicks();
         handleEvents(&quit, terrain, &textures);
+        //printf("handleEvents: %d\n", SDL_GetTicks() - ticks);
     }
 
-    freeTerrain(terrain, RESOLUTION_X);
+    quitGame(&textures, &terrain);
     quitSDL(&win, &ren);
     return 0;
 }
 
-void initGame(SDL_Renderer** ren, int*** terrain, textures_s* textures)
+void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
 {
     *terrain = generateTerrain(RESOLUTION_X, RESOLUTION_Y);
 
@@ -58,9 +68,10 @@ void initGame(SDL_Renderer** ren, int*** terrain, textures_s* textures)
     textures->tank1.rect.y = 0;
 }
 
-void quitGame(textures_s* textures)
+void quitGame(textures_s* textures, terrain_s** terrain)
 {
     SDL_DestroyTexture(textures->tank1.texture);
+    free(*terrain);
 }
 
 int initSDL(SDL_Window** win, SDL_Renderer** ren)

@@ -5,7 +5,8 @@
 #ifndef TANKS_TERRAINGEN_H
 #define TANKS_TERRAINGEN_H
 
-int** generateTerrain(int width, int height);
-void freeTerrain(int** terrain, int width);
+#include <SDL2/SDL.h>
+
+terrain_s* generateTerrain(int width, int height);
 
 #endif //TANKS_TERRAINGEN_H

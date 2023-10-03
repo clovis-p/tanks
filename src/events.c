@@ -6,7 +6,7 @@
 
 #include "main.h"
 
-void handleEvents(int *quit, int **terrain, textures_s *textures)
+void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
 {
     static SDL_Event event;
 
@@ -19,11 +19,10 @@ void handleEvents(int *quit, int **terrain, textures_s *textures)
         *quit = 1;
     }
 
-    if (!terrain[textures->tank1.rect.x + textures->tank1.rect.w / 2][textures->tank1.rect.y + textures->tank1.rect.y + textures->tank1.rect.h / 2])
+    printf("tank: %d %d\nterrain: %d %d\n", (textures->tank1.rect.x + textures->tank1.rect.w / 2), (textures->tank1.rect.y + textures->tank1.rect.h), terrain->groundLevel[textures->tank1.rect.x + textures->tank1.rect.w / 2], terrain->groundLevel[textures->tank1.rect.y + textures->tank1.rect.h]);
+    if (textures->tank1.rect.y + textures->tank1.rect.h < terrain->groundLevel[textures->tank1.rect.x + textures->tank1.rect.w / 2])
     {
-        textures->tank1.rect.y++;
-        printf("tank: %d, %d\n", textures->tank1.rect.x, textures->tank1.rect.y);
-        printf("terrain: %d\n", terrain[textures->tank1.rect.x + textures->tank1.rect.w / 2][textures->tank1.rect.y + textures->tank1.rect.y + textures->tank1.rect.h / 2]);
+        textures->tank1.rect.y += 1;
     }
 
     if (keyStates[SDL_SCANCODE_D])
