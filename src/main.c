@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <SDL2/SDL.h>
 
 #include "main.h"
@@ -16,6 +17,8 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures);
 
 int main(int argc, char *argv[])
 {
+    setbuf(stdout, NULL);
+    printf("Hello World!\n");
     SDL_Window *win;
     SDL_Renderer *ren;
     terrain_s *terrain;

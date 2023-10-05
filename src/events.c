@@ -19,10 +19,10 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
         *quit = 1;
     }
 
-    printf("tank: %d %d\nterrain: %d %d\n", (textures->tank1.rect.x + textures->tank1.rect.w / 2), (textures->tank1.rect.y + textures->tank1.rect.h), terrain->groundLevel[textures->tank1.rect.x + textures->tank1.rect.w / 2], terrain->groundLevel[textures->tank1.rect.y + textures->tank1.rect.h]);
+    //printf("tank: %d %d\nterrain: %d %d\n", (textures->tank1.rect.x + textures->tank1.rect.w / 2), (textures->tank1.rect.y + textures->tank1.rect.h), terrain->groundLevel[textures->tank1.rect.x + textures->tank1.rect.w / 2], terrain->groundLevel[textures->tank1.rect.y + textures->tank1.rect.h]);
     if (textures->tank1.rect.y + textures->tank1.rect.h < terrain->groundLevel[textures->tank1.rect.x + textures->tank1.rect.w / 2])
     {
-        textures->tank1.rect.y += 1;
+        textures->tank1.rect.y += 2;
     }
 
     if (keyStates[SDL_SCANCODE_D])
