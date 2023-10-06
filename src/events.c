@@ -12,6 +12,9 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
 
     const Uint8 *keyStates = SDL_GetKeyboardState(NULL);
 
+    // For some reason the keyboard keystates "stick", meaning the tank sometimes keeps moving
+    // for a second after the key is released, and for some reason, calling SDL_PumpEvents() fixes this
+    SDL_PumpEvents();
     SDL_PollEvent(&event);
 
     if (event.type == SDL_QUIT || (keyStates[SDL_SCANCODE_LALT] && keyStates[SDL_SCANCODE_F4]))
