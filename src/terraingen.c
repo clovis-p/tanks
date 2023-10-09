@@ -16,6 +16,7 @@ int generateRandomNumber(int min, int max);
 int getCenterMidpointNumber(int midpointCount);
 int isOdd(int number);
 int calculateMidpointNumber(int index, int highestIndex, int k);
+double calculateLinearSlope(int y2, int y1, int x2, int x1);
 
 terrain_s* generateTerrain(int width, int height)
 {
@@ -145,17 +146,22 @@ terrain_s* generateTerrain(int width, int height)
                 printf("L: %d, ", closestLeftGeneratedMidpoint.no);
                 printf("R: %d\n", closestRightGeneratedMidpoint.no);
 
+                int differenceBetweenNeighbours;
+                const double VARIATION_MULTIPLIER = 0.1;
+
                 if (closestLeftGeneratedMidpoint.y > closestRightGeneratedMidpoint.y)
                 {
-                    midpoint[currentMidpointNumber].y = generateRandomNumber(closestRightGeneratedMidpoint.y, closestLeftGeneratedMidpoint.y);
+                    differenceBetweenNeighbours = closestLeftGeneratedMidpoint.y - closestRightGeneratedMidpoint.y;
+                    midpoint[currentMidpointNumber].y = generateRandomNumber(closestRightGeneratedMidpoint.y - (int)(VARIATION_MULTIPLIER * differenceBetweenNeighbours), closestLeftGeneratedMidpoint.y + (int)(VARIATION_MULTIPLIER * differenceBetweenNeighbours));
                 }
                 else if (closestLeftGeneratedMidpoint.y < closestRightGeneratedMidpoint.y)
                 {
-                    midpoint[currentMidpointNumber].y = generateRandomNumber(closestLeftGeneratedMidpoint.y, closestRightGeneratedMidpoint.y);
+                    differenceBetweenNeighbours = closestRightGeneratedMidpoint.y - closestLeftGeneratedMidpoint.y;
+                    midpoint[currentMidpointNumber].y = generateRandomNumber(closestLeftGeneratedMidpoint.y - (int)(VARIATION_MULTIPLIER * differenceBetweenNeighbours), closestRightGeneratedMidpoint.y + (int)(VARIATION_MULTIPLIER * differenceBetweenNeighbours));
                 }
                 else
                 {
-                    midpoint[currentMidpointNumber].y = closestLeftGeneratedMidpoint.y;
+                    midpoint[currentMidpointNumber].y = closestLeftGeneratedMidpoint.y + generateRandomNumber(-1, 1);
                 }
 
                 printf("currentMidpointNumber = %d / %d, %d\n", currentMidpointNumber, (midpointCount - 1), totalGeneratedMidpoints);
@@ -172,6 +178,7 @@ terrain_s* generateTerrain(int width, int height)
 
     terrain->groundPointsCount = 0;
 
+    double a = 0;
     for (int i = 0; i < midpointCount; i++)
     {
         for (int y = 0; y < height; y++)
@@ -194,29 +201,6 @@ terrain_s* generateTerrain(int width, int height)
             }
         }
     }
-
-    /*
-    terrain->groundPointsCount = 0;
-
-    for (int x = 0; x < width; x++)
-    {
-        for (int y = 0; y < height; y++)
-        {
-            if (y >= 360)
-            {
-                terrain->terrainArray[x][y] = 1;
-                terrain->groundLevel[x] = 360;
-                terrain->sdlGroundPoints[terrain->groundPointsCount].x = x;
-                terrain->sdlGroundPoints[terrain->groundPointsCount].y = y;
-                terrain->groundPointsCount++;
-            }
-            else
-            {
-                terrain->terrainArray[x][y] = 0;
-            }
-        }
-    }
-*/
     return terrain;
 }
 
@@ -284,4 +268,9 @@ int calculateMidpointNumber(int index, int highestIndex, int k)
     midpointNumber = (int)pow(2, a) * k;
 
     return midpointNumber;
+}
+
+double calculateLinearSlope(int y2, int y1, int x2, int x1)
+{
+    return (double)(y2 - y1) / (x2 - x1);
 }
