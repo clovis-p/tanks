@@ -35,9 +35,9 @@ terrain_s* generateTerrain(int width, int height)
         int isGenerated;
     };
 
-    int terrainGenPrecision = 9;
-    int highestIndex = terrainGenPrecision + 1;
-    int midpointCount = (int)(pow(2, terrainGenPrecision + 1) + 1);
+    const int TERRAIN_GEN_PRECISION = 9;
+    int highestIndex = TERRAIN_GEN_PRECISION + 1;
+    int midpointCount = (int)(pow(2, TERRAIN_GEN_PRECISION + 1) + 1);
     struct midpoint_s midpoint[midpointCount];
     struct midpoint_s closestLeftGeneratedMidpoint, closestRightGeneratedMidpoint;
     int lastMidpointNumber = -1;
