@@ -12,6 +12,6 @@
 void fireBullet(bullet_s* bullet, textureAndRect_s* tank);
 void updateBullet(bullet_s* bullet);
 void updateBulletPos(bullet_s* bullet);
-int isOutOfBounds(bullet_s* bullet);
+int bulletIsOutOfBounds(bullet_s* bullet);
 
 #endif //TANKS_BULLET_H

@@ -16,7 +16,7 @@ void fireBullet(bullet_s* bullet, textureAndRect_s* tank)
 
 void updateBullet(bullet_s* bullet)
 {
-    if (isOutOfBounds(bullet))
+    if (bulletIsOutOfBounds(bullet))
     {
         bullet->active = 0;
     }
@@ -33,7 +33,7 @@ void updateBulletPos(bullet_s* bullet)
     bullet->rect.y += bullet->speedY;
 }
 
-int isOutOfBounds(bullet_s* bullet)
+int bulletIsOutOfBounds(bullet_s* bullet)
 {
     if (bullet->rect.x < 0 || bullet->rect.x > RESOLUTION_X || bullet->rect.y < 0 || bullet->rect.y > RESOLUTION_Y)
     {
