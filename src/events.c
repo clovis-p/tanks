@@ -37,6 +37,7 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     }
 
     textures->tank1.rect.y = terrain->groundLevel[textures->tank1.rect.x + textures->tank1.rect.w / 2] - textures->tank1.rect.h;
+    textures->tank2.rect.y = terrain->groundLevel[textures->tank2.rect.x + textures->tank2.rect.w / 2] - textures->tank2.rect.h;
 
     if (keyStates[SDL_SCANCODE_D])
     {
@@ -45,6 +46,15 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     if (keyStates[SDL_SCANCODE_A])
     {
         moveTankX(&textures->tank1, -1, terrain);
+    }
+
+    if (keyStates[SDL_SCANCODE_RIGHT])
+    {
+        moveTankX(&textures->tank2, 1, terrain);
+    }
+    if (keyStates[SDL_SCANCODE_LEFT])
+    {
+        moveTankX(&textures->tank2, -1, terrain);
     }
 
     if (keyStates[SDL_SCANCODE_LALT] && keyStates[SDL_SCANCODE_LSHIFT])

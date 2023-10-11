@@ -17,6 +17,7 @@ typedef struct textureAndRect_s
 typedef struct textures_s
 {
     textureAndRect_s tank1;
+    textureAndRect_s tank2;
 } textures_s;
 
 #endif //TANKS_MAIN_H

@@ -65,15 +65,21 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
         printf("Failed to load image: %s\n", SDL_GetError());
     }
     textures->tank1.texture = SDL_CreateTextureFromSurface(*ren, buffer);
-    SDL_FreeSurface(buffer);
     SDL_QueryTexture(textures->tank1.texture, NULL, NULL, &textures->tank1.rect.w, &textures->tank1.rect.h);
     textures->tank1.rect.x = 0;
     textures->tank1.rect.y = 0;
+
+    textures->tank2.texture = SDL_CreateTextureFromSurface(*ren, buffer);
+    SDL_FreeSurface(buffer);
+    SDL_QueryTexture(textures->tank2.texture, NULL, NULL, &textures->tank2.rect.w, &textures->tank2.rect.h);
+    textures->tank2.rect.x = 0;
+    textures->tank2.rect.y = 0;
 }
 
 void quitGame(textures_s* textures, terrain_s** terrain)
 {
     SDL_DestroyTexture(textures->tank1.texture);
+    SDL_DestroyTexture(textures->tank2.texture);
     free(*terrain);
 }
 

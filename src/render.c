@@ -25,6 +25,7 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
 
     //textures->tank1.angle++;
     SDL_RenderCopyEx(*ren, textures->tank1.texture, NULL, &textures->tank1.rect, textures->tank1.angle, NULL, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(*ren, textures->tank2.texture, NULL, &textures->tank2.rect, textures->tank2.angle, NULL, SDL_FLIP_NONE);
 
     SDL_RenderPresent(*ren);
 }
