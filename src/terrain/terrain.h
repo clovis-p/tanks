@@ -21,7 +21,7 @@ typedef struct terrain_s
 } terrain_s;
 
 terrain_s* generateTerrain(int width, int height, int type);
-terrain_s* generateMidpointTerrain(int width, int height);
+terrain_s* generateMidpointTerrain(int width, int height, int precision);
 terrain_s* generateSineTerrain(int width, int height);
 
 

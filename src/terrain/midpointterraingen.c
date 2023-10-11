@@ -19,7 +19,7 @@ int isOdd(int number);
 int calculateMidpointNumber(int index, int highestIndex, int k);
 double calculateLinearSlope(int y2, int y1, int x2, int x1);
 
-terrain_s* generateMidpointTerrain(int width, int height)
+terrain_s* generateMidpointTerrain(int width, int height, int precision)
 {
     terrain_s* terrain;
 
@@ -46,7 +46,7 @@ terrain_s* generateMidpointTerrain(int width, int height)
         int isGenerated;
     };
 
-    const int TERRAIN_GEN_PRECISION = 9;
+    const int TERRAIN_GEN_PRECISION = precision;
     int highestIndex = TERRAIN_GEN_PRECISION + 1;
     int midpointCount = (int)(pow(2, TERRAIN_GEN_PRECISION + 1) + 1);
     struct midpoint_s midpoint[midpointCount];
