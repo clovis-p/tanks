@@ -33,14 +33,14 @@ void calculateTankAngle(textureAndRect_s* tank, terrain_s* terrain)
     }
 }
 
-void moveTankX(textureAndRect_s* tank, int amount, terrain_s* terrain)
+void moveTank(textureAndRect_s* tank, int amount, terrain_s* terrain)
 {
     calculateTankAngle(tank, terrain);
-    tank->rect.x += amount;
-    /*
-    if (tank->angle < 45 || tank->angle > 315)
-    {
-        tank->rect.x += amount;
-    }
-    */
+
+    float speed = (float)amount * (float)cos(tank->angle * M_PI / 180);
+    tank->fPoint.x += speed;
+    tank->rect.x = (int)tank->fPoint.x;
+
+    tank->fPoint.y = (float)(terrain->groundLevel[tank->rect.x + tank->rect.w / 2] - tank->rect.h);
+    tank->rect.y = (int)tank->fPoint.y;
 }

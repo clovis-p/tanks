@@ -8,6 +8,6 @@
 #include "main.h"
 
 void calculateTankAngle(textureAndRect_s* textures, terrain_s* terrain);
-void moveTankX(textureAndRect_s* tank, int amount, terrain_s* terrain);
+void moveTank(textureAndRect_s* tank, int amount, terrain_s* terrain);
 
 #endif //TANKS_TANK_H

@@ -14,6 +14,6 @@ terrain_s* generateTerrain(int width, int height, int type)
 {
     if (type == TERRAIN_TYPE_MIDPOINT)
     {
-        return generateMidpointTerrain(width, height, 6);
+        return generateMidpointTerrain(width, height, 7);
     }
 }

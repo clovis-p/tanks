@@ -6,9 +6,7 @@
 #include "render.h"
 #include "events.h"
 #include "terrain/terrain.h"
-
-const int RESOLUTION_X = 1280;
-const int RESOLUTION_Y = 720;
+#include "bullet.h"
 
 int initSDL(SDL_Window** win, SDL_Renderer** ren);
 void quitSDL(SDL_Window** win, SDL_Renderer** ren);
@@ -41,6 +39,8 @@ int main(int argc, char *argv[])
         SDL_Delay(10);
         //printf("SDL_Delay: %d\n", SDL_GetTicks() - ticks);
 
+        updateBullet(&textures.bullet);
+
         //ticks = SDL_GetTicks();
         render(&win, &ren, terrain, &textures);
         //printf("render: %d\n", SDL_GetTicks() - ticks);
@@ -59,6 +59,7 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
 {
     *terrain = generateTerrain(RESOLUTION_X, RESOLUTION_Y, TERRAIN_TYPE_MIDPOINT);
 
+    // init tank1
     SDL_Surface* buffer = SDL_LoadBMP("../resources/images/red_tank.bmp");
     if (buffer == NULL)
     {
@@ -69,7 +70,11 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
     SDL_QueryTexture(textures->tank1.texture, NULL, NULL, &textures->tank1.rect.w, &textures->tank1.rect.h);
     textures->tank1.rect.x = 0;
     textures->tank1.rect.y = 0;
+    textures->tank1.angle = 0;
+    textures->tank1.fPoint.x = 0;
+    textures->tank1.fPoint.y = 0;
 
+    // init tank2
     buffer = SDL_LoadBMP("../resources/images/blue_tank.bmp");
     if (buffer == NULL)
     {
@@ -80,6 +85,18 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
     SDL_QueryTexture(textures->tank2.texture, NULL, NULL, &textures->tank2.rect.w, &textures->tank2.rect.h);
     textures->tank2.rect.x = 0;
     textures->tank2.rect.y = 0;
+    textures->tank2.angle = 0;
+    textures->tank2.fPoint.x = 0;
+    textures->tank2.fPoint.y = 0;
+
+    // init bullet
+    textures->bullet.rect.w = 3;
+    textures->bullet.rect.h = 3;
+    textures->bullet.rect.x = 0;
+    textures->bullet.rect.y = 0;
+    textures->bullet.active = 0;
+    textures->bullet.speedX = 1;
+    textures->bullet.speedY = 1;
 }
 
 void quitGame(textures_s* textures, terrain_s** terrain)

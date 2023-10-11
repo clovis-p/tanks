@@ -8,6 +8,7 @@
 #include "events.h"
 #include "terrain/terrain.h"
 #include "tank.h"
+#include "bullet.h"
 
 int showDebug;
 
@@ -36,27 +37,40 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
         printf("tank1 angle: %d\n", textures->tank1.angle);
     }
 
-    textures->tank1.rect.y = terrain->groundLevel[textures->tank1.rect.x + textures->tank1.rect.w / 2] - textures->tank1.rect.h;
-    textures->tank2.rect.y = terrain->groundLevel[textures->tank2.rect.x + textures->tank2.rect.w / 2] - textures->tank2.rect.h;
-
+    // tank1
     if (keyStates[SDL_SCANCODE_D])
     {
-        moveTankX(&textures->tank1, 1, terrain);
+        moveTank(&textures->tank1, 1, terrain);
     }
     if (keyStates[SDL_SCANCODE_A])
     {
-        moveTankX(&textures->tank1, -1, terrain);
+        moveTank(&textures->tank1, -1, terrain);
     }
 
+    // tank2
     if (keyStates[SDL_SCANCODE_RIGHT])
     {
-        moveTankX(&textures->tank2, 1, terrain);
+        moveTank(&textures->tank2, 1, terrain);
     }
     if (keyStates[SDL_SCANCODE_LEFT])
     {
-        moveTankX(&textures->tank2, -1, terrain);
+        moveTank(&textures->tank2, -1, terrain);
     }
 
+    // bullet
+    static int fire = 0;
+
+    if (keyStates[SDL_SCANCODE_SPACE])
+    {
+        fire = 1;
+    }
+    else if (fire)
+    {
+        fireBullet(&textures->bullet, &textures->tank1);
+        fire = 0;
+    }
+
+    // debug
     if (keyStates[SDL_SCANCODE_LALT] && keyStates[SDL_SCANCODE_LSHIFT])
     {
         showDebug = 1;

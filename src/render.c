@@ -11,21 +11,33 @@
 #include "events.h"
 
 void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s* textures) {
+    // sky
     SDL_SetRenderDrawColor(*ren, 135, 206, 235, 255);
     SDL_RenderClear(*ren);
 
+    // ground
     SDL_SetRenderDrawColor(*ren, 34, 139, 34, 255);
     SDL_RenderDrawPoints(*ren, terrain->sdlGroundPoints, terrain->groundPointsCount);
 
+    // debug points
     if (showDebug)
     {
         SDL_SetRenderDrawColor(*ren, 255, 0, 0, 255);
         SDL_RenderDrawPoints(*ren, terrain->debugPoints, terrain->debugPointsCount);
     }
 
-    //textures->tank1.angle++;
+    // tank 1
     SDL_RenderCopyEx(*ren, textures->tank1.texture, NULL, &textures->tank1.rect, textures->tank1.angle, NULL, SDL_FLIP_NONE);
+
+    // tank 2
     SDL_RenderCopyEx(*ren, textures->tank2.texture, NULL, &textures->tank2.rect, textures->tank2.angle, NULL, SDL_FLIP_NONE);
+
+    // bullet
+    if (textures->bullet.active)
+    {
+        SDL_SetRenderDrawColor(*ren, 0, 0, 0, 255);
+        SDL_RenderFillRect(*ren, &textures->bullet.rect);
+    }
 
     SDL_RenderPresent(*ren);
 }
