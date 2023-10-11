@@ -5,6 +5,11 @@
 #include <SDL2/SDL.h>
 
 #include "main.h"
+#include "events.h"
+#include "terrain/terrain.h"
+#include "tank.h"
+
+int showDebug;
 
 void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
 {
@@ -22,19 +27,33 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
         *quit = 1;
     }
 
-    //printf("tank: %d %d\nterrain: %d %d\n", (textures->tank1.rect.x + textures->tank1.rect.w / 2), (textures->tank1.rect.y + textures->tank1.rect.h), terrain->groundLevel[textures->tank1.rect.x + textures->tank1.rect.w / 2], terrain->groundLevel[textures->tank1.rect.y + textures->tank1.rect.h]);
-    if (textures->tank1.rect.y + textures->tank1.rect.h < terrain->groundLevel[textures->tank1.rect.x + textures->tank1.rect.w / 2])
+    if (showDebug)
     {
-        textures->tank1.rect.y += 2;
+        /*printf("tank: %d %d\nterrain: %d %d\n", (textures->tank1.rect.x + textures->tank1.rect.w / 2),
+                                                       (textures->tank1.rect.y + textures->tank1.rect.h),
+                                                       terrain->groundLevel[textures->tank1.rect.x + textures->tank1.rect.w / 2],
+                                                       terrain->groundLevel[textures->tank1.rect.y + textures->tank1.rect.h]);*/
+        printf("tank1 angle: %d\n", textures->tank1.angle);
     }
+
+    textures->tank1.rect.y = terrain->groundLevel[textures->tank1.rect.x + textures->tank1.rect.w / 2] - textures->tank1.rect.h;
 
     if (keyStates[SDL_SCANCODE_D])
     {
-        textures->tank1.rect.x += 1;
+        moveTankX(&textures->tank1, 1, terrain);
     }
     if (keyStates[SDL_SCANCODE_A])
     {
-        textures->tank1.rect.x -= 1;
+        moveTankX(&textures->tank1, -1, terrain);
+    }
+
+    if (keyStates[SDL_SCANCODE_LALT] && keyStates[SDL_SCANCODE_LSHIFT])
+    {
+        showDebug = 1;
+    }
+    else
+    {
+        showDebug = 0;
     }
 
 }

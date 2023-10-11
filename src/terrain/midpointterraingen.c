@@ -1,16 +1,17 @@
 //
-// Created by clovis on 28/09/23.
+// Created by clovis on 09/10/23.
 //
 
-#include "main.h"
-#include "terraingen.h"
+//
+// Created by clovis on 28/09/23.
+//
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
 
-#include <SDL2/SDL.h>
+#include "terrain.h"
 
 int generateRandomNumber(int min, int max);
 int getCenterMidpointNumber(int midpointCount);
@@ -18,11 +19,21 @@ int isOdd(int number);
 int calculateMidpointNumber(int index, int highestIndex, int k);
 double calculateLinearSlope(int y2, int y1, int x2, int x1);
 
-terrain_s* generateTerrain(int width, int height)
+terrain_s* generateMidpointTerrain(int width, int height)
 {
     terrain_s* terrain;
 
     terrain = (terrain_s*)malloc(sizeof(terrain_s));
+
+    // Initialize arrays
+    for (int i = 0; i < width; i++) {
+        terrain->groundLevel[i] = 0;
+        for (int j = 0; j < height; j++) {
+            terrain->terrainArray[i][j] = 0;
+            terrain->sdlGroundPoints[i * j].x = 0;
+            terrain->sdlGroundPoints[i * j].y = 0;
+        }
+    }
 
     srand(time(NULL));
 
@@ -143,11 +154,8 @@ terrain_s* generateTerrain(int width, int height)
                     }
                 }
 
-                printf("L: %d, ", closestLeftGeneratedMidpoint.no);
-                printf("R: %d\n", closestRightGeneratedMidpoint.no);
-
                 int differenceBetweenNeighbours;
-                const double VARIATION_MULTIPLIER = 0.1;
+                const double VARIATION_MULTIPLIER = 0.0;
 
                 if (closestLeftGeneratedMidpoint.y > closestRightGeneratedMidpoint.y)
                 {
@@ -164,7 +172,6 @@ terrain_s* generateTerrain(int width, int height)
                     midpoint[currentMidpointNumber].y = closestLeftGeneratedMidpoint.y + generateRandomNumber(-1, 1);
                 }
 
-                printf("currentMidpointNumber = %d / %d, %d\n", currentMidpointNumber, (midpointCount - 1), totalGeneratedMidpoints);
                 midpoint[currentMidpointNumber].no = currentMidpointNumber;
                 midpoint[currentMidpointNumber].isGenerated = 1;
                 lastMidpointNumber = currentMidpointNumber;
@@ -177,28 +184,77 @@ terrain_s* generateTerrain(int width, int height)
     }
 
     terrain->groundPointsCount = 0;
+    terrain->debugPointsCount = 0;
 
-    double a = 0;
-    for (int i = 0; i < midpointCount; i++)
+    double slope = 0;
+    currentMidpointNumber = 0;
+    for (int x = 0; x < width; x++) // for every horizontal line
     {
-        for (int y = 0; y < height; y++)
-        {
-            if (y >= midpoint[i].y)
-            {
-                if (terrain->groundLevel[midpoint[i].x] != midpoint[i].y)
-                {
-                    terrain->groundLevel[midpoint[i].x] = midpoint[i].y;
-                }
 
-                terrain->terrainArray[midpoint[i].x][y] = 1;
-                terrain->sdlGroundPoints[terrain->groundPointsCount].x = midpoint[i].x;
-                terrain->sdlGroundPoints[terrain->groundPointsCount].y = y;
-                terrain->groundPointsCount++;
-            }
-            else
+        if (x == midpoint[currentMidpointNumber].x) // if we are on a midpoint
+        {
+            // write to the terrain array the coordinates of the midpoint and every pixel below it
+            for (int y = 0; y < height; y++)
             {
-                terrain->terrainArray[midpoint[i].x][y] = 0;
+                if (y >= midpoint[currentMidpointNumber].y)
+                {
+                    if (terrain->groundLevel[midpoint[currentMidpointNumber].x] != midpoint[currentMidpointNumber].y)
+                    {
+                        terrain->groundLevel[midpoint[currentMidpointNumber].x] = midpoint[currentMidpointNumber].y;
+                    }
+
+                    // write the pixel to the terrain arrays
+                    terrain->terrainArray[midpoint[currentMidpointNumber].x][y] = 1;
+                    terrain->sdlGroundPoints[terrain->groundPointsCount].x = midpoint[currentMidpointNumber].x;
+                    terrain->sdlGroundPoints[terrain->groundPointsCount].y = y;
+                    terrain->groundPointsCount++;
+
+                    if (1/*showDebug*/)
+                    {
+                        // write the pixel to the debug array
+                        terrain->debugPoints[terrain->debugPointsCount].x = midpoint[currentMidpointNumber].x;
+                        terrain->debugPoints[terrain->debugPointsCount].y = y;
+                        terrain->debugPointsCount++;
+                    }
+                }
+                else
+                {
+                    terrain->terrainArray[midpoint[currentMidpointNumber].x][y] = 0;
+                }
             }
+
+            currentMidpointNumber++;
+        }
+        else // if we aren't on a midpoint
+        {
+            currentMidpointNumber--;
+            // if we are right after a midpoint, calculate the slope between that midpoint and the next, and fill in the pixels below it
+            if (x == midpoint[currentMidpointNumber].x + 1)
+            {
+                slope = 0;
+                slope = calculateLinearSlope(midpoint[currentMidpointNumber].y, midpoint[currentMidpointNumber + 1].y, midpoint[currentMidpointNumber].x, midpoint[currentMidpointNumber + 1].x);
+                printf("Slope between %d and %d: %f\n", midpoint[currentMidpointNumber].y, midpoint[currentMidpointNumber + 1].y, slope);
+            }
+            terrain->groundLevel[x/* + (int)widthBetweenMidpoints*/] = (int)(slope * (x - midpoint[currentMidpointNumber].x) + midpoint[currentMidpointNumber].y);
+            for (int y = 0; y < height; y++)
+            { // fill in the pixels below the slope
+                if (y >= terrain->groundLevel[x])
+                {
+                    terrain->terrainArray[x][y] = 1;
+                    terrain->sdlGroundPoints[terrain->groundPointsCount].x = x;
+                    terrain->sdlGroundPoints[terrain->groundPointsCount].y = y;
+                    terrain->groundPointsCount++;
+                    if (y == terrain->groundLevel[x])
+                    {
+                        printf("Ground level at %d: %d\n", x, terrain->groundLevel[x]);
+                    }
+                }
+                else
+                {
+                    terrain->terrainArray[x][y] = 0;
+                }
+            }
+            currentMidpointNumber++;
         }
     }
     return terrain;

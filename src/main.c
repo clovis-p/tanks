@@ -5,7 +5,7 @@
 #include "main.h"
 #include "render.h"
 #include "events.h"
-#include "terraingen.h"
+#include "terrain/terrain.h"
 
 const int RESOLUTION_X = 1280;
 const int RESOLUTION_Y = 720;
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 
 void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
 {
-    *terrain = generateTerrain(RESOLUTION_X, RESOLUTION_Y);
+    *terrain = generateTerrain(RESOLUTION_X, RESOLUTION_Y, TERRAIN_TYPE_MIDPOINT);
 
     SDL_Surface* buffer = SDL_LoadBMP("../resources/images/red_tank.bmp");
     if (buffer == NULL)

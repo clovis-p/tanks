@@ -7,18 +7,24 @@
 
 #include "main.h"
 #include "render.h"
-
-int angle = 0;
+#include "terrain/terrain.h"
+#include "events.h"
 
 void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s* textures) {
     SDL_SetRenderDrawColor(*ren, 135, 206, 235, 255);
     SDL_RenderClear(*ren);
-    SDL_SetRenderDrawColor(*ren, 34, 139, 34, 255);
 
+    SDL_SetRenderDrawColor(*ren, 34, 139, 34, 255);
     SDL_RenderDrawPoints(*ren, terrain->sdlGroundPoints, terrain->groundPointsCount);
 
-    angle++;
-    SDL_RenderCopyEx(*ren, textures->tank1.texture, NULL, &textures->tank1.rect, angle, NULL, SDL_FLIP_NONE);
+    if (showDebug)
+    {
+        SDL_SetRenderDrawColor(*ren, 255, 0, 0, 255);
+        SDL_RenderDrawPoints(*ren, terrain->debugPoints, terrain->debugPointsCount);
+    }
+
+    //textures->tank1.angle++;
+    SDL_RenderCopyEx(*ren, textures->tank1.texture, NULL, &textures->tank1.rect, textures->tank1.angle, NULL, SDL_FLIP_NONE);
 
     SDL_RenderPresent(*ren);
 }
