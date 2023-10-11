@@ -62,13 +62,19 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
     SDL_Surface* buffer = SDL_LoadBMP("../resources/images/red_tank.bmp");
     if (buffer == NULL)
     {
-        printf("Failed to load image: %s\n", SDL_GetError());
+        printf("Failed to load red_tank.bmp: %s\n", SDL_GetError());
     }
     textures->tank1.texture = SDL_CreateTextureFromSurface(*ren, buffer);
+    SDL_FreeSurface(buffer);
     SDL_QueryTexture(textures->tank1.texture, NULL, NULL, &textures->tank1.rect.w, &textures->tank1.rect.h);
     textures->tank1.rect.x = 0;
     textures->tank1.rect.y = 0;
 
+    buffer = SDL_LoadBMP("../resources/images/blue_tank.bmp");
+    if (buffer == NULL)
+    {
+        printf("Failed to load blue_tank.bmp: %s\n", SDL_GetError());
+    }
     textures->tank2.texture = SDL_CreateTextureFromSurface(*ren, buffer);
     SDL_FreeSurface(buffer);
     SDL_QueryTexture(textures->tank2.texture, NULL, NULL, &textures->tank2.rect.w, &textures->tank2.rect.h);
