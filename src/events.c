@@ -48,11 +48,13 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     }
     if (keyStates[SDL_SCANCODE_W])
     {
-        textures->tank1.gun.angle -= 1; // rotate gun counter-clockwise
+        textures->tank1.gun.relativeAngle -= 1; // rotate gun counter-clockwise
+        updateTankGunAngle(&textures->tank1);
     }
     if (keyStates[SDL_SCANCODE_S])
     {
-        textures->tank1.gun.angle += 1; // rotate gun clockwise
+        textures->tank1.gun.relativeAngle += 1; // rotate gun clockwise
+        updateTankGunAngle(&textures->tank1);
     }
 
     // tank2
@@ -66,13 +68,15 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     }
     if (keyStates[SDL_SCANCODE_UP])
     {
-        textures->tank2.gun.angle -= 1; // rotate gun counter-clockwise
+        textures->tank2.gun.relativeAngle -= 1; // rotate gun counter-clockwise
+        updateTankGunAngle(&textures->tank2);
     }
     if (keyStates[SDL_SCANCODE_DOWN])
     {
-        textures->tank2.gun.angle += 1; // rotate gun clockwise
+        textures->tank2.gun.relativeAngle += 1; // rotate gun clockwise
+        updateTankGunAngle(&textures->tank2);
     }
-
+    printf("%d, %d\n", textures->tank1.gun.relativeAngle, textures->tank2.gun.relativeAngle);
     // bullet
     static int fire = 0;
 

@@ -9,5 +9,6 @@
 
 void calculateTankAngle(tank_s* textures, terrain_s* terrain);
 void moveTank(tank_s* tank, int amount, terrain_s* terrain);
+void updateTankGunAngle(tank_s* tank);
 
 #endif //TANKS_TANK_H

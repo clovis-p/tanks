@@ -52,5 +52,10 @@ void moveTank(tank_s* tank, int amount, terrain_s* terrain)
     tank->gun.rect.y = tank->rect.y + tank->gun.relativePosY;
 
     // update gun angle
+    updateTankGunAngle(tank);
+}
+
+void updateTankGunAngle(tank_s* tank)
+{
     tank->gun.angle = tank->angle + tank->gun.relativeAngle;
 }
