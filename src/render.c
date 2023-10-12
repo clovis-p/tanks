@@ -26,8 +26,14 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
         SDL_RenderDrawPoints(*ren, terrain->debugPoints, terrain->debugPointsCount);
     }
 
+    // tank1 gun
+    SDL_RenderCopyEx(*ren, textures->tank1.gun.texture, NULL, &textures->tank1.gun.rect, textures->tank1.gun.angle, NULL, SDL_FLIP_NONE);
+
     // tank 1
     SDL_RenderCopyEx(*ren, textures->tank1.texture, NULL, &textures->tank1.rect, textures->tank1.angle, NULL, SDL_FLIP_NONE);
+
+    // tank2 gun
+    SDL_RenderCopyEx(*ren, textures->tank2.gun.texture, NULL, &textures->tank2.gun.rect, textures->tank2.gun.angle, NULL, SDL_FLIP_NONE);
 
     // tank 2
     SDL_RenderCopyEx(*ren, textures->tank2.texture, NULL, &textures->tank2.rect, textures->tank2.angle, NULL, SDL_FLIP_NONE);

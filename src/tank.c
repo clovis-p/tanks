@@ -5,7 +5,7 @@
 #include "main.h"
 #include "terrain/terrain.h"
 
-void calculateTankAngle(textureAndRect_s* tank, terrain_s* terrain)
+void calculateTankAngle(tank_s* tank, terrain_s* terrain)
 {
     int x1, x2, y1, y2;
     double angle;
@@ -33,14 +33,24 @@ void calculateTankAngle(textureAndRect_s* tank, terrain_s* terrain)
     }
 }
 
-void moveTank(textureAndRect_s* tank, int amount, terrain_s* terrain)
+void moveTank(tank_s* tank, int amount, terrain_s* terrain)
 {
+    // tank angle according to terrain
     calculateTankAngle(tank, terrain);
 
+    // move according to angle
     float speed = (float)amount * (float)cos(tank->angle * M_PI / 180);
     tank->fPoint.x += speed;
     tank->rect.x = (int)tank->fPoint.x;
 
+    // update y position
     tank->fPoint.y = (float)(terrain->groundLevel[tank->rect.x + tank->rect.w / 2] - tank->rect.h);
     tank->rect.y = (int)tank->fPoint.y;
+
+    // update gun position according to tank position
+    tank->gun.rect.x = tank->rect.x;
+    tank->gun.rect.y = tank->rect.y + tank->gun.relativePosY;
+
+    // update gun angle
+    tank->gun.angle = tank->angle + tank->gun.relativeAngle;
 }

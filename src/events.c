@@ -40,11 +40,19 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     // tank1
     if (keyStates[SDL_SCANCODE_D])
     {
-        moveTank(&textures->tank1, 1, terrain);
+        moveTank(&textures->tank1, 1, terrain); // move right
     }
     if (keyStates[SDL_SCANCODE_A])
     {
-        moveTank(&textures->tank1, -1, terrain);
+        moveTank(&textures->tank1, -1, terrain); // move left
+    }
+    if (keyStates[SDL_SCANCODE_W])
+    {
+        textures->tank1.gun.angle -= 1; // rotate gun counter-clockwise
+    }
+    if (keyStates[SDL_SCANCODE_S])
+    {
+        textures->tank1.gun.angle += 1; // rotate gun clockwise
     }
 
     // tank2
@@ -56,6 +64,14 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     {
         moveTank(&textures->tank2, -1, terrain);
     }
+    if (keyStates[SDL_SCANCODE_UP])
+    {
+        textures->tank2.gun.angle -= 1; // rotate gun counter-clockwise
+    }
+    if (keyStates[SDL_SCANCODE_DOWN])
+    {
+        textures->tank2.gun.angle += 1; // rotate gun clockwise
+    }
 
     // bullet
     static int fire = 0;
@@ -66,7 +82,10 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     }
     else if (fire)
     {
-        fireBullet(&textures->bullet, &textures->tank1);
+        if (!textures->bullet.active)
+        {
+            fireBullet(&textures->bullet, &textures->tank1);
+        }
         fire = 0;
     }
 

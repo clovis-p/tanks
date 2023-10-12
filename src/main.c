@@ -74,6 +74,21 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
     textures->tank1.fPoint.x = 0;
     textures->tank1.fPoint.y = 0;
 
+    // tank1 gun
+    buffer = SDL_LoadBMP("../resources/images/gun.bmp");
+    if (buffer == NULL)
+    {
+        printf("Failed to load gun.bmp: %s\n", SDL_GetError());
+    }
+    textures->tank1.gun.texture = SDL_CreateTextureFromSurface(*ren, buffer);
+    SDL_FreeSurface(buffer);
+    SDL_QueryTexture(textures->tank1.gun.texture, NULL, NULL, &textures->tank1.gun.rect.w, &textures->tank1.gun.rect.h);
+    textures->tank1.gun.rect.x = 0;
+    textures->tank1.gun.rect.y = 0;
+    textures->tank1.gun.angle = 0;
+    textures->tank1.gun.relativeAngle = 0;
+    textures->tank1.gun.relativePosY = -((textures->tank1.gun.rect.h - textures->tank1.rect.h) / 2) - 5;
+
     // init tank2
     buffer = SDL_LoadBMP("../resources/images/blue_tank.bmp");
     if (buffer == NULL)
@@ -88,6 +103,21 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
     textures->tank2.angle = 0;
     textures->tank2.fPoint.x = 0;
     textures->tank2.fPoint.y = 0;
+
+    // tank2 gun
+    buffer = SDL_LoadBMP("../resources/images/gun.bmp");
+    if (buffer == NULL)
+    {
+        printf("Failed to load gun.bmp: %s\n", SDL_GetError());
+    }
+    textures->tank2.gun.texture = SDL_CreateTextureFromSurface(*ren, buffer);
+    SDL_FreeSurface(buffer);
+    SDL_QueryTexture(textures->tank1.gun.texture, NULL, NULL, &textures->tank2.gun.rect.w, &textures->tank2.gun.rect.h);
+    textures->tank2.gun.rect.x = 0;
+    textures->tank2.gun.rect.y = 0;
+    textures->tank2.gun.angle = 0;
+    textures->tank2.gun.relativeAngle = 45;
+    textures->tank2.gun.relativePosY = textures->tank1.gun.relativePosY;
 
     // init bullet
     textures->bullet.rect.w = 3;

@@ -5,7 +5,7 @@
 #include "bullet.h"
 #include "main.h"
 
-void fireBullet(bullet_s* bullet, textureAndRect_s* tank)
+void fireBullet(bullet_s* bullet, tank_s* tank)
 {
     bullet->rect.x = tank->rect.x + tank->rect.w / 2;
     bullet->rect.y = tank->rect.y + tank->rect.h / 2;
