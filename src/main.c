@@ -86,8 +86,8 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
     textures->tank1.gun.rect.x = 0;
     textures->tank1.gun.rect.y = 0;
     textures->tank1.gun.angle = 0;
-    textures->tank1.gun.relativeAngle = 0;
-    textures->tank1.gun.relativePosY = -((textures->tank1.gun.rect.h - textures->tank1.rect.h) / 2) - 5;
+    textures->tank1.gun.relativeAngle = 45;
+    textures->tank1.gun.relativePosY = -((textures->tank1.gun.rect.h - textures->tank1.rect.h) / 2);// - 5;
 
     // init tank2
     buffer = SDL_LoadBMP("../resources/images/blue_tank.bmp");
