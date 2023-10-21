@@ -46,17 +46,11 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     }
     if (keyStates[SDL_SCANCODE_W])
     {
-        if (textures->tank1.gun.angle > -90)
-        {
-            textures->tank1.gun.angle -= 1; // rotate gun counter-clockwise
-        }
+        rotateGunCounterClockwise(&textures->tank1.gun);
     }
     if (keyStates[SDL_SCANCODE_S])
     {
-        if (textures->tank1.gun.angle < 90)
-        {
-            textures->tank1.gun.angle += 1; // rotate gun clockwise
-        }
+        rotateGunClockwise(&textures->tank1.gun);
     }
 
     // tank2
@@ -70,17 +64,11 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     }
     if (keyStates[SDL_SCANCODE_UP])
     {
-        if (textures->tank2.gun.angle > -90)
-        {
-            textures->tank2.gun.angle -= 1; // rotate gun counter-clockwise
-        }
+        rotateGunCounterClockwise(&textures->tank2.gun);
     }
     if (keyStates[SDL_SCANCODE_DOWN])
     {
-        if (textures->tank2.gun.angle < 90)
-        {
-            textures->tank2.gun.angle += 1; // rotate gun clockwise
-        }
+        rotateGunClockwise(&textures->tank2.gun);
     }
 
     // bullet

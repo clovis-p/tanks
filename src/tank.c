@@ -53,3 +53,19 @@ void moveTank(tank_s* tank, int amount, terrain_s* terrain)
     tank->fPoint.y = (float)(terrain->groundLevel[tank->rect.x + tank->rect.w / 2] - tank->rect.h);
     tank->rect.y = (int)tank->fPoint.y;
 }
+
+void rotateGunClockwise(gun_s* gun)
+{
+    if (gun->angle < 90)
+    {
+        gun->angle += 1;
+    }
+}
+
+void rotateGunCounterClockwise(gun_s* gun)
+{
+    if (gun->angle > -90)
+    {
+        gun->angle -= 1;
+    }
+}
