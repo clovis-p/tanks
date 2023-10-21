@@ -35,19 +35,13 @@ int main(int argc, char *argv[])
 
     while (!quit)
     {
-        //ticks = SDL_GetTicks();
         SDL_Delay(10);
-        //printf("SDL_Delay: %d\n", SDL_GetTicks() - ticks);
 
         updateBullet(&textures.bullet, terrain);
 
-        //ticks = SDL_GetTicks();
         render(&win, &ren, terrain, &textures);
-        //printf("render: %d\n", SDL_GetTicks() - ticks);
 
-        //ticks = SDL_GetTicks();
         handleEvents(&quit, terrain, &textures);
-        //printf("handleEvents: %d\n", SDL_GetTicks() - ticks);
     }
 
     quitGame(&textures, &terrain);
@@ -96,7 +90,6 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
     textures->tank1.gun.rect.x = 0;
     textures->tank1.gun.rect.y = 6;
     textures->tank1.gun.angle = 0;
-    //textures->tank1.gun.relativePosY = -((textures->tank1.gun.rect.h - textures->tank1.rect.h) / 2);
 
     // init tank2
     buffer = SDL_LoadBMP("../resources/images/blue_tank.bmp");

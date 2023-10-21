@@ -32,10 +32,6 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
 
     if (showDebug)
     {
-        /*printf("tank: %d %d\nterrain: %d %d\n", (textures->tank1.rect.x + textures->tank1.rect.w / 2),
-                                                       (textures->tank1.rect.y + textures->tank1.rect.h),
-                                                       terrain->groundLevel[textures->tank1.rect.x + textures->tank1.rect.w / 2],
-                                                       terrain->groundLevel[textures->tank1.rect.y + textures->tank1.rect.h]);*/
         printf("tank1 angle: %d\n", textures->tank1.angle);
     }
 
@@ -74,8 +70,6 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     {
         textures->tank2.gun.angle += 1; // rotate gun clockwise
     }
-
-    //printf("tank angle: %d\n", textures->tank1.angle);
 
     // bullet
     static int fire = 0;

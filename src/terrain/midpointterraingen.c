@@ -56,7 +56,6 @@ terrain_s* generateMidpointTerrain(int width, int height, int precision)
     int currentIndex = 0;
 
     int currentMidpointNumber;
-    currentMidpointNumber = getCenterMidpointNumber(midpointCount);
 
     int midpointsToGenerateThisIteration = 1;
 
