@@ -2,8 +2,12 @@
 // Created by clovis on 11/10/23.
 //
 
+#include <stdio.h>
+#include <math.h>
+
 #include "main.h"
 #include "terrain/terrain.h"
+#include "tank.h"
 
 void calculateTankAngle(tank_s* tank, terrain_s* terrain)
 {
@@ -30,6 +34,8 @@ void calculateTankAngle(tank_s* tank, terrain_s* terrain)
         {
             tank->angle = 360 - (int)angle;
         }
+
+        tank->angle %= 360;
     }
 }
 
@@ -46,16 +52,4 @@ void moveTank(tank_s* tank, int amount, terrain_s* terrain)
     // update y position
     tank->fPoint.y = (float)(terrain->groundLevel[tank->rect.x + tank->rect.w / 2] - tank->rect.h);
     tank->rect.y = (int)tank->fPoint.y;
-
-    // update gun position according to tank position
-    tank->gun.rect.x = tank->rect.x;
-    tank->gun.rect.y = tank->rect.y + tank->gun.relativePosY;
-
-    // update gun angle
-    updateTankGunAngle(tank);
-}
-
-void updateTankGunAngle(tank_s* tank)
-{
-    tank->gun.angle = tank->angle + tank->gun.relativeAngle;
 }

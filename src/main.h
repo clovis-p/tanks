@@ -14,8 +14,7 @@ typedef struct gun_s
 {
     SDL_Texture* texture;
     SDL_Rect rect;
-    int angle; // rendered angle
-    int relativeAngle; // angle relative to the tank assuming the tank is straight
+    int angle;
     int relativePosY; // Y position relative to the tank
     // (relative X position is always 0)
 } gun_s;
@@ -23,14 +22,16 @@ typedef struct gun_s
 typedef struct bullet_s
 {
     SDL_Rect rect;
+    SDL_FPoint fPoint;
     int active;
-    int speedX;
-    int speedY;
+    float speedX;
+    float speedY;
 } bullet_s;
 
 typedef struct tank_s
 {
-    SDL_Texture* texture;
+    SDL_Texture* baseTexture; // Texture for the tank without the gun
+    SDL_Texture* combinedTexture; // Texture for the tank and gun combined
     SDL_Rect rect;
     SDL_FPoint fPoint;
     int angle;

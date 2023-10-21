@@ -2,6 +2,8 @@
 // Created by clovis on 09/10/23.
 //
 
+#include <math.h>
+
 #include "../main.h"
 #include "terrain.h"
 

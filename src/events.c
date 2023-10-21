@@ -2,6 +2,8 @@
 // Created by clovis on 28/09/23.
 //
 
+#include <stdio.h>
+
 #include <SDL2/SDL.h>
 
 #include "main.h"
@@ -48,13 +50,11 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     }
     if (keyStates[SDL_SCANCODE_W])
     {
-        textures->tank1.gun.relativeAngle -= 1; // rotate gun counter-clockwise
-        updateTankGunAngle(&textures->tank1);
+        textures->tank1.gun.angle -= 1; // rotate gun counter-clockwise
     }
     if (keyStates[SDL_SCANCODE_S])
     {
-        textures->tank1.gun.relativeAngle += 1; // rotate gun clockwise
-        updateTankGunAngle(&textures->tank1);
+        textures->tank1.gun.angle += 1; // rotate gun clockwise
     }
 
     // tank2
@@ -68,15 +68,15 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     }
     if (keyStates[SDL_SCANCODE_UP])
     {
-        textures->tank2.gun.relativeAngle -= 1; // rotate gun counter-clockwise
-        updateTankGunAngle(&textures->tank2);
+        textures->tank2.gun.angle -= 1; // rotate gun counter-clockwise
     }
     if (keyStates[SDL_SCANCODE_DOWN])
     {
-        textures->tank2.gun.relativeAngle += 1; // rotate gun clockwise
-        updateTankGunAngle(&textures->tank2);
+        textures->tank2.gun.angle += 1; // rotate gun clockwise
     }
-    printf("%d, %d\n", textures->tank1.gun.relativeAngle, textures->tank2.gun.relativeAngle);
+
+    //printf("tank angle: %d\n", textures->tank1.angle);
+
     // bullet
     static int fire = 0;
 
