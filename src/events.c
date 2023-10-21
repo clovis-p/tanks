@@ -46,11 +46,17 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     }
     if (keyStates[SDL_SCANCODE_W])
     {
-        textures->tank1.gun.angle -= 1; // rotate gun counter-clockwise
+        if (textures->tank1.gun.angle > -90)
+        {
+            textures->tank1.gun.angle -= 1; // rotate gun counter-clockwise
+        }
     }
     if (keyStates[SDL_SCANCODE_S])
     {
-        textures->tank1.gun.angle += 1; // rotate gun clockwise
+        if (textures->tank1.gun.angle < 90)
+        {
+            textures->tank1.gun.angle += 1; // rotate gun clockwise
+        }
     }
 
     // tank2

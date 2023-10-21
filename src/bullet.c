@@ -70,6 +70,16 @@ void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed)
         bullet->speedX = 0;
         bullet->speedY = -speed;
     }
+    else if (tank->gun.angle == 90)
+    {
+        bullet->speedX = speed;
+        bullet->speedY = 0;
+    }
+    else if (tank->gun.angle == -90)
+    {
+        bullet->speedX = -speed;
+        bullet->speedY = 0;
+    }
     else
     {
         int vectorAngle = 0;
