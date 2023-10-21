@@ -41,6 +41,21 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
                      SDL_FLIP_NONE);
     SDL_RenderCopy(*ren, textures->tank1.baseTexture, NULL, NULL);
 
+    // Set render target to tank2 texture
+    SDL_SetRenderTarget(*ren, textures->tank2.combinedTexture);
+
+    // Clear tank2 texture, then render tank2 base and tank2 gun to tank2 texture
+    SDL_SetRenderDrawColor(*ren, 0, 0, 0, 0); // set transparent background
+    SDL_RenderClear(*ren);
+    SDL_RenderCopyEx(*ren,
+                     textures->tank2.gun.texture,
+                     NULL,
+                     &textures->tank2.gun.rect,
+                     textures->tank2.gun.angle,
+                     NULL,
+                     SDL_FLIP_NONE);
+    SDL_RenderCopy(*ren, textures->tank2.baseTexture, NULL, NULL);
+
     // Reset render target
     SDL_SetRenderTarget(*ren, NULL);
 
@@ -53,6 +68,15 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
                      NULL,
                      &textures->tank1.rect,
                      textures->tank1.angle,
+                     &tankCenterPoint,
+                     SDL_FLIP_NONE);
+
+    // Render tank2
+    SDL_RenderCopyEx(*ren,
+                     textures->tank2.combinedTexture,
+                     NULL,
+                     &textures->tank2.rect,
+                     textures->tank2.angle,
                      &tankCenterPoint,
                      SDL_FLIP_NONE);
 

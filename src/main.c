@@ -89,7 +89,7 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
     SDL_QueryTexture(textures->tank1.gun.texture, NULL, NULL, &textures->tank1.gun.rect.w, &textures->tank1.gun.rect.h);
     textures->tank1.gun.rect.x = 0;
     textures->tank1.gun.rect.y = 6;
-    textures->tank1.gun.angle = 0;
+    textures->tank1.gun.angle = 80;
 
     // init tank2
     buffer = SDL_LoadBMP("../resources/images/blue_tank.bmp");
@@ -106,6 +106,15 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
     textures->tank2.fPoint.x = 0;
     textures->tank2.fPoint.y = 0;
 
+    // init tank2 combined texture
+    textures->tank2.combinedTexture = SDL_CreateTexture(*ren,
+                                                        SDL_PIXELFORMAT_RGBA8888,
+                                                        SDL_TEXTUREACCESS_TARGET,
+                                                        textures->tank2.rect.w,
+                                                        textures->tank2.rect.h);
+    SDL_SetTextureBlendMode(textures->tank2.combinedTexture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(textures->tank2.combinedTexture, 255);
+
     // tank2 gun
     buffer = SDL_LoadBMP("../resources/images/gun.bmp");
     if (buffer == NULL)
@@ -116,9 +125,8 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
     SDL_FreeSurface(buffer);
     SDL_QueryTexture(textures->tank1.gun.texture, NULL, NULL, &textures->tank2.gun.rect.w, &textures->tank2.gun.rect.h);
     textures->tank2.gun.rect.x = 0;
-    textures->tank2.gun.rect.y = 0;
-    textures->tank2.gun.angle = 0;
-    textures->tank2.gun.angle = 45;
+    textures->tank2.gun.rect.y = 6;
+    textures->tank2.gun.angle = 80;
     textures->tank2.gun.relativePosY = textures->tank1.gun.relativePosY;
 
     // init bullet
