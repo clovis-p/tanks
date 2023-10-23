@@ -47,7 +47,7 @@ void updateBulletPos(bullet_s* bullet)
     bullet->rect.x = (int)bullet->fPoint.x;
     bullet->rect.y = (int)bullet->fPoint.y;
 
-    bullet->speedY += 0.05;
+    bullet->speedY += 0.05f;
 }
 
 int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain)
