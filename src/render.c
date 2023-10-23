@@ -19,11 +19,14 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     SDL_SetRenderDrawColor(*ren, 34, 139, 34, 255);
     SDL_RenderDrawPoints(*ren, terrain->sdlGroundPoints, terrain->groundPointsCount);
 
-    // debug points
+    // debug, showDebug = 1 while left shift and left alt are held down, otherwise showDebug = 0
     if (showDebug)
     {
         SDL_SetRenderDrawColor(*ren, 255, 0, 0, 255);
         SDL_RenderDrawPoints(*ren, terrain->debugPoints, terrain->debugPointsCount);
+
+        SDL_RenderDrawRect(*ren, &textures->tank1.rect);
+        SDL_RenderDrawRect(*ren, &textures->tank2.rect);
     }
 
     // Set render target to tank1 texture

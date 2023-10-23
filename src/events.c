@@ -32,7 +32,7 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
 
     if (showDebug)
     {
-        printf("tank1 angle: %d\n", textures->tank1.angle);
+        //printf("tank1 angle: %d\n", textures->tank1.angle);
     }
 
     // tank1
