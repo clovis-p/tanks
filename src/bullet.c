@@ -10,16 +10,29 @@
 #include "terrain/terrain.h"
 
 void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed);
+void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank);
 double degToRad(int deg);
 
 void fireBullet(bullet_s* bullet, tank_s* tank)
 {
-    bullet->fPoint.x = (float)(tank->rect.x + tank->rect.w / 2.0);
-    bullet->fPoint.y = (float)(tank->rect.y + tank->rect.h / 2.0);
-    bullet->rect.x = (int)bullet->fPoint.x;
-    bullet->rect.y = (int)bullet->fPoint.y;
+    calculateBulletOriginPoint(bullet, tank);
     bullet->active = 1;
     calculateBulletXYSpeed(bullet, tank, 5);
+}
+
+void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank)
+{
+    // Set to center point of tank rotation
+    bullet->fPoint.x = (float)(tank->rect.x + tank->rect.w / 2.0);
+    bullet->fPoint.y = (float)(tank->rect.y + tank->rect.h);
+
+    // Adjust for tank angle
+    bullet->fPoint.x += (float)(tank->rect.w / 2.0) * (float)cos(degToRad(90 - tank->angle));
+    bullet->fPoint.y += -(float)(tank->rect.h / 2.0) * (float)sin(degToRad(90 - tank->angle));
+    printf("%f, %f\n", bullet->fPoint.x, bullet->fPoint.y);
+
+    bullet->rect.x = (int)bullet->fPoint.x;
+    bullet->rect.y = (int)bullet->fPoint.y;
 }
 
 void updateBullet(bullet_s* bullet, terrain_s* terrain)
@@ -84,13 +97,9 @@ void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed)
     {
         int vectorAngle = 0;
 
-        if (tank->gun.angle > 0 && tank->gun.angle < 90)
+        if ((tank->gun.angle > 0 && tank->gun.angle < 90) || tank->gun.angle < 0 && tank->gun.angle > -90)
         {
             vectorAngle = 90 - tank->gun.angle;
-        }
-        else if (tank->gun.angle < 0 && tank->gun.angle > -90)
-        {
-            vectorAngle = 90 + -(tank->gun.angle);
         }
         else
         {
