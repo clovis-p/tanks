@@ -12,6 +12,9 @@
 
 extern Uint32 deltaTime;
 
+extern int turn;
+extern int playerCount;
+
 typedef struct gun_s
 {
     SDL_Texture* texture;

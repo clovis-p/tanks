@@ -82,9 +82,18 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     {
         if (!textures->bullet.active)
         {
-            fireBullet(&textures->bullet, &textures->tank1);
+            if (turn == 0)
+            {
+                fireBullet(&textures->bullet, &textures->tank1);
+            }
+            else if (turn == 1)
+            {
+                fireBullet(&textures->bullet, &textures->tank2);
+            }
         }
         fire = 0;
+        turn++;
+        turn %= playerCount;
     }
 
     // debug
