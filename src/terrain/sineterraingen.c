@@ -41,6 +41,6 @@ terrain_s* generateSineTerrain(int width, int height)
     return terrain;
 }
 
-void drawSineWave(int width, int height) {
+static void drawSineWave(int width, int height) {
     int screen[height][width];
 }

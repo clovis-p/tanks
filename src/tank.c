@@ -9,7 +9,9 @@
 #include "terrain/terrain.h"
 #include "tank.h"
 
-void calculateTankAngle(tank_s* tank, terrain_s* terrain)
+static void calculateTankAngle(tank_s* tank, terrain_s* terrain);
+
+static void calculateTankAngle(tank_s* tank, terrain_s* terrain)
 {
     int x1, x2, y1, y2;
     double angle;

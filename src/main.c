@@ -8,10 +8,10 @@
 #include "terrain/terrain.h"
 #include "bullet.h"
 
-int initSDL(SDL_Window** win, SDL_Renderer** ren);
-void quitSDL(SDL_Window** win, SDL_Renderer** ren);
-void quitGame(textures_s* textures, terrain_s** terrain);
-void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures);
+static int initSDL(SDL_Window** win, SDL_Renderer** ren);
+static void quitSDL(SDL_Window** win, SDL_Renderer** ren);
+static void quitGame(textures_s* textures, terrain_s** terrain);
+static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures);
 
 int main(int argc, char *argv[])
 {
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
+static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
 {
     *terrain = generateTerrain(RESOLUTION_X, RESOLUTION_Y, TERRAIN_TYPE_MIDPOINT);
 
@@ -141,7 +141,7 @@ void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
     textures->bullet.fPoint.y = 0;
 }
 
-void quitGame(textures_s* textures, terrain_s** terrain)
+static void quitGame(textures_s* textures, terrain_s** terrain)
 {
     SDL_DestroyTexture(textures->tank1.baseTexture);
     SDL_DestroyTexture(textures->tank2.baseTexture);
@@ -152,7 +152,7 @@ void quitGame(textures_s* textures, terrain_s** terrain)
     free(*terrain);
 }
 
-int initSDL(SDL_Window** win, SDL_Renderer** ren)
+static int initSDL(SDL_Window** win, SDL_Renderer** ren)
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
@@ -183,7 +183,7 @@ int initSDL(SDL_Window** win, SDL_Renderer** ren)
     return 0;
 }
 
-void quitSDL(SDL_Window** win, SDL_Renderer** ren)
+static void quitSDL(SDL_Window** win, SDL_Renderer** ren)
 {
     SDL_DestroyRenderer(*ren);
     SDL_DestroyWindow(*win);

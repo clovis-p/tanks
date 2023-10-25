@@ -9,9 +9,11 @@
 #include "main.h"
 #include "terrain/terrain.h"
 
-void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed);
-void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank);
-double degToRad(int deg);
+static void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed);
+static void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank);
+static double degToRad(int deg);
+static void updateBulletPos(bullet_s* bullet);
+static int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain);
 
 void fireBullet(bullet_s* bullet, tank_s* tank)
 {
@@ -20,7 +22,7 @@ void fireBullet(bullet_s* bullet, tank_s* tank)
     calculateBulletXYSpeed(bullet, tank, 5);
 }
 
-void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank)
+static void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank)
 {
     // Set to center point of tank rotation
     bullet->fPoint.x = (float)(tank->rect.x + tank->rect.w / 2.0);
@@ -55,7 +57,7 @@ void updateBullet(bullet_s* bullet, terrain_s* terrain)
     }
 }
 
-void updateBulletPos(bullet_s* bullet)
+static void updateBulletPos(bullet_s* bullet)
 {
     bullet->fPoint.x += bullet->speedX;
     bullet->fPoint.y += bullet->speedY;
@@ -66,7 +68,7 @@ void updateBulletPos(bullet_s* bullet)
     bullet->speedY += 0.05f;
 }
 
-int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain)
+static int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain)
 {
     if (bullet->rect.x < 0 || bullet->rect.x > RESOLUTION_X || bullet->rect.y < 0 || bullet->rect.y > RESOLUTION_Y ||
         bullet->rect.y + bullet->rect.h > terrain->groundLevel[bullet->rect.x + bullet->rect.w / 2])
@@ -79,7 +81,7 @@ int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain)
     }
 }
 
-void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed)
+static void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed)
 {
     int vectorAngle = 90 - tank->gun.angle;
 
@@ -89,7 +91,7 @@ void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed)
     printf("angle: %d, tank angle: %d, speedX: %f, speedY: %f\n", tank->gun.angle, tank->angle, bullet->speedX, bullet->speedY);
 }
 
-double degToRad(int deg)
+static double degToRad(int deg)
 {
     return (double)deg * M_PI / 180;
 }

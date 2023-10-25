@@ -10,6 +10,8 @@
 #include "terrain/terrain.h"
 #include "events.h"
 
+static void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x, int y, int width, int height, SDL_Color fg, SDL_Color bg);
+
 void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s* textures) {
     // sky
     SDL_SetRenderDrawColor(*ren, 135, 206, 235, 255);
@@ -93,7 +95,7 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     SDL_RenderPresent(*ren);
 }
 
-void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x, int y, int width, int height, SDL_Color fg, SDL_Color bg)
+static void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x, int y, int width, int height, SDL_Color fg, SDL_Color bg)
 {
     for (int i = 0; i < width; i++)
     {

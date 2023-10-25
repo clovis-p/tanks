@@ -13,11 +13,11 @@
 
 #include "terrain.h"
 
-int generateRandomNumber(int min, int max);
-int getCenterMidpointNumber(int midpointCount);
-int isOdd(int number);
-int calculateMidpointNumber(int index, int highestIndex, int k);
-double calculateLinearSlope(int y2, int y1, int x2, int x1);
+static int generateRandomNumber(int min, int max);
+static int getCenterMidpointNumber(int midpointCount);
+static int isOdd(int number);
+static int calculateMidpointNumber(int index, int highestIndex, int k);
+static double calculateLinearSlope(int y2, int y1, int x2, int x1);
 
 terrain_s* generateMidpointTerrain(int width, int height, int precision)
 {
@@ -259,12 +259,12 @@ terrain_s* generateMidpointTerrain(int width, int height, int precision)
     return terrain;
 }
 
-int generateRandomNumber(int min, int max)
+static int generateRandomNumber(int min, int max)
 {
     return rand() % (max - min) + min;
 }
 
-int getCenterMidpointNumber(int midpointCount)
+static int getCenterMidpointNumber(int midpointCount)
 {
     switch (midpointCount)
     {
@@ -293,12 +293,12 @@ int getCenterMidpointNumber(int midpointCount)
     }
 }
 
-int isOdd(int number)
+static int isOdd(int number)
 {
     return number % 2;
 }
 
-int calculateMidpointNumber(int index, int highestIndex, int k)
+static int calculateMidpointNumber(int index, int highestIndex, int k)
 {
     // k = midpoint number within it's index
     int midpointNumber = 0;
@@ -325,7 +325,7 @@ int calculateMidpointNumber(int index, int highestIndex, int k)
     return midpointNumber;
 }
 
-double calculateLinearSlope(int y2, int y1, int x2, int x1)
+static double calculateLinearSlope(int y2, int y1, int x2, int x1)
 {
     return (double)(y2 - y1) / (x2 - x1);
 }
