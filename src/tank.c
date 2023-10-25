@@ -2,7 +2,6 @@
 // Created by clovis on 11/10/23.
 //
 
-#include <stdio.h>
 #include <math.h>
 
 #include "main.h"
