@@ -14,7 +14,7 @@ static void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank);
 static double degToRad(int deg);
 static void updateBulletPos(textures_s* textures);
 static int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain);
-static int checkBulletCollision(textures_s* textures);
+static int checkBulletCollisions(textures_s* textures);
 
 void fireBullet(bullet_s* bullet, tank_s* tank)
 {
@@ -66,7 +66,7 @@ static void updateBulletPos(textures_s* textures)
         textures->bullet.fPoint.y += textures->bullet.speedY;
         textures->bullet.speedY += 0.0003f;
 
-        checkBulletCollision(textures);
+        checkBulletCollisions(textures);
     }
 
     textures->bullet.rect.x = (int)textures->bullet.fPoint.x;
@@ -101,7 +101,7 @@ static double degToRad(int deg)
     return (double)deg * M_PI / 180;
 }
 
-static int checkBulletCollision(textures_s* textures)
+static int checkBulletCollisions(textures_s* textures)
 {
     if (textures->bullet.fPoint.x + (float)textures->bullet.rect.w >= textures->tank1.fPoint.x && textures->bullet.fPoint.x < textures->tank1.fPoint.x + (float)textures->tank1.rect.w && // Check X axis
         textures->bullet.fPoint.y + (float)textures->bullet.rect.w >= textures->tank1.fPoint.y - (float)textures->tank1.rect.h && textures->bullet.fPoint.y < textures->tank1.fPoint.y + (float)textures->tank1.rect.h)
