@@ -17,6 +17,13 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     SDL_SetRenderDrawColor(*ren, 135, 206, 235, 255);
     SDL_RenderClear(*ren);
 
+    // bullet
+    if (textures->bullet.active)
+    {
+        SDL_SetRenderDrawColor(*ren, 0, 0, 0, 255);
+        SDL_RenderFillRect(*ren, &textures->bullet.rect);
+    }
+
     // ground
     SDL_SetRenderDrawColor(*ren, 34, 139, 34, 255);
     SDL_RenderDrawPoints(*ren, terrain->sdlGroundPoints, terrain->groundPointsCount);
@@ -84,13 +91,6 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
                      textures->tank2.angle,
                      &tankCenterPoint,
                      SDL_FLIP_NONE);
-
-    // bullet
-    if (textures->bullet.active)
-    {
-        SDL_SetRenderDrawColor(*ren, 0, 0, 0, 255);
-        SDL_RenderFillRect(*ren, &textures->bullet.rect);
-    }
 
     SDL_RenderPresent(*ren);
 }
