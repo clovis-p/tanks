@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
         SDL_Delay(5);
 
-        updateBullet(&textures.bullet, terrain);
+        updateBullet(&textures, terrain);
 
         render(&win, &ren, terrain, &textures);
 
@@ -77,6 +77,7 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     textures->tank1.angle = 0;
     textures->tank1.fPoint.x = 0;
     textures->tank1.fPoint.y = 0;
+    textures->tank1.health = 100;
 
 
     // init tank1 combined texture
@@ -119,6 +120,7 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     textures->tank2.angle = 0;
     textures->tank2.fPoint.x = 0;
     textures->tank2.fPoint.y = 0;
+    textures->tank2.health = 100;
 
     // init tank2 combined texture
     textures->tank2.combinedTexture = SDL_CreateTexture(*ren,

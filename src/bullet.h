@@ -11,6 +11,6 @@
 #include "terrain/terrain.h"
 
 void fireBullet(bullet_s* bullet, tank_s* tank);
-void updateBullet(bullet_s* bullet, terrain_s* terrain);
+void updateBullet(textures_s* textures, terrain_s* terrain);
 
 #endif //TANKS_BULLET_H

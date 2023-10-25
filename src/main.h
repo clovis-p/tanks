@@ -42,6 +42,7 @@ typedef struct tank_s
     SDL_FPoint fPoint;
     int angle;
     gun_s gun;
+    int health;
 } tank_s;
 
 typedef struct textures_s
