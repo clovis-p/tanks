@@ -27,9 +27,12 @@ void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank)
     bullet->fPoint.y = (float)(tank->rect.y + tank->rect.h);
 
     // Adjust for tank angle
-    bullet->fPoint.x += (float)(tank->rect.w / 2.0) * (float)cos(degToRad(90 - tank->angle));
-    bullet->fPoint.y += -(float)(tank->rect.h / 2.0) * (float)sin(degToRad(90 - tank->angle));
-    printf("%f, %f\n", bullet->fPoint.x, bullet->fPoint.y);
+    bullet->fPoint.x += 18.0f * (float)sin(degToRad(tank->angle));
+    bullet->fPoint.y += -18.0f * (float)cos(degToRad(tank->angle));
+
+    // Adjust for the tip of the gun
+    bullet->fPoint.x += -13.0f * (float)cos(degToRad(90 + tank->gun.angle + tank->angle));
+    bullet->fPoint.y += -13.0f * (float)sin(degToRad(90 + tank->gun.angle + tank->angle));
 
     bullet->rect.x = (int)bullet->fPoint.x;
     bullet->rect.y = (int)bullet->fPoint.y;
@@ -78,40 +81,12 @@ int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain)
 
 void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed)
 {
-    if (tank->gun.angle == 0)
-    {
-        bullet->speedX = 0;
-        bullet->speedY = -speed;
-    }
-    else if (tank->gun.angle == 90)
-    {
-        bullet->speedX = speed;
-        bullet->speedY = 0;
-    }
-    else if (tank->gun.angle == -90)
-    {
-        bullet->speedX = -speed;
-        bullet->speedY = 0;
-    }
-    else
-    {
-        int vectorAngle = 0;
+    int vectorAngle = 90 - tank->gun.angle;
 
-        if ((tank->gun.angle > 0 && tank->gun.angle < 90) || tank->gun.angle < 0 && tank->gun.angle > -90)
-        {
-            vectorAngle = 90 - tank->gun.angle;
-        }
-        else
-        {
-            printf("Tank gun angle out of bounds: %d\n", tank->gun.angle);
-            vectorAngle = 90;
-        }
-
-        // Converting polar vector to cartesian form
-        bullet->speedX = speed * (float)cos(degToRad(vectorAngle - tank->angle));
-        bullet->speedY = -speed * (float)sin(degToRad(vectorAngle - tank->angle));
-        printf("angle: %d, tank angle: %d, speedX: %f, speedY: %f\n", tank->gun.angle, tank->angle, bullet->speedX, bullet->speedY);
-    }
+    // Converting polar vector to cartesian form
+    bullet->speedX = speed * (float)cos(degToRad(vectorAngle - tank->angle));
+    bullet->speedY = -speed * (float)sin(degToRad(vectorAngle - tank->angle));
+    printf("angle: %d, tank angle: %d, speedX: %f, speedY: %f\n", tank->gun.angle, tank->angle, bullet->speedX, bullet->speedY);
 }
 
 double degToRad(int deg)
