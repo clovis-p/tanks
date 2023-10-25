@@ -7,11 +7,14 @@
 #include "events.h"
 #include "terrain/terrain.h"
 #include "bullet.h"
+#include "tank.h"
 
 static int initSDL(SDL_Window** win, SDL_Renderer** ren);
 static void quitSDL(SDL_Window** win, SDL_Renderer** ren);
 static void quitGame(textures_s* textures, terrain_s** terrain);
 static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures);
+
+Uint32 deltaTime = 0;
 
 int main(int argc, char *argv[])
 {
@@ -21,7 +24,7 @@ int main(int argc, char *argv[])
     terrain_s *terrain;
 
     textures_s textures;
-    int ticks = 0;
+    Uint32 ticks = 0;
 
     int quit = 0;
 
@@ -34,7 +37,12 @@ int main(int argc, char *argv[])
 
     while (!quit)
     {
-        SDL_Delay(10);
+        deltaTime = SDL_GetTicks() - ticks;
+        ticks = SDL_GetTicks();
+
+        //printf("deltaTime: %d\n%f fps\n", deltaTime, 1000 / (float)deltaTime);
+
+        SDL_Delay(5);
 
         updateBullet(&textures.bullet, terrain);
 
@@ -89,6 +97,10 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     textures->tank1.gun.rect.x = 0;
     textures->tank1.gun.rect.y = 6;
     textures->tank1.gun.angle = 80;
+    textures->tank1.gun.fAngle = (float)textures->tank1.gun.angle;
+
+    // tank1 spawn point
+    teleportTank(&textures->tank1, 150, *terrain);
 
     // init tank2
     buffer = SDL_LoadBMP("../resources/images/blue_tank.bmp");
@@ -125,8 +137,12 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     SDL_QueryTexture(textures->tank1.gun.texture, NULL, NULL, &textures->tank2.gun.rect.w, &textures->tank2.gun.rect.h);
     textures->tank2.gun.rect.x = 0;
     textures->tank2.gun.rect.y = 6;
-    textures->tank2.gun.angle = 80;
+    textures->tank2.gun.angle = -80;
+    textures->tank2.gun.fAngle = (float)textures->tank2.gun.angle;
     textures->tank2.gun.relativePosY = textures->tank1.gun.relativePosY;
+
+    // tank2 spawn point
+    teleportTank(&textures->tank2, 1280 - 150, *terrain);
 
     // init bullet
     textures->bullet.rect.w = 3;

@@ -40,14 +40,34 @@ static void calculateTankAngle(tank_s* tank, terrain_s* terrain)
     }
 }
 
-void moveTank(tank_s* tank, int amount, terrain_s* terrain)
+void teleportTank(tank_s* tank, int x, terrain_s* terrain)
 {
+    // set x coordinate
+    tank->fPoint.x = (float)x - tank->rect.w / 2;
+    tank->rect.x = (int)tank->fPoint.x;
+
+    // update y position
+    tank->fPoint.y = (float)(terrain->groundLevel[tank->rect.x + tank->rect.w / 2] - tank->rect.h);
+    tank->rect.y = (int)tank->fPoint.y;
+
+    // tank angle according to terrain
+    calculateTankAngle(tank, terrain);
+}
+
+void moveTank(tank_s* tank, float amount, terrain_s* terrain)
+{
+    if (tank->fPoint.x + (float)amount < (float)tank->rect.w / 2 && amount < 0 || // tank is too far left and going left or
+        tank->fPoint.x + (float)tank->rect.w + (float)amount > RESOLUTION_X - ((float)tank->rect.w / 2) && amount > 0) // tank is too far right and going right
+    {
+        return;
+    }
+
     // tank angle according to terrain
     calculateTankAngle(tank, terrain);
 
     // move according to angle
     float speed = (float)amount * (float)cos(tank->angle * M_PI / 180);
-    tank->fPoint.x += speed;
+    tank->fPoint.x += speed * (float)deltaTime;
     tank->rect.x = (int)tank->fPoint.x;
 
     // update y position
@@ -57,16 +77,37 @@ void moveTank(tank_s* tank, int amount, terrain_s* terrain)
 
 void rotateGunClockwise(gun_s* gun)
 {
-    if (gun->angle < 90)
+    if (gun->fAngle < 90)
     {
-        gun->angle += 1;
+        gun->fAngle += 0.1f * (float)deltaTime;
+
+        if (gun->fAngle > 90)
+        {
+            gun->fAngle = 90;
+            gun->angle = (int)gun->fAngle;
+        }
+        else
+        {
+            gun->angle = (int)gun->fAngle;
+        }
     }
 }
 
 void rotateGunCounterClockwise(gun_s* gun)
 {
-    if (gun->angle > -90)
+    if (gun->fAngle > -90)
     {
-        gun->angle -= 1;
+        gun->fAngle -= 0.1f * (float)deltaTime;
+
+        if (gun->fAngle < -90)
+        {
+            gun->fAngle = -90;
+            gun->angle = (int)gun->fAngle;
+        }
+        else
+        {
+
+            gun->angle = (int)gun->fAngle;
+        }
     }
 }

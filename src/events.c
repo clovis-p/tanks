@@ -38,11 +38,11 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     // tank1
     if (keyStates[SDL_SCANCODE_D])
     {
-        moveTank(&textures->tank1, 1, terrain); // move right
+        moveTank(&textures->tank1, 0.075f, terrain); // move right
     }
     if (keyStates[SDL_SCANCODE_A])
     {
-        moveTank(&textures->tank1, -1, terrain); // move left
+        moveTank(&textures->tank1, -0.075f, terrain); // move left
     }
     if (keyStates[SDL_SCANCODE_W])
     {
@@ -56,11 +56,11 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     // tank2
     if (keyStates[SDL_SCANCODE_RIGHT])
     {
-        moveTank(&textures->tank2, 1, terrain);
+        moveTank(&textures->tank2, 0.075f, terrain);
     }
     if (keyStates[SDL_SCANCODE_LEFT])
     {
-        moveTank(&textures->tank2, -1, terrain);
+        moveTank(&textures->tank2, -0.075f, terrain);
     }
     if (keyStates[SDL_SCANCODE_UP])
     {
@@ -97,4 +97,14 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
         showDebug = 0;
     }
 
+    /*
+    if (keyStates[SDL_SCANCODE_T])
+    {
+        SDL_Delay(50);
+    }
+    else
+    {
+        SDL_Delay(10);
+    }
+    */
 }

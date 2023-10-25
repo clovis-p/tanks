@@ -7,9 +7,10 @@
 
 #include "main.h"
 
-void moveTank(tank_s* tank, int amount, terrain_s* terrain);
+void moveTank(tank_s* tank, float amount, terrain_s* terrain);
 void updateTankGunAngle(tank_s* tank);
 void rotateGunClockwise(gun_s* gun);
 void rotateGunCounterClockwise(gun_s* gun);
+void teleportTank(tank_s* tank, int x, terrain_s* terrain);
 
 #endif //TANKS_TANK_H

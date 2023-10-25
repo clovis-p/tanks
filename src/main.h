@@ -10,11 +10,14 @@
 #define RESOLUTION_X 1280
 #define RESOLUTION_Y 720
 
+extern Uint32 deltaTime;
+
 typedef struct gun_s
 {
     SDL_Texture* texture;
     SDL_Rect rect;
     int angle;
+    float fAngle;
     int relativePosY; // Y position relative to the tank
     // (relative X position is always 0)
 } gun_s;

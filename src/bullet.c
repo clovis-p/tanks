@@ -19,7 +19,7 @@ void fireBullet(bullet_s* bullet, tank_s* tank)
 {
     calculateBulletOriginPoint(bullet, tank);
     bullet->active = 1;
-    calculateBulletXYSpeed(bullet, tank, 5);
+    calculateBulletXYSpeed(bullet, tank, 0.4f);
 }
 
 static void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank)
@@ -59,13 +59,15 @@ void updateBullet(bullet_s* bullet, terrain_s* terrain)
 
 static void updateBulletPos(bullet_s* bullet)
 {
-    bullet->fPoint.x += bullet->speedX;
-    bullet->fPoint.y += bullet->speedY;
+    for (int i = 0; i < deltaTime; i++)
+    {
+        bullet->fPoint.x += bullet->speedX;
+        bullet->fPoint.y += bullet->speedY;
+        bullet->speedY += 0.0003f;
+    }
 
     bullet->rect.x = (int)bullet->fPoint.x;
     bullet->rect.y = (int)bullet->fPoint.y;
-
-    bullet->speedY += 0.05f;
 }
 
 static int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain)
@@ -88,7 +90,7 @@ static void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed)
     // Converting polar vector to cartesian form
     bullet->speedX = speed * (float)cos(degToRad(vectorAngle - tank->angle));
     bullet->speedY = -speed * (float)sin(degToRad(vectorAngle - tank->angle));
-    printf("angle: %d, tank angle: %d, speedX: %f, speedY: %f\n", tank->gun.angle, tank->angle, bullet->speedX, bullet->speedY);
+    //printf("angle: %d, tank angle: %d, speedX: %f, speedY: %f\n", tank->gun.angle, tank->angle, bullet->speedX, bullet->speedY);
 }
 
 static double degToRad(int deg)
