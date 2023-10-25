@@ -80,17 +80,8 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     }
     else if (fire)
     {
-        if (turn == 0)
-        {
-            fireBullet(&textures->bullet, &textures->tank[0]);
-        }
-        else if (turn == 1)
-        {
-            fireBullet(&textures->bullet, &textures->tank[1]);
-        }
-
+        fireBullet(&textures->bullet, &textures->tank[turn]);
         fire = 0;
-
         turn++;
         turn %= playerCount;
     }
