@@ -154,17 +154,17 @@ terrain_s* generateMidpointTerrain(int width, int height, int precision)
                 }
 
                 int differenceBetweenNeighbours;
-                const double VARIATION_MULTIPLIER = 0.0;
+                static double variationMultiplier = -0.2;
 
                 if (closestLeftGeneratedMidpoint.y > closestRightGeneratedMidpoint.y)
                 {
                     differenceBetweenNeighbours = closestLeftGeneratedMidpoint.y - closestRightGeneratedMidpoint.y;
-                    midpoint[currentMidpointNumber].y = generateRandomNumber(closestRightGeneratedMidpoint.y - (int)(VARIATION_MULTIPLIER * differenceBetweenNeighbours), closestLeftGeneratedMidpoint.y + (int)(VARIATION_MULTIPLIER * differenceBetweenNeighbours));
+                    midpoint[currentMidpointNumber].y = generateRandomNumber(closestRightGeneratedMidpoint.y - (int)(variationMultiplier * differenceBetweenNeighbours), closestLeftGeneratedMidpoint.y + (int)(variationMultiplier * differenceBetweenNeighbours));
                 }
                 else if (closestLeftGeneratedMidpoint.y < closestRightGeneratedMidpoint.y)
                 {
                     differenceBetweenNeighbours = closestRightGeneratedMidpoint.y - closestLeftGeneratedMidpoint.y;
-                    midpoint[currentMidpointNumber].y = generateRandomNumber(closestLeftGeneratedMidpoint.y - (int)(VARIATION_MULTIPLIER * differenceBetweenNeighbours), closestRightGeneratedMidpoint.y + (int)(VARIATION_MULTIPLIER * differenceBetweenNeighbours));
+                    midpoint[currentMidpointNumber].y = generateRandomNumber(closestLeftGeneratedMidpoint.y - (int)(variationMultiplier * differenceBetweenNeighbours), closestRightGeneratedMidpoint.y + (int)(variationMultiplier * differenceBetweenNeighbours));
                 }
                 else
                 {
