@@ -103,15 +103,25 @@ static double degToRad(int deg)
 
 static int checkBulletCollisions(textures_s* textures)
 {
-    if (textures->bullet.fPoint.x + (float)textures->bullet.rect.w >= textures->tank1.fPoint.x && textures->bullet.fPoint.x < textures->tank1.fPoint.x + (float)textures->tank1.rect.w && // Check X axis
-        textures->bullet.fPoint.y + (float)textures->bullet.rect.w >= textures->tank1.fPoint.y - (float)textures->tank1.rect.h && textures->bullet.fPoint.y < textures->tank1.fPoint.y + (float)textures->tank1.rect.h)
+    if (textures->bullet.fPoint.x + (float)textures->bullet.rect.w >= textures->tank[0].fPoint.x && textures->bullet.fPoint.x < textures->tank[0].fPoint.x + (float)textures->tank[0].rect.w && // Check X axis
+        textures->bullet.fPoint.y + (float)textures->bullet.rect.w >= textures->tank[0].fPoint.y - (float)textures->tank[0].rect.h && textures->bullet.fPoint.y < textures->tank[0].fPoint.y + (float)textures->tank[0].rect.h)
     {
         printf("Collision!! ");
+        textures->tank[0].collidesWithBullet = 1;
+    }
+    else
+    {
+        textures->tank[0].collidesWithBullet = 0;
     }
 
-    if (textures->bullet.fPoint.x + (float)textures->bullet.rect.w >= textures->tank2.fPoint.x && textures->bullet.fPoint.x < textures->tank2.fPoint.x + (float)textures->tank2.rect.w && // Check X axis
-        textures->bullet.fPoint.y + (float)textures->bullet.rect.w >= textures->tank2.fPoint.y - (float)textures->tank2.rect.h && textures->bullet.fPoint.y < textures->tank2.fPoint.y + (float)textures->tank2.rect.h)
+    if (textures->bullet.fPoint.x + (float)textures->bullet.rect.w >= textures->tank[1].fPoint.x && textures->bullet.fPoint.x < textures->tank[1].fPoint.x + (float)textures->tank[1].rect.w && // Check X axis
+        textures->bullet.fPoint.y + (float)textures->bullet.rect.w >= textures->tank[1].fPoint.y - (float)textures->tank[1].rect.h && textures->bullet.fPoint.y < textures->tank[1].fPoint.y + (float)textures->tank[1].rect.h)
     {
         printf("Collision!! ");
+        textures->tank[1].collidesWithBullet = 1;
+    }
+    else
+    {
+        textures->tank[1].collidesWithBullet = 0;
     }
 }

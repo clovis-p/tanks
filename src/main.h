@@ -43,12 +43,12 @@ typedef struct tank_s
     int angle;
     gun_s gun;
     int health;
+    int collidesWithBullet;
 } tank_s;
 
 typedef struct textures_s
 {
-    tank_s tank1;
-    tank_s tank2;
+    tank_s tank[2];
     bullet_s bullet;
 } textures_s;
 

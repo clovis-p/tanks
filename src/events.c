@@ -32,43 +32,43 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
 
     if (showDebug)
     {
-        //printf("tank1 angle: %d\n", textures->tank1.angle);
+        //printf("tank[0] angle: %d\n", textures->tank[0].angle);
     }
 
-    // tank1
+    // tank[0]
     if (keyStates[SDL_SCANCODE_D])
     {
-        moveTank(&textures->tank1, 0.075f, terrain); // move right
+        moveTank(&textures->tank[0], 0.075f, terrain); // move right
     }
     if (keyStates[SDL_SCANCODE_A])
     {
-        moveTank(&textures->tank1, -0.075f, terrain); // move left
+        moveTank(&textures->tank[0], -0.075f, terrain); // move left
     }
     if (keyStates[SDL_SCANCODE_W])
     {
-        rotateGunCounterClockwise(&textures->tank1.gun);
+        rotateGunCounterClockwise(&textures->tank[0].gun);
     }
     if (keyStates[SDL_SCANCODE_S])
     {
-        rotateGunClockwise(&textures->tank1.gun);
+        rotateGunClockwise(&textures->tank[0].gun);
     }
 
-    // tank2
+    // tank[1]
     if (keyStates[SDL_SCANCODE_RIGHT])
     {
-        moveTank(&textures->tank2, 0.075f, terrain);
+        moveTank(&textures->tank[1], 0.075f, terrain);
     }
     if (keyStates[SDL_SCANCODE_LEFT])
     {
-        moveTank(&textures->tank2, -0.075f, terrain);
+        moveTank(&textures->tank[1], -0.075f, terrain);
     }
     if (keyStates[SDL_SCANCODE_UP])
     {
-        rotateGunCounterClockwise(&textures->tank2.gun);
+        rotateGunCounterClockwise(&textures->tank[1].gun);
     }
     if (keyStates[SDL_SCANCODE_DOWN])
     {
-        rotateGunClockwise(&textures->tank2.gun);
+        rotateGunClockwise(&textures->tank[1].gun);
     }
 
     // bullet
@@ -82,11 +82,11 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     {
         if (turn == 0)
         {
-            fireBullet(&textures->bullet, &textures->tank1);
+            fireBullet(&textures->bullet, &textures->tank[0]);
         }
         else if (turn == 1)
         {
-            fireBullet(&textures->bullet, &textures->tank2);
+            fireBullet(&textures->bullet, &textures->tank[1]);
         }
 
         fire = 0;

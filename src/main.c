@@ -63,91 +63,91 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
 {
     *terrain = generateTerrain(RESOLUTION_X, RESOLUTION_Y, TERRAIN_TYPE_MIDPOINT);
 
-    // init tank1 base
+    // init tank[0] base
     SDL_Surface* buffer = SDL_LoadBMP("../resources/images/red_tank.bmp");
     if (buffer == NULL)
     {
         printf("Failed to load red_tank.bmp: %s\n", SDL_GetError());
     }
-    textures->tank1.baseTexture = SDL_CreateTextureFromSurface(*ren, buffer);
+    textures->tank[0].baseTexture = SDL_CreateTextureFromSurface(*ren, buffer);
     SDL_FreeSurface(buffer);
-    SDL_QueryTexture(textures->tank1.baseTexture, NULL, NULL, &textures->tank1.rect.w, &textures->tank1.rect.h);
-    textures->tank1.rect.x = 0;
-    textures->tank1.rect.y = 0;
-    textures->tank1.angle = 0;
-    textures->tank1.fPoint.x = 0;
-    textures->tank1.fPoint.y = 0;
-    textures->tank1.health = 100;
+    SDL_QueryTexture(textures->tank[0].baseTexture, NULL, NULL, &textures->tank[0].rect.w, &textures->tank[0].rect.h);
+    textures->tank[0].rect.x = 0;
+    textures->tank[0].rect.y = 0;
+    textures->tank[0].angle = 0;
+    textures->tank[0].fPoint.x = 0;
+    textures->tank[0].fPoint.y = 0;
+    textures->tank[0].health = 100;
 
 
-    // init tank1 combined texture
-    textures->tank1.combinedTexture = SDL_CreateTexture(*ren,
+    // init tank[0] combined texture
+    textures->tank[0].combinedTexture = SDL_CreateTexture(*ren,
                                                         SDL_PIXELFORMAT_RGBA8888,
                                                         SDL_TEXTUREACCESS_TARGET,
-                                                        textures->tank1.rect.w,
-                                                        textures->tank1.rect.h);
-    SDL_SetTextureBlendMode(textures->tank1.combinedTexture, SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(textures->tank1.combinedTexture, 255);
+                                                        textures->tank[0].rect.w,
+                                                        textures->tank[0].rect.h);
+    SDL_SetTextureBlendMode(textures->tank[0].combinedTexture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(textures->tank[0].combinedTexture, 255);
 
-    // tank1 gun
+    // tank[0] gun
     buffer = SDL_LoadBMP("../resources/images/gun.bmp");
     if (buffer == NULL)
     {
         printf("Failed to load gun.bmp: %s\n", SDL_GetError());
     }
-    textures->tank1.gun.texture = SDL_CreateTextureFromSurface(*ren, buffer);
+    textures->tank[0].gun.texture = SDL_CreateTextureFromSurface(*ren, buffer);
     SDL_FreeSurface(buffer);
-    SDL_QueryTexture(textures->tank1.gun.texture, NULL, NULL, &textures->tank1.gun.rect.w, &textures->tank1.gun.rect.h);
-    textures->tank1.gun.rect.x = 0;
-    textures->tank1.gun.rect.y = 6;
-    textures->tank1.gun.angle = 80;
-    textures->tank1.gun.fAngle = (float)textures->tank1.gun.angle;
+    SDL_QueryTexture(textures->tank[0].gun.texture, NULL, NULL, &textures->tank[0].gun.rect.w, &textures->tank[0].gun.rect.h);
+    textures->tank[0].gun.rect.x = 0;
+    textures->tank[0].gun.rect.y = 6;
+    textures->tank[0].gun.angle = 80;
+    textures->tank[0].gun.fAngle = (float)textures->tank[0].gun.angle;
 
-    // tank1 spawn point
-    teleportTank(&textures->tank1, 150, *terrain);
+    // tank[0] spawn point
+    teleportTank(&textures->tank[0], 150, *terrain);
 
-    // init tank2
+    // init tank[1]
     buffer = SDL_LoadBMP("../resources/images/blue_tank.bmp");
     if (buffer == NULL)
     {
         printf("Failed to load blue_tank.bmp: %s\n", SDL_GetError());
     }
-    textures->tank2.baseTexture = SDL_CreateTextureFromSurface(*ren, buffer);
+    textures->tank[1].baseTexture = SDL_CreateTextureFromSurface(*ren, buffer);
     SDL_FreeSurface(buffer);
-    SDL_QueryTexture(textures->tank2.baseTexture, NULL, NULL, &textures->tank2.rect.w, &textures->tank2.rect.h);
-    textures->tank2.rect.x = 0;
-    textures->tank2.rect.y = 0;
-    textures->tank2.angle = 0;
-    textures->tank2.fPoint.x = 0;
-    textures->tank2.fPoint.y = 0;
-    textures->tank2.health = 100;
+    SDL_QueryTexture(textures->tank[1].baseTexture, NULL, NULL, &textures->tank[1].rect.w, &textures->tank[1].rect.h);
+    textures->tank[1].rect.x = 0;
+    textures->tank[1].rect.y = 0;
+    textures->tank[1].angle = 0;
+    textures->tank[1].fPoint.x = 0;
+    textures->tank[1].fPoint.y = 0;
+    textures->tank[1].health = 100;
 
-    // init tank2 combined texture
-    textures->tank2.combinedTexture = SDL_CreateTexture(*ren,
+    // init tank[1] combined texture
+    textures->tank[1].combinedTexture = SDL_CreateTexture(*ren,
                                                         SDL_PIXELFORMAT_RGBA8888,
                                                         SDL_TEXTUREACCESS_TARGET,
-                                                        textures->tank2.rect.w,
-                                                        textures->tank2.rect.h);
-    SDL_SetTextureBlendMode(textures->tank2.combinedTexture, SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(textures->tank2.combinedTexture, 255);
+                                                        textures->tank[1].rect.w,
+                                                        textures->tank[1].rect.h);
+    SDL_SetTextureBlendMode(textures->tank[1].combinedTexture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(textures->tank[1].combinedTexture, 255);
 
-    // tank2 gun
+    // tank[1] gun
     buffer = SDL_LoadBMP("../resources/images/gun.bmp");
     if (buffer == NULL)
     {
         printf("Failed to load gun.bmp: %s\n", SDL_GetError());
     }
-    textures->tank2.gun.texture = SDL_CreateTextureFromSurface(*ren, buffer);
+    textures->tank[1].gun.texture = SDL_CreateTextureFromSurface(*ren, buffer);
     SDL_FreeSurface(buffer);
-    SDL_QueryTexture(textures->tank1.gun.texture, NULL, NULL, &textures->tank2.gun.rect.w, &textures->tank2.gun.rect.h);
-    textures->tank2.gun.rect.x = 0;
-    textures->tank2.gun.rect.y = 6;
-    textures->tank2.gun.angle = -80;
-    textures->tank2.gun.fAngle = (float)textures->tank2.gun.angle;
-    textures->tank2.gun.relativePosY = textures->tank1.gun.relativePosY;
+    SDL_QueryTexture(textures->tank[0].gun.texture, NULL, NULL, &textures->tank[1].gun.rect.w, &textures->tank[1].gun.rect.h);
+    textures->tank[1].gun.rect.x = 0;
+    textures->tank[1].gun.rect.y = 6;
+    textures->tank[1].gun.angle = -80;
+    textures->tank[1].gun.fAngle = (float)textures->tank[1].gun.angle;
+    textures->tank[1].gun.relativePosY = textures->tank[0].gun.relativePosY;
 
-    // tank2 spawn point
-    teleportTank(&textures->tank2, 1280 - 150, *terrain);
+    // tank[1] spawn point
+    teleportTank(&textures->tank[1], 1280 - 150, *terrain);
 
     // init bullet
     textures->bullet.rect.w = 3;
@@ -163,12 +163,12 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
 
 static void quitGame(textures_s* textures, terrain_s** terrain)
 {
-    SDL_DestroyTexture(textures->tank1.baseTexture);
-    SDL_DestroyTexture(textures->tank2.baseTexture);
-    SDL_DestroyTexture(textures->tank1.combinedTexture);
-    SDL_DestroyTexture(textures->tank2.combinedTexture);
-    SDL_DestroyTexture(textures->tank1.gun.texture);
-    SDL_DestroyTexture(textures->tank2.gun.texture);
+    SDL_DestroyTexture(textures->tank[0].baseTexture);
+    SDL_DestroyTexture(textures->tank[1].baseTexture);
+    SDL_DestroyTexture(textures->tank[0].combinedTexture);
+    SDL_DestroyTexture(textures->tank[1].combinedTexture);
+    SDL_DestroyTexture(textures->tank[0].gun.texture);
+    SDL_DestroyTexture(textures->tank[1].gun.texture);
     free(*terrain);
 }
 
