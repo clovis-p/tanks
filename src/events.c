@@ -74,24 +74,23 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     // bullet
     static int fire = 0;
 
-    if (keyStates[SDL_SCANCODE_SPACE])
+    if (keyStates[SDL_SCANCODE_SPACE] && !textures->bullet.active)
     {
         fire = 1;
     }
     else if (fire)
     {
-        if (!textures->bullet.active)
+        if (turn == 0)
         {
-            if (turn == 0)
-            {
-                fireBullet(&textures->bullet, &textures->tank1);
-            }
-            else if (turn == 1)
-            {
-                fireBullet(&textures->bullet, &textures->tank2);
-            }
+            fireBullet(&textures->bullet, &textures->tank1);
         }
+        else if (turn == 1)
+        {
+            fireBullet(&textures->bullet, &textures->tank2);
+        }
+
         fire = 0;
+
         turn++;
         turn %= playerCount;
     }
