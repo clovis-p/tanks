@@ -35,40 +35,25 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
         //printf("tank[0] angle: %d\n", textures->tank[0].angle);
     }
 
-    // tank[0]
-    if (keyStates[SDL_SCANCODE_D])
+    // tank
+    if (!textures->bullet.active)
     {
-        moveTank(&textures->tank[0], 0.075f, terrain); // move right
-    }
-    if (keyStates[SDL_SCANCODE_A])
-    {
-        moveTank(&textures->tank[0], -0.075f, terrain); // move left
-    }
-    if (keyStates[SDL_SCANCODE_W])
-    {
-        rotateGunCounterClockwise(&textures->tank[0].gun);
-    }
-    if (keyStates[SDL_SCANCODE_S])
-    {
-        rotateGunClockwise(&textures->tank[0].gun);
-    }
-
-    // tank[1]
-    if (keyStates[SDL_SCANCODE_RIGHT])
-    {
-        moveTank(&textures->tank[1], 0.075f, terrain);
-    }
-    if (keyStates[SDL_SCANCODE_LEFT])
-    {
-        moveTank(&textures->tank[1], -0.075f, terrain);
-    }
-    if (keyStates[SDL_SCANCODE_UP])
-    {
-        rotateGunCounterClockwise(&textures->tank[1].gun);
-    }
-    if (keyStates[SDL_SCANCODE_DOWN])
-    {
-        rotateGunClockwise(&textures->tank[1].gun);
+        if (keyStates[SDL_SCANCODE_D])
+        {
+            moveTank(&textures->tank[turn], 0.075f, terrain); // move right
+        }
+        if (keyStates[SDL_SCANCODE_A])
+        {
+            moveTank(&textures->tank[turn], -0.075f, terrain); // move left
+        }
+        if (keyStates[SDL_SCANCODE_W])
+        {
+            rotateGunCounterClockwise(&textures->tank[turn].gun);
+        }
+        if (keyStates[SDL_SCANCODE_S])
+        {
+            rotateGunClockwise(&textures->tank[turn].gun);
+        }
     }
 
     // bullet
