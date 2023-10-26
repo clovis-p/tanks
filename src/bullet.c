@@ -75,7 +75,7 @@ static void updateBulletPos(textures_s* textures)
 
 static int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain)
 {
-    if (bullet->rect.x < 0 || bullet->rect.x > RESOLUTION_X || bullet->rect.y < 0 || bullet->rect.y > RESOLUTION_Y ||
+    if (bullet->rect.x < 0 || bullet->rect.x > RESOLUTION_X ||
         bullet->rect.y + bullet->rect.h > terrain->groundLevel[bullet->rect.x + bullet->rect.w / 2])
     {
         return 1;
