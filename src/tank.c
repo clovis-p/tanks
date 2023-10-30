@@ -44,20 +44,71 @@ static void updateTankHitbox(tank_s* tank)
 {
     const float HITBOX_TOP_OFFSET = 25.0f;
 
-    tank->hitBox.bottomCenter.x = (float)tank->rect.x + (float)tank->rect.w / 2;
-    tank->hitBox.bottomCenter.y = (float)tank->rect.y + (float)tank->rect.h;
+    if (tank->angle == 0)
+    {
+        tank->hitBox.bottomCenter.x = (float)tank->rect.x + (float)tank->rect.w / 2;
+        tank->hitBox.bottomCenter.y = (float)tank->rect.y + (float)tank->rect.h;
 
-    tank->hitBox.topLeft.x = (float)tank->rect.x;
-    tank->hitBox.topLeft.y = (float)tank->rect.y + HITBOX_TOP_OFFSET;
+        tank->hitBox.topLeft.x = (float)tank->rect.x;
+        tank->hitBox.topLeft.y = (float)tank->rect.y + HITBOX_TOP_OFFSET;
 
-    tank->hitBox.topRight.x = (float)tank->rect.x + (float)tank->rect.w;
-    tank->hitBox.topRight.y = (float)tank->rect.y + HITBOX_TOP_OFFSET;
+        tank->hitBox.topRight.x = (float)tank->rect.x + (float)tank->rect.w;
+        tank->hitBox.topRight.y = (float)tank->rect.y + HITBOX_TOP_OFFSET;
 
-    tank->hitBox.bottomLeft.x = (float)tank->rect.x;
-    tank->hitBox.bottomLeft.y = (float)tank->rect.y + (float)tank->rect.h;
+        tank->hitBox.bottomLeft.x = (float)tank->rect.x;
+        tank->hitBox.bottomLeft.y = (float)tank->rect.y + (float)tank->rect.h;
 
-    tank->hitBox.bottomRight.x = (float)tank->rect.x + (float)tank->rect.w;
-    tank->hitBox.bottomRight.y = (float)tank->rect.y + (float)tank->rect.h;
+        tank->hitBox.bottomRight.x = (float)tank->rect.x + (float)tank->rect.w;
+        tank->hitBox.bottomRight.y = (float)tank->rect.y + (float)tank->rect.h;
+    }
+    else
+    {
+        const float HITBOX_HEIGHT = (float)tank->rect.h - HITBOX_TOP_OFFSET;
+
+        // Set initial values centered on bottom center at (0, 0)
+        tank->hitBox.bottomCenter.x = 0;
+        tank->hitBox.bottomCenter.y = HITBOX_HEIGHT;
+
+        // top left
+        tank->hitBox.topLeft.x = -(float)tank->rect.w / 2;
+        tank->hitBox.topLeft.y = 0;
+
+        // top right
+        tank->hitBox.topRight.x = (float)tank->rect.w / 2;
+        tank->hitBox.topRight.y = 0;
+
+        // bottom left
+        tank->hitBox.bottomLeft.x = -(float)tank->rect.w / 2;
+        tank->hitBox.bottomLeft.y = HITBOX_HEIGHT;
+
+        // bottom right
+        tank->hitBox.bottomRight.x = (float)tank->rect.w / 2;
+        tank->hitBox.bottomRight.y = HITBOX_HEIGHT;
+
+        // Rotate hitbox
+        float tankAngleRad = (float)tank->angle * M_PI / 180; // convert to radians
+        float bottomLeftVectorLength = tank->hitBox.topLeft.x; // length from bottom center to bottom left
+        float topLeftVectorLength = sqrtf(powf(tank->hitBox.topLeft.x, 2) + powf(tank->hitBox.topLeft.y + HITBOX_HEIGHT, 2)); // length from bottom center to top left
+        float topRightVectorLength = sqrtf(powf(tank->hitBox.topRight.x, 2) + powf(tank->hitBox.topRight.y + HITBOX_HEIGHT, 2)); // length from bottom center to top right
+        float bottomRightVectorLength = tank->hitBox.bottomRight.x; // length from bottom center to bottom right
+
+        tank->hitBox.bottomLeft.x = bottomLeftVectorLength * sinf(-tankAngleRad);
+        tank->hitBox.bottomLeft.y = bottomLeftVectorLength * cosf(-tankAngleRad);
+
+        tank->hitBox.topLeft.x = topLeftVectorLength * sinf(-tankAngleRad);
+        tank->hitBox.topLeft.y = topLeftVectorLength * cosf(-tankAngleRad) - HITBOX_HEIGHT;
+
+        tank->hitBox.topRight.x = topRightVectorLength * sinf(-tankAngleRad);
+        tank->hitBox.topRight.y = topRightVectorLength * cosf(-tankAngleRad) - HITBOX_HEIGHT;
+
+        tank->hitBox.bottomRight.x = bottomRightVectorLength * sinf(-tankAngleRad);
+        tank->hitBox.bottomRight.y = bottomRightVectorLength * cosf(-tankAngleRad);
+
+        // Translate hitbox to tank position
+        tank->hitBox.bottomCenter.x += (float)tank->rect.x + (float)tank->rect.w / 2;
+        tank->hitBox.bottomCenter.y += (float)tank->rect.y + (float)tank->rect.h;
+
+    }
 }
 
 void teleportTank(tank_s* tank, int x, terrain_s* terrain)
