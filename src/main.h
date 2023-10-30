@@ -34,6 +34,15 @@ typedef struct bullet_s
     float speedY;
 } bullet_s;
 
+typedef struct tankHitBox_s
+{
+    SDL_FPoint bottomCenter;
+    SDL_FPoint topLeft;
+    SDL_FPoint topRight;
+    SDL_FPoint bottomLeft;
+    SDL_FPoint bottomRight;
+} tankHitBox_s;
+
 typedef struct tank_s
 {
     SDL_Texture* baseTexture; // Texture for the tank without the gun
@@ -44,6 +53,7 @@ typedef struct tank_s
     gun_s gun;
     int health;
     int collidesWithBullet;
+    tankHitBox_s hitBox;
 } tank_s;
 
 typedef struct textures_s

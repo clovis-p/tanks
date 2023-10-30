@@ -11,6 +11,7 @@
 #include "events.h"
 
 static void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x, int y, int width, int height, SDL_Color fg, SDL_Color bg);
+static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank);
 
 void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s* textures) {
     // sky
@@ -31,11 +32,14 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     // debug, showDebug = 1 while left shift and left alt are held down, otherwise showDebug = 0
     if (showDebug)
     {
-        SDL_SetRenderDrawColor(*ren, 255, 0, 0, 255);
+        SDL_SetRenderDrawColor(*ren, 0, 0, 0, 255);
         SDL_RenderDrawPoints(*ren, terrain->debugPoints, terrain->debugPointsCount);
 
         SDL_RenderDrawRect(*ren, &textures->tank[0].rect);
         SDL_RenderDrawRect(*ren, &textures->tank[1].rect);
+
+        renderTankHitboxes(ren, &textures->tank[0]);
+        renderTankHitboxes(ren, &textures->tank[1]);
     }
 
     // Set render target to tank[0] texture
@@ -93,6 +97,14 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
                      SDL_FLIP_NONE);
 
     SDL_RenderPresent(*ren);
+}
+
+static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank)
+{
+    SDL_RenderDrawLineF(*ren, tank->hitBox.topLeft.x, tank->hitBox.topLeft.y, tank->hitBox.topRight.x, tank->hitBox.topRight.y); // top line
+    SDL_RenderDrawLineF(*ren, tank->hitBox.topLeft.x, tank->hitBox.topLeft.y, tank->hitBox.bottomLeft.x, tank->hitBox.bottomLeft.y); // left line
+    SDL_RenderDrawLineF(*ren, tank->hitBox.topRight.x, tank->hitBox.topRight.y, tank->hitBox.bottomRight.x, tank->hitBox.bottomRight.y); // right line
+    SDL_RenderDrawLineF(*ren, tank->hitBox.bottomLeft.x, tank->hitBox.bottomLeft.y, tank->hitBox.bottomRight.x, tank->hitBox.bottomRight.y); // bottom line
 }
 
 static void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x, int y, int width, int height, SDL_Color fg, SDL_Color bg)

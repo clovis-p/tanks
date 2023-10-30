@@ -40,6 +40,26 @@ static void calculateTankAngle(tank_s* tank, terrain_s* terrain)
     }
 }
 
+static void updateTankHitbox(tank_s* tank)
+{
+    const float HITBOX_TOP_OFFSET = 25.0f;
+
+    tank->hitBox.bottomCenter.x = (float)tank->rect.x + (float)tank->rect.w / 2;
+    tank->hitBox.bottomCenter.y = (float)tank->rect.y + (float)tank->rect.h;
+
+    tank->hitBox.topLeft.x = (float)tank->rect.x;
+    tank->hitBox.topLeft.y = (float)tank->rect.y + HITBOX_TOP_OFFSET;
+
+    tank->hitBox.topRight.x = (float)tank->rect.x + (float)tank->rect.w;
+    tank->hitBox.topRight.y = (float)tank->rect.y + HITBOX_TOP_OFFSET;
+
+    tank->hitBox.bottomLeft.x = (float)tank->rect.x;
+    tank->hitBox.bottomLeft.y = (float)tank->rect.y + (float)tank->rect.h;
+
+    tank->hitBox.bottomRight.x = (float)tank->rect.x + (float)tank->rect.w;
+    tank->hitBox.bottomRight.y = (float)tank->rect.y + (float)tank->rect.h;
+}
+
 void teleportTank(tank_s* tank, int x, terrain_s* terrain)
 {
     // set x coordinate
@@ -52,6 +72,9 @@ void teleportTank(tank_s* tank, int x, terrain_s* terrain)
 
     // tank angle according to terrain
     calculateTankAngle(tank, terrain);
+
+    // update hitbox
+    updateTankHitbox(tank);
 }
 
 void moveTank(tank_s* tank, float amount, terrain_s* terrain)
@@ -64,6 +87,9 @@ void moveTank(tank_s* tank, float amount, terrain_s* terrain)
 
     // tank angle according to terrain
     calculateTankAngle(tank, terrain);
+
+    // update hitbox
+    updateTankHitbox(tank);
 
     // move according to angle
     float speed = (float)amount * (float)cos(tank->angle * M_PI / 180);
