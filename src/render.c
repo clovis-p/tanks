@@ -39,6 +39,7 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
         //SDL_RenderDrawRect(*ren, &textures->tank[0].rect);
         //SDL_RenderDrawRect(*ren, &textures->tank[1].rect);
 
+        SDL_SetRenderDrawColor(*ren, 0, 0, 255, 255);
         renderTankHitboxes(ren, &textures->tank[0]);
         renderTankHitboxes(ren, &textures->tank[1]);
     }
@@ -102,12 +103,67 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     SDL_RenderPresent(*ren);
 }
 
-static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank)
-{
-    SDL_RenderDrawLineF(*ren, tank->hitBox.topLeft.x, tank->hitBox.topLeft.y, tank->hitBox.topRight.x, tank->hitBox.topRight.y); // top line
-    SDL_RenderDrawLineF(*ren, tank->hitBox.topLeft.x, tank->hitBox.topLeft.y, tank->hitBox.bottomLeft.x, tank->hitBox.bottomLeft.y); // left line
-    SDL_RenderDrawLineF(*ren, tank->hitBox.topRight.x, tank->hitBox.topRight.y, tank->hitBox.bottomRight.x, tank->hitBox.bottomRight.y); // right line
-    SDL_RenderDrawLineF(*ren, tank->hitBox.bottomLeft.x, tank->hitBox.bottomLeft.y, tank->hitBox.bottomRight.x, tank->hitBox.bottomRight.y); // bottom line
+static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank) {
+    // box around tank
+    SDL_RenderDrawLineF(*ren, tank->hitBox.topLeft.x, tank->hitBox.topLeft.y, tank->hitBox.topRight.x,
+                        tank->hitBox.topRight.y); // top line
+    SDL_RenderDrawLineF(*ren, tank->hitBox.topLeft.x, tank->hitBox.topLeft.y, tank->hitBox.bottomLeft.x,
+                        tank->hitBox.bottomLeft.y); // left line
+    SDL_RenderDrawLineF(*ren, tank->hitBox.topRight.x, tank->hitBox.topRight.y, tank->hitBox.bottomRight.x,
+                        tank->hitBox.bottomRight.y); // right line
+    SDL_RenderDrawLineF(*ren, tank->hitBox.bottomLeft.x, tank->hitBox.bottomLeft.y, tank->hitBox.bottomRight.x,
+                        tank->hitBox.bottomRight.y); // bottom line
+
+    // top slope
+    SDL_RenderDrawLineF(*ren,
+                        tank->hitBox.topLeft.x - RESOLUTION_X,
+                        tank->hitBox.topLeft.y - tank->hitBox.topSlope * RESOLUTION_X,
+                        tank->hitBox.topLeft.x + RESOLUTION_X,
+                        tank->hitBox.topLeft.y + tank->hitBox.topSlope * RESOLUTION_X);
+
+    // bottom slope
+    SDL_RenderDrawLineF(*ren,
+                        tank->hitBox.bottomLeft.x - RESOLUTION_X,
+                        tank->hitBox.bottomLeft.y - tank->hitBox.bottomSlope * RESOLUTION_X,
+                        tank->hitBox.bottomLeft.x + RESOLUTION_X,
+                        tank->hitBox.bottomLeft.y + tank->hitBox.bottomSlope * RESOLUTION_X);
+
+    // left slope
+    if (tank->angle != 0)
+    {
+        SDL_RenderDrawLineF(*ren,
+                            tank->hitBox.topLeft.x - RESOLUTION_X,
+                            tank->hitBox.topLeft.y - tank->hitBox.leftSlope * RESOLUTION_X,
+                            tank->hitBox.topLeft.x + RESOLUTION_X,
+                            tank->hitBox.topLeft.y + tank->hitBox.leftSlope * RESOLUTION_X);
+    }
+    else
+    {
+        SDL_RenderDrawLineF(*ren,
+                            tank->hitBox.topLeft.x,
+                            tank->hitBox.topLeft.y - RESOLUTION_Y,
+                            tank->hitBox.topLeft.x,
+                            tank->hitBox.topLeft.y + RESOLUTION_X);
+    }
+
+    // right slope
+    if (tank->angle != 0)
+    {
+        SDL_RenderDrawLineF(*ren,
+                            tank->hitBox.topRight.x - RESOLUTION_X,
+                            tank->hitBox.topRight.y - tank->hitBox.rightSlope * RESOLUTION_X,
+                            tank->hitBox.topRight.x + RESOLUTION_X,
+                            tank->hitBox.topRight.y + tank->hitBox.rightSlope * RESOLUTION_X);
+    }
+    else
+    {
+        SDL_RenderDrawLineF(*ren,
+                            tank->hitBox.topRight.x,
+                            tank->hitBox.topRight.y - RESOLUTION_Y,
+                            tank->hitBox.topRight.x,
+                            tank->hitBox.topRight.y + RESOLUTION_X);
+
+    }
 }
 
 static void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x, int y, int width, int height, SDL_Color fg, SDL_Color bg)

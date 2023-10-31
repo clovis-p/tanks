@@ -41,6 +41,16 @@ typedef struct tankHitBox_s
     SDL_FPoint topRight;
     SDL_FPoint bottomLeft;
     SDL_FPoint bottomRight;
+
+    float topSlope;
+    float bottomSlope;
+    float leftSlope;
+    float rightSlope;
+
+    float topOffset;
+    float bottomOffset;
+    float leftOffset;
+    float rightOffset;
 } tankHitBox_s;
 
 typedef struct tank_s
