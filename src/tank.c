@@ -137,12 +137,6 @@ void moveTank(tank_s* tank, float amount, terrain_s* terrain)
         return;
     }
 
-    // tank angle according to terrain
-    calculateTankAngle(tank, terrain);
-
-    // update hitbox
-    updateTankHitbox(tank);
-
     // move according to angle
     float speed = (float)amount * (float)cos(tank->angle * M_PI / 180);
     tank->fPoint.x += speed * (float)deltaTime;
@@ -151,6 +145,12 @@ void moveTank(tank_s* tank, float amount, terrain_s* terrain)
     // update y position
     tank->fPoint.y = (float)(terrain->groundLevel[tank->rect.x + tank->rect.w / 2] - tank->rect.h);
     tank->rect.y = (int)tank->fPoint.y;
+
+    // tank angle according to terrain
+    calculateTankAngle(tank, terrain);
+
+    // update hitbox
+    updateTankHitbox(tank);
 }
 
 void rotateGunClockwise(gun_s* gun)
