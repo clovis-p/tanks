@@ -49,6 +49,7 @@ typedef struct tank_s
     SDL_Texture* combinedTexture; // Texture for the tank and gun combined
     SDL_Rect rect;
     SDL_FPoint fPoint;
+    SDL_FPoint bottomCenter;
     int angle;
     gun_s gun;
     int health;

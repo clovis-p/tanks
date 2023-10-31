@@ -35,8 +35,8 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
         SDL_SetRenderDrawColor(*ren, 0, 0, 0, 255);
         SDL_RenderDrawPoints(*ren, terrain->debugPoints, terrain->debugPointsCount);
 
-        SDL_RenderDrawRect(*ren, &textures->tank[0].rect);
-        SDL_RenderDrawRect(*ren, &textures->tank[1].rect);
+        //SDL_RenderDrawRect(*ren, &textures->tank[0].rect);
+        //SDL_RenderDrawRect(*ren, &textures->tank[1].rect);
 
         renderTankHitboxes(ren, &textures->tank[0]);
         renderTankHitboxes(ren, &textures->tank[1]);
@@ -75,7 +75,9 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     // Reset render target
     SDL_SetRenderTarget(*ren, NULL);
 
-    // set tank center point to the bottom of the tank so it stays level with the ground when on a hill
+    // Set tank center point to the bottom of the tank so it stays level with the ground when on a hill
+    // This is different from tank.bottomCenter!! tank.bottomCenter is relative to the entire window, this
+    // is relative to the tank texture only
     SDL_Point tankCenterPoint = {textures->tank[0].rect.w / 2, textures->tank[0].rect.h};
 
     // Render tank[0]
