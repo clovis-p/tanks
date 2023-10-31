@@ -47,91 +47,69 @@ static void updateTankHitbox(tank_s* tank)
 {
     const float HITBOX_TOP_OFFSET = 30.0f;
 
-    if (tank->angle == 0)
-    {
-        // Some values need to be substracted by 1 because the texture is 45 pixels wide,
-        // but pixel #1 is at position 0 and pixel #45 is at position 44
-        tank->hitBox.bottomCenter.x = ((float)tank->rect.x + (float)tank->rect.w / 2) - 1;
-        tank->hitBox.bottomCenter.y = ((float)tank->rect.y + (float)tank->rect.h) - 1;
+    const float HITBOX_HEIGHT = (float)tank->rect.h - HITBOX_TOP_OFFSET;
 
-        tank->hitBox.topLeft.x = (float)tank->rect.x;
-        tank->hitBox.topLeft.y = (float)tank->rect.y + HITBOX_TOP_OFFSET;
+    tankHitBox_s untranslatedHitBox;
 
-        tank->hitBox.topRight.x = ((float)tank->rect.x + (float)tank->rect.w) - 1;
-        tank->hitBox.topRight.y = (float)tank->rect.y + HITBOX_TOP_OFFSET;
+    // Set initial values centered on bottom center at (0, 0)
+    untranslatedHitBox.bottomCenter.x = 0;
+    untranslatedHitBox.bottomCenter.y = 0;
 
-        tank->hitBox.bottomLeft.x = (float)tank->rect.x;
-        tank->hitBox.bottomLeft.y = (float)tank->rect.y + (float)tank->rect.h;
+    // top left
+    untranslatedHitBox.topLeft.x = -(float)tank->rect.w / 2;
+    untranslatedHitBox.topLeft.y = -HITBOX_HEIGHT;
 
-        tank->hitBox.bottomRight.x = ((float)tank->rect.x + (float)tank->rect.w) - 1;
-        tank->hitBox.bottomRight.y = ((float)tank->rect.y + (float)tank->rect.h) - 1;
-    }
-    else
-    {
-        const float HITBOX_HEIGHT = (float)tank->rect.h - HITBOX_TOP_OFFSET;
+    // top right
+    untranslatedHitBox.topRight.x = (float)tank->rect.w / 2;
+    untranslatedHitBox.topRight.y = -HITBOX_HEIGHT;
 
-        tankHitBox_s untranslatedHitBox;
+    // bottom left
+    untranslatedHitBox.bottomLeft.x = -(float)tank->rect.w / 2;
+    untranslatedHitBox.bottomLeft.y = 0;
 
-        // Set initial values centered on bottom center at (0, 0)
-        untranslatedHitBox.bottomCenter.x = 0;
-        untranslatedHitBox.bottomCenter.y = 0;
+    // bottom right
+    untranslatedHitBox.bottomRight.x = (float)tank->rect.w / 2;
+    untranslatedHitBox.bottomRight.y = 0;
 
-        // top left
-        untranslatedHitBox.topLeft.x = -(float)tank->rect.w / 2;
-        untranslatedHitBox.topLeft.y = -HITBOX_HEIGHT;
+    // Convert tank angle to radians
+    float tankAngleRad = (float)(tank->angle * M_PI / 180);
 
-        // top right
-        untranslatedHitBox.topRight.x = (float)tank->rect.w / 2;
-        untranslatedHitBox.topRight.y = -HITBOX_HEIGHT;
+    // Rotate hitbox
+    float bottomRightVectorLength = untranslatedHitBox.bottomRight.x; // length from bottom center to bottom right
+    float topRightVectorLength = sqrtf(powf(untranslatedHitBox.topRight.x, 2) + powf(untranslatedHitBox.topRight.y, 2)); // length from bottom center to top right
+    float topLeftVectorLength = topRightVectorLength; // length from bottom center to top left - symmetrical to top right
+    float bottomLeftVectorLength = bottomRightVectorLength; // length from bottom center to bottom left - symmetrical to bottom right
 
-        // bottom left
-        untranslatedHitBox.bottomLeft.x = -(float)tank->rect.w / 2;
-        untranslatedHitBox.bottomLeft.y = 0;
-
-        // bottom right
-        untranslatedHitBox.bottomRight.x = (float)tank->rect.w / 2;
-        untranslatedHitBox.bottomRight.y = 0;
-
-        // Convert tank angle to radians
-        float tankAngleRad = (float)(tank->angle * M_PI / 180);
-
-        // Rotate hitbox
-        float bottomRightVectorLength = untranslatedHitBox.bottomRight.x; // length from bottom center to bottom right
-        float topRightVectorLength = sqrtf(powf(untranslatedHitBox.topRight.x, 2) + powf(untranslatedHitBox.topRight.y, 2)); // length from bottom center to top right
-        float topLeftVectorLength = topRightVectorLength; // length from bottom center to top left - symmetrical to top right
-        float bottomLeftVectorLength = bottomRightVectorLength; // length from bottom center to bottom left - symmetrical to bottom right
-
-        float bottomRightVectorAngle = tankAngleRad; // angle of bottom center to bottom right vector
-        float topRightVectorAngle = atanf(untranslatedHitBox.topRight.y / untranslatedHitBox.topRight.x); // angle of bottom center to top right vector
-        float topLeftVectorAngle = -(float)M_PI - topRightVectorAngle; // angle of bottom center to top left vector
-        topRightVectorAngle += tankAngleRad;
-        topLeftVectorAngle += tankAngleRad;
-        float bottomLeftVectorAngle = -(float)M_PI + tankAngleRad; // angle of bottom center to bottom left vector
+    float bottomRightVectorAngle = tankAngleRad; // angle of bottom center to bottom right vector
+    float topRightVectorAngle = atanf(untranslatedHitBox.topRight.y / untranslatedHitBox.topRight.x); // angle of bottom center to top right vector
+    float topLeftVectorAngle = -(float)M_PI - topRightVectorAngle; // angle of bottom center to top left vector
+    topRightVectorAngle += tankAngleRad;
+    topLeftVectorAngle += tankAngleRad;
+    float bottomLeftVectorAngle = -(float)M_PI + tankAngleRad; // angle of bottom center to bottom left vector
 
 
-        untranslatedHitBox.bottomLeft.x = bottomLeftVectorLength * cosf(bottomLeftVectorAngle);
-        untranslatedHitBox.bottomLeft.y = bottomLeftVectorLength * sinf(bottomLeftVectorAngle);
+    untranslatedHitBox.bottomLeft.x = bottomLeftVectorLength * cosf(bottomLeftVectorAngle);
+    untranslatedHitBox.bottomLeft.y = bottomLeftVectorLength * sinf(bottomLeftVectorAngle);
 
-        untranslatedHitBox.topLeft.x = topLeftVectorLength * cosf(topLeftVectorAngle);
-        untranslatedHitBox.topLeft.y = topLeftVectorLength * sinf(topLeftVectorAngle);
+    untranslatedHitBox.topLeft.x = topLeftVectorLength * cosf(topLeftVectorAngle);
+    untranslatedHitBox.topLeft.y = topLeftVectorLength * sinf(topLeftVectorAngle);
 
-        untranslatedHitBox.topRight.x = topRightVectorLength * cosf(topRightVectorAngle);
-        untranslatedHitBox.topRight.y = topRightVectorLength * sinf(topRightVectorAngle);
+    untranslatedHitBox.topRight.x = topRightVectorLength * cosf(topRightVectorAngle);
+    untranslatedHitBox.topRight.y = topRightVectorLength * sinf(topRightVectorAngle);
 
-        untranslatedHitBox.bottomRight.x = bottomRightVectorLength * cosf(bottomRightVectorAngle);
-        untranslatedHitBox.bottomRight.y = bottomRightVectorLength * sinf(bottomRightVectorAngle);
+    untranslatedHitBox.bottomRight.x = bottomRightVectorLength * cosf(bottomRightVectorAngle);
+    untranslatedHitBox.bottomRight.y = bottomRightVectorLength * sinf(bottomRightVectorAngle);
 
-        // Translate hitbox to tank position
-        tank->hitBox.bottomCenter = tank->bottomCenter;
-        tank->hitBox.topLeft.x = tank->bottomCenter.x + untranslatedHitBox.topLeft.x;
-        tank->hitBox.topLeft.y = tank->bottomCenter.y + untranslatedHitBox.topLeft.y;
-        tank->hitBox.topRight.x = tank->bottomCenter.x + untranslatedHitBox.topRight.x;
-        tank->hitBox.topRight.y = tank->bottomCenter.y + untranslatedHitBox.topRight.y;
-        tank->hitBox.bottomLeft.x = tank->bottomCenter.x + untranslatedHitBox.bottomLeft.x;
-        tank->hitBox.bottomLeft.y = tank->bottomCenter.y + untranslatedHitBox.bottomLeft.y;
-        tank->hitBox.bottomRight.x = tank->bottomCenter.x + untranslatedHitBox.bottomRight.x;
-        tank->hitBox.bottomRight.y = tank->bottomCenter.y + untranslatedHitBox.bottomRight.y;
-    }
+    // Translate hitbox to tank position
+    tank->hitBox.bottomCenter = tank->bottomCenter;
+    tank->hitBox.topLeft.x = tank->bottomCenter.x + untranslatedHitBox.topLeft.x;
+    tank->hitBox.topLeft.y = tank->bottomCenter.y + untranslatedHitBox.topLeft.y;
+    tank->hitBox.topRight.x = tank->bottomCenter.x + untranslatedHitBox.topRight.x;
+    tank->hitBox.topRight.y = tank->bottomCenter.y + untranslatedHitBox.topRight.y;
+    tank->hitBox.bottomLeft.x = tank->bottomCenter.x + untranslatedHitBox.bottomLeft.x;
+    tank->hitBox.bottomLeft.y = tank->bottomCenter.y + untranslatedHitBox.bottomLeft.y;
+    tank->hitBox.bottomRight.x = tank->bottomCenter.x + untranslatedHitBox.bottomRight.x;
+    tank->hitBox.bottomRight.y = tank->bottomCenter.y + untranslatedHitBox.bottomRight.y;
 }
 
 void teleportTank(tank_s* tank, int x, terrain_s* terrain)
