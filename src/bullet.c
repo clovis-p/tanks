@@ -23,6 +23,23 @@ void fireBullet(bullet_s* bullet, tank_s* tank)
     calculateBulletXYSpeed(bullet, tank, 0.4f);
 }
 
+void updateBullet(textures_s* textures, terrain_s* terrain)
+{
+    if (bulletIsOutOfBounds(&textures->bullet, terrain))
+    {
+        textures->bullet.active = 0;
+        textures->bullet.rect.x = -1;
+        textures->bullet.rect.y = -1;
+        textures->bullet.fPoint.x = -1;
+        textures->bullet.fPoint.y = -1;
+    }
+
+    if (textures->bullet.active)
+    {
+        updateBulletPos(textures);
+    }
+}
+
 static void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank)
 {
     // Set to center point of tank rotation
@@ -39,23 +56,6 @@ static void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank)
 
     bullet->rect.x = (int)bullet->fPoint.x;
     bullet->rect.y = (int)bullet->fPoint.y;
-}
-
-void updateBullet(textures_s* textures, terrain_s* terrain)
-{
-    if (bulletIsOutOfBounds(&textures->bullet, terrain))
-    {
-        textures->bullet.active = 0;
-        textures->bullet.rect.x = -1;
-        textures->bullet.rect.y = -1;
-        textures->bullet.fPoint.x = -1;
-        textures->bullet.fPoint.y = -1;
-    }
-
-    if (textures->bullet.active)
-    {
-        updateBulletPos(textures);
-    }
 }
 
 static void updateBulletPos(textures_s* textures)
