@@ -13,7 +13,8 @@
 static void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x, int y, int width, int height, SDL_Color fg, SDL_Color bg);
 static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank);
 
-void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s* textures) {
+void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s* textures)
+{
     // sky
     SDL_SetRenderDrawColor(*ren, 135, 206, 235, 255);
     SDL_RenderClear(*ren);
