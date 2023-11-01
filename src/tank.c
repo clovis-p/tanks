@@ -90,6 +90,147 @@ void rotateGunCounterClockwise(gun_s* gun)
     }
 }
 
+void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet)
+{
+    if (tank->angle == 0)
+    {
+        if (bullet->fPoint.x + (float)bullet->rect.w > tank->hitBox.topLeft.x)
+        {
+            tank->hitBox.leftColConditionMet = 1;
+        }
+        else
+        {
+            tank->hitBox.leftColConditionMet = 0;
+        }
+
+        if (bullet->fPoint.x < tank->hitBox.topRight.x)
+        {
+            tank->hitBox.rightColConditionMet = 1;
+        }
+        else
+        {
+            tank->hitBox.rightColConditionMet = 0;
+        }
+
+        if (bullet->fPoint.y + (float)bullet->rect.h > tank->hitBox.topLeft.y)
+        {
+            tank->hitBox.topColConditionMet = 1;
+        }
+        else
+        {
+            tank->hitBox.topColConditionMet = 0;
+        }
+
+        if (bullet->fPoint.y < tank->hitBox.bottomLeft.y)
+        {
+            tank->hitBox.bottomColConditionMet = 1;
+        }
+        else
+        {
+            tank->hitBox.bottomColConditionMet = 0;
+        }
+    }
+    else if (tank->angle > 0)
+    {
+        if (bullet->fPoint.y >= tank->hitBox.leftSlope * bullet->fPoint.x + tank->hitBox.leftOffset)
+        {
+            tank->hitBox.leftColConditionMet = 1;
+        }
+        else
+        {
+            tank->hitBox.leftColConditionMet = 0;
+        }
+
+        if (bullet->fPoint.y + (float)bullet->rect.h <= tank->hitBox.rightSlope * bullet->fPoint.x + tank->hitBox.rightOffset)
+        {
+            tank->hitBox.rightColConditionMet = 1;
+        }
+        else
+        {
+            tank->hitBox.rightColConditionMet = 0;
+        }
+
+        if (bullet->fPoint.x <= (bullet->fPoint.y - tank->hitBox.topOffset) / tank->hitBox.topSlope)
+        {
+            tank->hitBox.topColConditionMet = 1;
+        }
+        else
+        {
+            tank->hitBox.topColConditionMet = 0;
+        }
+
+        if (bullet->fPoint.x + (float)bullet->rect.w >= (bullet->fPoint.y - tank->hitBox.bottomOffset) / tank->hitBox.bottomSlope)
+        {
+            tank->hitBox.bottomColConditionMet = 1;
+        }
+        else
+        {
+            tank->hitBox.bottomColConditionMet = 0;
+        }
+    }
+    else if (tank->angle < 0)
+    {
+        if (bullet->fPoint.y + (float)bullet->rect.h <= tank->hitBox.leftSlope * bullet->fPoint.x + tank->hitBox.leftOffset)
+        {
+            tank->hitBox.leftColConditionMet = 1;
+        }
+        else
+        {
+            tank->hitBox.leftColConditionMet = 0;
+        }
+
+        if (bullet->fPoint.y >= tank->hitBox.rightSlope * bullet->fPoint.x + tank->hitBox.rightOffset)
+        {
+            tank->hitBox.rightColConditionMet = 1;
+        }
+        else
+        {
+            tank->hitBox.rightColConditionMet = 0;
+        }
+
+        if (bullet->fPoint.x + (float)bullet->rect.w >= (bullet->fPoint.y - tank->hitBox.topOffset) / tank->hitBox.topSlope)
+        {
+            tank->hitBox.topColConditionMet = 1;
+        }
+        else
+        {
+            tank->hitBox.topColConditionMet = 0;
+        }
+
+        if (bullet->fPoint.x <= (bullet->fPoint.y - tank->hitBox.bottomOffset) / tank->hitBox.bottomSlope)
+        {
+            tank->hitBox.bottomColConditionMet = 1;
+        }
+        else
+        {
+            tank->hitBox.bottomColConditionMet = 0;
+        }
+    }
+
+    if (tank->hitBox.topColConditionMet && tank->hitBox.bottomColConditionMet &&
+        tank->hitBox.leftColConditionMet && tank->hitBox.rightColConditionMet)
+    {
+        tank->collidesWithBullet = 1;
+    }
+    else
+    {
+        tank->collidesWithBullet = 0;
+    }
+}
+
+void resetAllTanksHitboxStates(tank_s tanks[])
+{
+    for (int i = 0; i < playerCount; i++)
+    {
+        tanks[i].hitBox.topColConditionMet = 0;
+        tanks[i].hitBox.bottomColConditionMet = 0;
+        tanks[i].hitBox.leftColConditionMet = 0;
+        tanks[i].hitBox.rightColConditionMet = 0;
+
+        tanks[i].collidesWithBullet = 0;
+    }
+}
+
 static void calculateTankAngle(tank_s* tank, terrain_s* terrain)
 {
     int x1, x2, y1, y2;
@@ -125,9 +266,7 @@ static void calculateTankAngle(tank_s* tank, terrain_s* terrain)
 
 static void updateTankHitbox(tank_s* tank)
 {
-    const float HITBOX_TOP_OFFSET = 30.0f;
-
-    const float HITBOX_HEIGHT = (float)tank->rect.h - HITBOX_TOP_OFFSET;
+    const float HITBOX_HEIGHT = 20.0f;
 
     tankHitBox_s untranslatedHitBox;
 

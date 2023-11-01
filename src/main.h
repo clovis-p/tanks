@@ -51,6 +51,11 @@ typedef struct tankHitBox_s
     float bottomOffset;
     float leftOffset;
     float rightOffset;
+
+    int topColConditionMet;
+    int bottomColConditionMet;
+    int leftColConditionMet;
+    int rightColConditionMet;
 } tankHitBox_s;
 
 typedef struct tank_s

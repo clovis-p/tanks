@@ -39,7 +39,6 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
         //SDL_RenderDrawRect(*ren, &textures->tank[0].rect);
         //SDL_RenderDrawRect(*ren, &textures->tank[1].rect);
 
-        SDL_SetRenderDrawColor(*ren, 0, 0, 255, 255);
         renderTankHitboxes(ren, &textures->tank[0]);
         renderTankHitboxes(ren, &textures->tank[1]);
     }
@@ -115,6 +114,15 @@ static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank) {
                         tank->hitBox.bottomRight.y); // bottom line
 
     // top slope
+    if (tank->hitBox.topColConditionMet)
+    {
+        SDL_SetRenderDrawColor(*ren, 255, 0, 0, 255);
+    }
+    else
+    {
+        SDL_SetRenderDrawColor(*ren, 0, 0, 255, 255);
+    }
+
     SDL_RenderDrawLineF(*ren,
                         tank->hitBox.topLeft.x - RESOLUTION_X,
                         tank->hitBox.topLeft.y - tank->hitBox.topSlope * RESOLUTION_X,
@@ -122,6 +130,15 @@ static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank) {
                         tank->hitBox.topLeft.y + tank->hitBox.topSlope * RESOLUTION_X);
 
     // bottom slope
+    if (tank->hitBox.bottomColConditionMet)
+    {
+        SDL_SetRenderDrawColor(*ren, 255, 0, 0, 255);
+    }
+    else
+    {
+        SDL_SetRenderDrawColor(*ren, 0, 0, 255, 255);
+    }
+
     SDL_RenderDrawLineF(*ren,
                         tank->hitBox.bottomLeft.x - RESOLUTION_X,
                         tank->hitBox.bottomLeft.y - tank->hitBox.bottomSlope * RESOLUTION_X,
@@ -129,6 +146,15 @@ static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank) {
                         tank->hitBox.bottomLeft.y + tank->hitBox.bottomSlope * RESOLUTION_X);
 
     // left slope
+    if (tank->hitBox.leftColConditionMet)
+    {
+        SDL_SetRenderDrawColor(*ren, 255, 0, 0, 255);
+    }
+    else
+    {
+        SDL_SetRenderDrawColor(*ren, 0, 0, 255, 255);
+    }
+
     if (tank->angle != 0)
     {
         SDL_RenderDrawLineF(*ren,
@@ -147,6 +173,14 @@ static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank) {
     }
 
     // right slope
+    if (tank->hitBox.rightColConditionMet)
+    {
+        SDL_SetRenderDrawColor(*ren, 255, 0, 0, 255);
+    }
+    else
+    {
+        SDL_SetRenderDrawColor(*ren, 0, 0, 255, 255);
+    }
     if (tank->angle != 0)
     {
         SDL_RenderDrawLineF(*ren,

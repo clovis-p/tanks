@@ -8,6 +8,7 @@
 #include "bullet.h"
 #include "main.h"
 #include "terrain/terrain.h"
+#include "tank.h"
 
 static void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed);
 static void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank);
@@ -25,13 +26,17 @@ void fireBullet(bullet_s* bullet, tank_s* tank)
 
 void updateBullet(textures_s* textures, terrain_s* terrain)
 {
-    if (bulletIsOutOfBounds(&textures->bullet, terrain))
+    if (bulletIsOutOfBounds(&textures->bullet, terrain) && textures->bullet.active)
     {
+        // Runs once when bullet goes out of bounds or hits the ground
+
         textures->bullet.active = 0;
         textures->bullet.rect.x = -1;
         textures->bullet.rect.y = -1;
         textures->bullet.fPoint.x = -1;
         textures->bullet.fPoint.y = -1;
+
+        resetAllTanksHitboxStates(textures->tank);
     }
 
     if (textures->bullet.active)
@@ -66,7 +71,10 @@ static void updateBulletPos(textures_s* textures)
         textures->bullet.fPoint.y += textures->bullet.speedY;
         textures->bullet.speedY += 0.0003f;
 
-        checkBulletCollisions(textures);
+        for (int j = 0; j < playerCount; j++)
+        {
+            checkTankCollisionWithBullet(&textures->tank[j], &textures->bullet);
+        }
     }
 
     textures->bullet.rect.x = (int)textures->bullet.fPoint.x;
@@ -99,29 +107,4 @@ static void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed)
 static double degToRad(int deg)
 {
     return (double)deg * M_PI / 180;
-}
-
-static int checkBulletCollisions(textures_s* textures)
-{
-    if (textures->bullet.fPoint.x + (float)textures->bullet.rect.w >= textures->tank[0].fPoint.x && textures->bullet.fPoint.x < textures->tank[0].fPoint.x + (float)textures->tank[0].rect.w && // Check X axis
-        textures->bullet.fPoint.y + (float)textures->bullet.rect.w >= textures->tank[0].fPoint.y - (float)textures->tank[0].rect.h && textures->bullet.fPoint.y < textures->tank[0].fPoint.y + (float)textures->tank[0].rect.h)
-    {
-        printf("Collision!! ");
-        textures->tank[0].collidesWithBullet = 1;
-    }
-    else
-    {
-        textures->tank[0].collidesWithBullet = 0;
-    }
-
-    if (textures->bullet.fPoint.x + (float)textures->bullet.rect.w >= textures->tank[1].fPoint.x && textures->bullet.fPoint.x < textures->tank[1].fPoint.x + (float)textures->tank[1].rect.w && // Check X axis
-        textures->bullet.fPoint.y + (float)textures->bullet.rect.w >= textures->tank[1].fPoint.y - (float)textures->tank[1].rect.h && textures->bullet.fPoint.y < textures->tank[1].fPoint.y + (float)textures->tank[1].rect.h)
-    {
-        printf("Collision!! ");
-        textures->tank[1].collidesWithBullet = 1;
-    }
-    else
-    {
-        textures->tank[1].collidesWithBullet = 0;
-    }
 }

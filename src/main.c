@@ -159,6 +159,9 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     textures->bullet.speedY = 1;
     textures->bullet.fPoint.x = 0;
     textures->bullet.fPoint.y = 0;
+
+    // init hitboxes
+    resetAllTanksHitboxStates(textures->tank);
 }
 
 static void quitGame(textures_s* textures, terrain_s** terrain)
