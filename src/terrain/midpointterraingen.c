@@ -232,7 +232,7 @@ terrain_s* generateMidpointTerrain(int width, int height, int precision)
             {
                 slope = 0;
                 slope = calculateLinearSlope(midpoint[currentMidpointNumber].y, midpoint[currentMidpointNumber + 1].y, midpoint[currentMidpointNumber].x, midpoint[currentMidpointNumber + 1].x);
-                printf("Slope between %d and %d: %f\n", midpoint[currentMidpointNumber].y, midpoint[currentMidpointNumber + 1].y, slope);
+                //printf("Slope between %d and %d: %f\n", midpoint[currentMidpointNumber].y, midpoint[currentMidpointNumber + 1].y, slope);
             }
             terrain->groundLevel[x/* + (int)widthBetweenMidpoints*/] = (int)(slope * (x - midpoint[currentMidpointNumber].x) + midpoint[currentMidpointNumber].y);
             for (int y = 0; y < height; y++)
@@ -245,7 +245,7 @@ terrain_s* generateMidpointTerrain(int width, int height, int precision)
                     terrain->groundPointsCount++;
                     if (y == terrain->groundLevel[x])
                     {
-                        printf("Ground level at %d: %d\n", x, terrain->groundLevel[x]);
+                        //printf("Ground level at %d: %d\n", x, terrain->groundLevel[x]);
                     }
                 }
                 else
