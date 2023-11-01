@@ -71,14 +71,19 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
         turn %= playerCount;
     }
 
-    // debug
-    if (keyStates[SDL_SCANCODE_LALT] && keyStates[SDL_SCANCODE_LSHIFT])
+    // toggle debug mode
+    static int lockF3 = 0;
+
+    if (keyStates[SDL_SCANCODE_F3] && !lockF3)
     {
-        showDebug = 1;
+        showDebug++;
+        showDebug %= 2;
+        lockF3 = 1;
     }
-    else
+    else if (!keyStates[SDL_SCANCODE_F3])
     {
-        showDebug = 0;
+        // Once the key is released, unlock it so debug mode can be toggled again
+        lockF3 = 0;
     }
 
     /*
