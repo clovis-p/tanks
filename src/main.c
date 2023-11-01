@@ -78,6 +78,8 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     textures->tank[0].fPoint.x = 0;
     textures->tank[0].fPoint.y = 0;
     textures->tank[0].health = 100;
+    textures->tank[0].isInvincible = 0;
+    textures->tank[0].id = 0;
 
 
     // init tank[0] combined texture
@@ -121,6 +123,8 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     textures->tank[1].fPoint.x = 0;
     textures->tank[1].fPoint.y = 0;
     textures->tank[1].health = 100;
+    textures->tank[1].isInvincible = 0;
+    textures->tank[1].id = 1;
 
     // init tank[1] combined texture
     textures->tank[1].combinedTexture = SDL_CreateTexture(*ren,
@@ -159,6 +163,7 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     textures->bullet.speedY = 1;
     textures->bullet.fPoint.x = 0;
     textures->bullet.fPoint.y = 0;
+    textures->bullet.harmlessToShooter = 1;
 
     // init hitboxes
     resetAllTanksHitboxStates(textures->tank);

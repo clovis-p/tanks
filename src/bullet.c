@@ -15,12 +15,14 @@ static void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank);
 static double degToRad(int deg);
 static void updateBulletPos(textures_s* textures);
 static int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain);
-static int checkBulletCollisions(textures_s* textures);
+static void deactivateBullet(textures_s* textures);
 
 void fireBullet(bullet_s* bullet, tank_s* tank)
 {
     calculateBulletOriginPoint(bullet, tank);
     bullet->active = 1;
+    bullet->harmlessToShooter = 1;
+    bullet->shooterId = tank->id;
     calculateBulletXYSpeed(bullet, tank, 0.4f);
 }
 
@@ -28,21 +30,36 @@ void updateBullet(textures_s* textures, terrain_s* terrain)
 {
     if (bulletIsOutOfBounds(&textures->bullet, terrain) && textures->bullet.active)
     {
-        // Runs once when bullet goes out of bounds or hits the ground
-
-        textures->bullet.active = 0;
-        textures->bullet.rect.x = -1;
-        textures->bullet.rect.y = -1;
-        textures->bullet.fPoint.x = -1;
-        textures->bullet.fPoint.y = -1;
-
-        resetAllTanksHitboxStates(textures->tank);
+        deactivateBullet(textures);
     }
 
     if (textures->bullet.active)
     {
-        updateBulletPos(textures);
+        for (int i = 0; i < deltaTime; i++)
+        {
+            updateBulletPos(textures);
+        }
+
+        textures->bullet.rect.x = (int)textures->bullet.fPoint.x;
+        textures->bullet.rect.y = (int)textures->bullet.fPoint.y;
     }
+    else
+    {
+        resetAllTanksHitboxStates(textures->tank);
+    }
+}
+
+static void deactivateBullet(textures_s* textures)
+{
+    // Runs once when bullet goes out of bounds or hits the ground
+
+    textures->bullet.active = 0;
+    textures->bullet.rect.x = -1;
+    textures->bullet.rect.y = -1;
+    textures->bullet.fPoint.x = -1;
+    textures->bullet.fPoint.y = -1;
+
+    resetAllTanksHitboxStates(textures->tank);
 }
 
 static void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank)
@@ -65,20 +82,30 @@ static void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank)
 
 static void updateBulletPos(textures_s* textures)
 {
-    for (int i = 0; i < deltaTime; i++)
-    {
-        textures->bullet.fPoint.x += textures->bullet.speedX;
-        textures->bullet.fPoint.y += textures->bullet.speedY;
-        textures->bullet.speedY += 0.0003f;
+    textures->bullet.fPoint.x += textures->bullet.speedX;
+    textures->bullet.fPoint.y += textures->bullet.speedY;
+    textures->bullet.speedY += 0.0003f;
 
-        for (int j = 0; j < playerCount; j++)
+    for (int i = 0; i < playerCount; i++)
+    {
+        checkTankCollisionWithBullet(&textures->tank[i], &textures->bullet);
+
+        if (textures->bullet.harmlessToShooter && textures->tank[i].collidesWithBullet && i == textures->bullet.shooterId)
         {
-            checkTankCollisionWithBullet(&textures->tank[j], &textures->bullet);
+            textures->tank[i].isInvincible = 1;
+        }
+        else if (!textures->tank[i].collidesWithBullet && i == textures->bullet.shooterId)
+        {
+            textures->tank[i].isInvincible = 0;
+            textures->bullet.harmlessToShooter = 0;
+        }
+
+        if (textures->tank[i].collidesWithBullet && !textures->tank[i].isInvincible)
+        {
+            deactivateBullet(textures);
+            applyDamageToTank(&textures->tank[i], 10);
         }
     }
-
-    textures->bullet.rect.x = (int)textures->bullet.fPoint.x;
-    textures->bullet.rect.y = (int)textures->bullet.fPoint.y;
 }
 
 static int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain)

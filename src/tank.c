@@ -53,6 +53,15 @@ void moveTank(tank_s* tank, float amount, terrain_s* terrain)
     updateTankHitbox(tank);
 }
 
+void applyDamageToTank(tank_s* tank, int damage)
+{
+    if (!tank->isInvincible)
+    {
+        tank->health -= damage;
+        printf("tank %d health: %d\n", tank->id, tank->health);
+    }
+}
+
 void rotateGunClockwise(gun_s* gun)
 {
     if (gun->fAngle < 90)

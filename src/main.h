@@ -32,6 +32,8 @@ typedef struct bullet_s
     int active;
     float speedX;
     float speedY;
+    int harmlessToShooter;
+    int shooterId;
 } bullet_s;
 
 typedef struct tankHitBox_s
@@ -70,6 +72,8 @@ typedef struct tank_s
     int health;
     int collidesWithBullet;
     tankHitBox_s hitBox;
+    int isInvincible;
+    int id;
 } tank_s;
 
 typedef struct textures_s
