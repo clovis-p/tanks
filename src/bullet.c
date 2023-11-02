@@ -16,6 +16,20 @@ static void updateBulletPos(textures_s* textures);
 static int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain);
 static void deactivateBullet(textures_s* textures);
 
+void initBullet(bullet_s* bullet)
+{
+    bullet->rect.w = 3;
+    bullet->rect.h = 3;
+    bullet->rect.x = 0;
+    bullet->rect.y = 0;
+    bullet->active = 0;
+    bullet->speedX = 1;
+    bullet->speedY = 1;
+    bullet->fPoint.x = 0;
+    bullet->fPoint.y = 0;
+    bullet->harmlessToShooter = 1;
+}
+
 void fireBullet(bullet_s* bullet, tank_s* tank)
 {
     calculateBulletOriginPoint(bullet, tank);

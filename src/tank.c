@@ -15,6 +15,82 @@ static void updateTankHitbox(tank_s* tank);
 static float calculateLinearSlope(float x1, float y1, float x2, float y2);
 static void updateTankHealthBar(tank_s* tank);
 
+void initTank(SDL_Renderer** ren, textures_s* textures, int id)
+{
+    // init tank[id] base
+    SDL_Surface* buffer;
+    if (id == 0)
+    {
+        buffer = SDL_LoadBMP("../resources/images/red_tank.bmp");
+        if (buffer == NULL)
+        {
+            printf("Failed to load red_tank.bmp: %s\n", SDL_GetError());
+        }
+    }
+    else if (id == 1)
+    {
+        buffer = SDL_LoadBMP("../resources/images/blue_tank.bmp");
+        if (buffer == NULL)
+        {
+            printf("Failed to load blue_tank.bmp: %s\n", SDL_GetError());
+        }
+    }
+    else
+    {
+        printf("Invalid tank id: %d\n", id);
+        return;
+    }
+
+    textures->tank[id].baseTexture = SDL_CreateTextureFromSurface(*ren, buffer);
+    SDL_FreeSurface(buffer);
+    SDL_QueryTexture(textures->tank[id].baseTexture, NULL, NULL, &textures->tank[id].rect.w, &textures->tank[id].rect.h);
+    textures->tank[id].rect.x = 0;
+    textures->tank[id].rect.y = 0;
+    textures->tank[id].angle = 0;
+    textures->tank[id].fPoint.x = 0;
+    textures->tank[id].fPoint.y = 0;
+    textures->tank[id].health = 100;
+    textures->tank[id].isInvincible = 0;
+    textures->tank[id].id = 0;
+
+
+    // init tank[id] combined texture
+    textures->tank[id].combinedTexture = SDL_CreateTexture(*ren,
+                                                          SDL_PIXELFORMAT_RGBA8888,
+                                                          SDL_TEXTUREACCESS_TARGET,
+                                                          textures->tank[id].rect.w,
+                                                          textures->tank[id].rect.h);
+    SDL_SetTextureBlendMode(textures->tank[id].combinedTexture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(textures->tank[id].combinedTexture, 255);
+
+    // tank[id] gun
+    buffer = SDL_LoadBMP("../resources/images/gun.bmp");
+    if (buffer == NULL)
+    {
+        printf("Failed to load gun.bmp: %s\n", SDL_GetError());
+    }
+    textures->tank[id].gun.texture = SDL_CreateTextureFromSurface(*ren, buffer);
+    SDL_FreeSurface(buffer);
+    SDL_QueryTexture(textures->tank[id].gun.texture, NULL, NULL, &textures->tank[id].gun.rect.w, &textures->tank[id].gun.rect.h);
+    textures->tank[id].gun.rect.x = 0;
+    textures->tank[id].gun.rect.y = 6;
+    textures->tank[id].gun.angle = 80;
+    textures->tank[id].gun.fAngle = (float)textures->tank[id].gun.angle;
+}
+
+void initHealthBars(healthBar_s* healthBar)
+{
+    healthBar->fRect.w = 30;
+    healthBar->fRect.h = 8;
+    healthBar->rect.w = 30;
+    healthBar->rect.h = 8;
+}
+
+void initAllTanksHitboxes(tank_s tanks[])
+{
+    resetAllTanksHitboxStates(tanks);
+}
+
 void teleportTank(tank_s* tank, int x, terrain_s* terrain)
 {
     // set x coordinate
@@ -68,7 +144,6 @@ void applyDamageToTank(tank_s* tank, int damage)
     {
         tank->health -= damage;
         updateTankHealthBar(tank);
-        printf("tank %d health: %d\n", tank->id, tank->health);
     }
 }
 

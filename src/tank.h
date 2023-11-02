@@ -7,6 +7,9 @@
 
 #include "main.h"
 
+void initTank(SDL_Renderer** ren, textures_s* textures, int id);
+void initHealthBars(healthBar_s* healthBar);
+void initAllTanksHitboxes(tank_s tanks[]);
 void moveTank(tank_s* tank, float amount, terrain_s* terrain);
 void updateTankGunAngle(tank_s* tank);
 void rotateGunClockwise(gun_s* gun);
