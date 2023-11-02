@@ -59,11 +59,13 @@ static void renderDebugInfo(SDL_Renderer** ren, terrain_s* terrain, textures_s* 
     SDL_SetRenderDrawColor(*ren, 0, 0, 0, 255);
     SDL_RenderDrawPoints(*ren, terrain->debugPoints, terrain->debugPointsCount);
 
-    //SDL_RenderDrawRect(*ren, &textures->tank[0].rect);
-    //SDL_RenderDrawRect(*ren, &textures->tank[1].rect);
+    for (int i = 0; i < playerCount; i++)
+    {
+        renderTankHitboxes(ren, &textures->tank[i]);
 
-    renderTankHitboxes(ren, &textures->tank[0]);
-    renderTankHitboxes(ren, &textures->tank[1]);
+        SDL_SetRenderDrawColor(*ren, 0, 0, 0, 255);
+        SDL_RenderDrawRect(*ren, &textures->tank[i].rect);
+    }
 }
 
 static void renderTerrain(SDL_Renderer** ren, terrain_s* terrain)

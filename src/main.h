@@ -90,7 +90,7 @@ typedef struct tank_s
 
 typedef struct textures_s
 {
-    tank_s tank[2];
+    tank_s tank[4];
     bullet_s bullet;
 } textures_s;
 

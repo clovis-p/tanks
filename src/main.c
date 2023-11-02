@@ -17,7 +17,7 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
 Uint32 deltaTime = 0;
 
 int turn = 0;
-int playerCount = 2;
+int playerCount = 4;
 
 int main(int argc, char *argv[])
 {
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
         printf("deltaTime: %d, %d fps         \r", deltaTime, (int)(1000 / (float)deltaTime));
 
-        //SDL_Delay(5);
+        SDL_Delay(5);
 
         updateBullet(&textures, terrain);
 
@@ -81,11 +81,22 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     }
 
     // Set tank spawn points
-    // tank[0] spawn point
-    teleportTank(&textures->tank[0], 150, *terrain);
-
-    // tank[1] spawn point
-    teleportTank(&textures->tank[1], 1280 - 150, *terrain);
+    if (playerCount >= 1)
+    {
+        teleportTank(&textures->tank[0], 1280 / 5, *terrain);
+    }
+    if (playerCount >= 2)
+    {
+        teleportTank(&textures->tank[1], 1280 / 5 * 4, *terrain);
+    }
+    if (playerCount >= 3)
+    {
+        teleportTank(&textures->tank[2], 1280 / 5 * 2, *terrain);
+    }
+    if (playerCount >= 4)
+    {
+        teleportTank(&textures->tank[3], 1280 / 5 * 3, *terrain);
+    }
 }
 
 static void quitGame(textures_s* textures, terrain_s** terrain)

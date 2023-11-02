@@ -35,6 +35,22 @@ void initTank(SDL_Renderer** ren, textures_s* textures, int id)
             printf("Failed to load blue_tank.bmp: %s\n", SDL_GetError());
         }
     }
+    else if (id == 2)
+    {
+        buffer = SDL_LoadBMP("../resources/images/green_tank.bmp");
+        if (buffer == NULL)
+        {
+            printf("Failed to load green_tank.bmp: %s\n", SDL_GetError());
+        }
+    }
+    else if (id == 3)
+    {
+        buffer = SDL_LoadBMP("../resources/images/yellow_tank.bmp");
+        if (buffer == NULL)
+        {
+            printf("Failed to load yellow_tank.bmp: %s\n", SDL_GetError());
+        }
+    }
     else
     {
         printf("Invalid tank id: %d\n", id);
