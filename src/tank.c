@@ -51,7 +51,7 @@ void initTank(SDL_Renderer** ren, textures_s* textures, int id)
     textures->tank[id].fPoint.y = 0;
     textures->tank[id].health = 100;
     textures->tank[id].isInvincible = 0;
-    textures->tank[id].id = 0;
+    textures->tank[id].id = id;
 
 
     // init tank[id] combined texture
