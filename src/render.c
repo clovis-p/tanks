@@ -13,6 +13,9 @@
 static void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x, int y, int width, int height, SDL_Color fg, SDL_Color bg);
 static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank);
 static void renderTankHealthBar(SDL_Renderer** ren, tank_s* tank);
+static void renderTank(SDL_Renderer** ren, tank_s* tank);
+static void renderTerrain(SDL_Renderer** ren, terrain_s* terrain);
+static void renderDebugInfo(SDL_Renderer** ren, terrain_s* terrain, textures_s* textures);
 
 void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s* textures)
 {
@@ -28,51 +31,57 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     }
 
     // ground
-    SDL_SetRenderDrawColor(*ren, 34, 139, 34, 255);
-    SDL_RenderDrawPoints(*ren, terrain->sdlGroundPoints, terrain->groundPointsCount);
+    renderTerrain(ren, terrain);
 
     // debug, showDebug = 1 while left shift and left alt are held down, otherwise showDebug = 0
     if (showDebug)
     {
-        SDL_SetRenderDrawColor(*ren, 0, 0, 0, 255);
-        SDL_RenderDrawPoints(*ren, terrain->debugPoints, terrain->debugPointsCount);
-
-        //SDL_RenderDrawRect(*ren, &textures->tank[0].rect);
-        //SDL_RenderDrawRect(*ren, &textures->tank[1].rect);
-
-        renderTankHitboxes(ren, &textures->tank[0]);
-        renderTankHitboxes(ren, &textures->tank[1]);
+        renderDebugInfo(ren, terrain, textures);
     }
 
-    // Set render target to tank[0] texture
-    SDL_SetRenderTarget(*ren, textures->tank[0].combinedTexture);
+    // Render tanks
+    for (int i = 0; i < playerCount; i++)
+    {
+        renderTank(ren, &textures->tank[i]);
+    }
 
-    // Clear tank[0] texture, then render tank[0] base and tank[0] gun to tank[0] texture
+    // Render health bars
+    for (int i = 0; i < playerCount; i++)
+    {
+        renderTankHealthBar(ren, &textures->tank[i]);
+    }
+
+    SDL_RenderPresent(*ren);
+}
+
+static void renderDebugInfo(SDL_Renderer** ren, terrain_s* terrain, textures_s* textures)
+{
+    SDL_SetRenderDrawColor(*ren, 0, 0, 0, 255);
+    SDL_RenderDrawPoints(*ren, terrain->debugPoints, terrain->debugPointsCount);
+
+    //SDL_RenderDrawRect(*ren, &textures->tank[0].rect);
+    //SDL_RenderDrawRect(*ren, &textures->tank[1].rect);
+
+    renderTankHitboxes(ren, &textures->tank[0]);
+    renderTankHitboxes(ren, &textures->tank[1]);
+}
+
+static void renderTerrain(SDL_Renderer** ren, terrain_s* terrain)
+{
+    SDL_SetRenderDrawColor(*ren, 34, 139, 34, 255);
+    SDL_RenderDrawPoints(*ren, terrain->sdlGroundPoints, terrain->groundPointsCount);
+}
+
+static void renderTank(SDL_Renderer** ren, tank_s* tank)
+{
+    // Set render target to tank texture
+    SDL_SetRenderTarget(*ren, tank->combinedTexture);
+
+    // Clear tank texture, then render tank base and tank gun to tank texture
     SDL_SetRenderDrawColor(*ren, 0, 0, 0, 0); // set transparent background
     SDL_RenderClear(*ren);
-    SDL_RenderCopyEx(*ren,
-                     textures->tank[0].gun.texture,
-                     NULL,
-                     &textures->tank[0].gun.rect,
-                     textures->tank[0].gun.angle,
-                     NULL,
-                     SDL_FLIP_NONE);
-    SDL_RenderCopy(*ren, textures->tank[0].baseTexture, NULL, NULL);
-
-    // Set render target to tank[1] texture
-    SDL_SetRenderTarget(*ren, textures->tank[1].combinedTexture);
-
-    // Clear tank[1] texture, then render tank[1] base and tank[1] gun to tank[1] texture
-    SDL_SetRenderDrawColor(*ren, 0, 0, 0, 0); // set transparent background
-    SDL_RenderClear(*ren);
-    SDL_RenderCopyEx(*ren,
-                     textures->tank[1].gun.texture,
-                     NULL,
-                     &textures->tank[1].gun.rect,
-                     textures->tank[1].gun.angle,
-                     NULL,
-                     SDL_FLIP_NONE);
-    SDL_RenderCopy(*ren, textures->tank[1].baseTexture, NULL, NULL);
+    SDL_RenderCopyEx(*ren, tank->gun.texture, NULL, &tank->gun.rect, tank->gun.angle, NULL, SDL_FLIP_NONE);
+    SDL_RenderCopy(*ren, tank->baseTexture, NULL, NULL);
 
     // Reset render target
     SDL_SetRenderTarget(*ren, NULL);
@@ -80,31 +89,10 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     // Set tank center point to the bottom of the tank so it stays level with the ground when on a hill
     // This is different from tank.bottomCenter!! tank.bottomCenter is relative to the entire window, this
     // is relative to the tank texture only
-    SDL_Point tankCenterPoint = {textures->tank[0].rect.w / 2, textures->tank[0].rect.h};
+    SDL_Point tankCenterPoint = {tank->rect.w / 2, tank->rect.h};
 
-    // Render tank[0]
-    SDL_RenderCopyEx(*ren,
-                     textures->tank[0].combinedTexture,
-                     NULL,
-                     &textures->tank[0].rect,
-                     textures->tank[0].angle,
-                     &tankCenterPoint,
-                     SDL_FLIP_NONE);
-
-    // Render tank[1]
-    SDL_RenderCopyEx(*ren,
-                     textures->tank[1].combinedTexture,
-                     NULL,
-                     &textures->tank[1].rect,
-                     textures->tank[1].angle,
-                     &tankCenterPoint,
-                     SDL_FLIP_NONE);
-
-    // Render health bars
-    renderTankHealthBar(ren, &textures->tank[0]);
-    renderTankHealthBar(ren, &textures->tank[1]);
-
-    SDL_RenderPresent(*ren);
+    // Render whole tank to window
+    SDL_RenderCopyEx(*ren,tank->combinedTexture,NULL,&tank->rect,tank->angle,&tankCenterPoint,SDL_FLIP_NONE);
 }
 
 static void renderTankHealthBar(SDL_Renderer** ren, tank_s* tank)
