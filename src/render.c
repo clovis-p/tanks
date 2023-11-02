@@ -12,6 +12,7 @@
 
 static void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x, int y, int width, int height, SDL_Color fg, SDL_Color bg);
 static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank);
+static void renderTankHealthBar(SDL_Renderer** ren, tank_s* tank);
 
 void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s* textures)
 {
@@ -99,7 +100,24 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
                      &tankCenterPoint,
                      SDL_FLIP_NONE);
 
+    // Render health bars
+    renderTankHealthBar(ren, &textures->tank[0]);
+    renderTankHealthBar(ren, &textures->tank[1]);
+
     SDL_RenderPresent(*ren);
+}
+
+static void renderTankHealthBar(SDL_Renderer** ren, tank_s* tank)
+{
+    SDL_SetRenderDrawColor(*ren, 255, 0, 0, 255);
+    SDL_RenderFillRect(*ren, &tank->healthBar.rect);
+
+    SDL_SetRenderDrawColor(*ren, 0, 255, 0, 255);
+    SDL_RenderFillRect(*ren, &tank->healthBar.filledRect);
+
+    // Draw outline
+    SDL_SetRenderDrawColor(*ren, 0, 0, 0, 255);
+    SDL_RenderDrawRect(*ren, &tank->healthBar.rect);
 }
 
 static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank) {

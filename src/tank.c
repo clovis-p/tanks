@@ -3,14 +3,17 @@
 //
 
 #include <math.h>
+#include <stdio.h>
 
 #include "main.h"
 #include "terrain/terrain.h"
 #include "tank.h"
+#include "bullet.h"
 
 static void calculateTankAngle(tank_s* tank, terrain_s* terrain);
 static void updateTankHitbox(tank_s* tank);
 static float calculateLinearSlope(float x1, float y1, float x2, float y2);
+static void updateTankHealthBar(tank_s* tank);
 
 void teleportTank(tank_s* tank, int x, terrain_s* terrain)
 {
@@ -27,6 +30,9 @@ void teleportTank(tank_s* tank, int x, terrain_s* terrain)
 
     // update hitbox
     updateTankHitbox(tank);
+
+    // update health bar
+    updateTankHealthBar(tank);
 }
 
 void moveTank(tank_s* tank, float amount, terrain_s* terrain)
@@ -51,13 +57,17 @@ void moveTank(tank_s* tank, float amount, terrain_s* terrain)
 
     // update hitbox
     updateTankHitbox(tank);
+
+    // update health bar
+    updateTankHealthBar(tank);
 }
 
 void applyDamageToTank(tank_s* tank, int damage)
 {
-    if (!tank->isInvincible)
+    if (!tank->isInvincible && tank->health > 0)
     {
         tank->health -= damage;
+        updateTankHealthBar(tank);
         printf("tank %d health: %d\n", tank->id, tank->health);
     }
 }
@@ -240,6 +250,21 @@ void resetAllTanksHitboxStates(tank_s tanks[])
     }
 }
 
+static void updateTankHealthBar(tank_s* tank)
+{
+    tank->healthBar.fRect.x = tank->bottomCenter.x + 9.0f * (float)sin(degToRad(tank->angle)) - tank->healthBar.fRect.w / 2;
+    tank->healthBar.fRect.y = (float)tank->rect.y;
+    tank->healthBar.rect.x = (int)tank->healthBar.fRect.x;
+    tank->healthBar.rect.y = (int)tank->healthBar.fRect.y;
+
+    tank->healthBar.filledFRect = tank->healthBar.fRect;
+    tank->healthBar.filledFRect.w = (float)tank->health / 100.0f * tank->healthBar.fRect.w;
+    tank->healthBar.filledRect.x = (int)tank->healthBar.filledFRect.x;
+    tank->healthBar.filledRect.y = (int)tank->healthBar.filledFRect.y;
+    tank->healthBar.filledRect.w = (int)tank->healthBar.filledFRect.w;
+    tank->healthBar.filledRect.h = (int)tank->healthBar.filledFRect.h;
+}
+
 static void calculateTankAngle(tank_s* tank, terrain_s* terrain)
 {
     int x1, x2, y1, y2;
@@ -314,7 +339,6 @@ static void updateTankHitbox(tank_s* tank)
     topRightVectorAngle += tankAngleRad;
     topLeftVectorAngle += tankAngleRad;
     float bottomLeftVectorAngle = -(float)M_PI + tankAngleRad; // angle of bottom center to bottom left vector
-
 
     untranslatedHitBox.bottomLeft.x = bottomLeftVectorLength * cosf(bottomLeftVectorAngle);
     untranslatedHitBox.bottomLeft.y = bottomLeftVectorLength * sinf(bottomLeftVectorAngle);

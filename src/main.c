@@ -105,9 +105,6 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     textures->tank[0].gun.angle = 80;
     textures->tank[0].gun.fAngle = (float)textures->tank[0].gun.angle;
 
-    // tank[0] spawn point
-    teleportTank(&textures->tank[0], 150, *terrain);
-
     // init tank[1]
     buffer = SDL_LoadBMP("../resources/images/blue_tank.bmp");
     if (buffer == NULL)
@@ -150,9 +147,6 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     textures->tank[1].gun.fAngle = (float)textures->tank[1].gun.angle;
     textures->tank[1].gun.relativePosY = textures->tank[0].gun.relativePosY;
 
-    // tank[1] spawn point
-    teleportTank(&textures->tank[1], 1280 - 150, *terrain);
-
     // init bullet
     textures->bullet.rect.w = 3;
     textures->bullet.rect.h = 3;
@@ -167,6 +161,24 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
 
     // init hitboxes
     resetAllTanksHitboxStates(textures->tank);
+
+    // init health bars
+    textures->tank[0].healthBar.fRect.w = 30;
+    textures->tank[0].healthBar.fRect.h = 8;
+    textures->tank[0].healthBar.rect.w = 30;
+    textures->tank[0].healthBar.rect.h = 8;
+
+    textures->tank[1].healthBar.fRect.w = 30;
+    textures->tank[1].healthBar.fRect.h = 8;
+    textures->tank[1].healthBar.rect.w = 30;
+    textures->tank[1].healthBar.rect.h = 8;
+
+    // Set tank spawn points
+    // tank[0] spawn point
+    teleportTank(&textures->tank[0], 150, *terrain);
+
+    // tank[1] spawn point
+    teleportTank(&textures->tank[1], 1280 - 150, *terrain);
 }
 
 static void quitGame(textures_s* textures, terrain_s** terrain)

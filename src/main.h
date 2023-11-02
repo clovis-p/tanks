@@ -60,6 +60,17 @@ typedef struct tankHitBox_s
     int rightColConditionMet;
 } tankHitBox_s;
 
+typedef struct healthBar_s
+{
+    // Rect of the whole health bar
+    SDL_FRect fRect;
+    SDL_Rect rect;
+
+    // Rect of the filled (green) part of the health bar
+    SDL_FRect filledFRect;
+    SDL_Rect filledRect;
+} healthBar_s;
+
 typedef struct tank_s
 {
     SDL_Texture* baseTexture; // Texture for the tank without the gun
@@ -74,6 +85,7 @@ typedef struct tank_s
     tankHitBox_s hitBox;
     int isInvincible;
     int id;
+    healthBar_s healthBar;
 } tank_s;
 
 typedef struct textures_s

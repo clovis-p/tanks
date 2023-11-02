@@ -12,7 +12,6 @@
 
 static void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed);
 static void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank);
-static double degToRad(int deg);
 static void updateBulletPos(textures_s* textures);
 static int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain);
 static void deactivateBullet(textures_s* textures);
@@ -131,7 +130,7 @@ static void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed)
     //printf("angle: %d, tank angle: %d, speedX: %f, speedY: %f\n", tank->gun.angle, tank->angle, bullet->speedX, bullet->speedY);
 }
 
-static double degToRad(int deg)
+double degToRad(int deg)
 {
     return (double)deg * M_PI / 180;
 }
