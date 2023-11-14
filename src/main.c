@@ -148,6 +148,9 @@ static int initSDL(SDL_Window** win, SDL_Renderer** ren)
         return -1;
     }
 
+    // Linear filtering
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+
     return 0;
 }
 
