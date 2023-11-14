@@ -10,13 +10,15 @@
 
 #include <SDL2/SDL.h>
 
+#include "../main.h"
+
 typedef struct terrain_s
 {
-    SDL_Point sdlGroundPoints[1280*720];
-    int terrainArray[1280][720];
-    int groundLevel[1280];
+    SDL_Point sdlGroundPoints[RESOLUTION_X * RESOLUTION_Y];
+    int terrainArray[RESOLUTION_X][RESOLUTION_Y];
+    int groundLevel[RESOLUTION_X];
     int groundPointsCount;
-    SDL_Point debugPoints[1280*720];
+    SDL_Point debugPoints[RESOLUTION_X * RESOLUTION_Y];
     int debugPointsCount;
 } terrain_s;
 

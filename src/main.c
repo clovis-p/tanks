@@ -17,7 +17,7 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
 Uint32 deltaTime = 0;
 
 int turn = 0;
-int playerCount = 4;
+int playerCount = 2;
 
 int main(int argc, char *argv[])
 {
@@ -83,19 +83,19 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     // Set tank spawn points
     if (playerCount >= 1)
     {
-        teleportTank(&textures->tank[0], 1280 / 5, *terrain);
+        teleportTank(&textures->tank[0], RESOLUTION_X / 5, *terrain);
     }
     if (playerCount >= 2)
     {
-        teleportTank(&textures->tank[1], 1280 / 5 * 4, *terrain);
+        teleportTank(&textures->tank[1], RESOLUTION_X / 5 * 4, *terrain);
     }
     if (playerCount >= 3)
     {
-        teleportTank(&textures->tank[2], 1280 / 5 * 2, *terrain);
+        teleportTank(&textures->tank[2], RESOLUTION_X / 5 * 2, *terrain);
     }
     if (playerCount >= 4)
     {
-        teleportTank(&textures->tank[3], 1280 / 5 * 3, *terrain);
+        teleportTank(&textures->tank[3], RESOLUTION_X / 5 * 3, *terrain);
     }
 }
 
@@ -121,7 +121,7 @@ static int initSDL(SDL_Window** win, SDL_Renderer** ren)
     *win = SDL_CreateWindow("tanks",
                             SDL_WINDOWPOS_CENTERED,
                             SDL_WINDOWPOS_CENTERED,
-                            1280, 720,
+                            RESOLUTION_X, RESOLUTION_Y,
                             SDL_WINDOW_SHOWN);
 
     if (!*win)
