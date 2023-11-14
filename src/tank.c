@@ -342,13 +342,13 @@ static void updateTankHealthBar(tank_s* tank)
 
 static void calculateTankAngle(tank_s* tank, terrain_s* terrain)
 {
-    int x1, x2, y1, y2;
+    float x1, x2, y1, y2;
     double angle;
 
-    x1 = tank->rect.x + (int)(0.35 * tank->rect.w);
-    x2 = tank->rect.x + (int)(0.65 * tank->rect.w);
-    y1 = terrain->groundLevel[x1];
-    y2 = terrain->groundLevel[x2];
+    x1 = tank->fRect.x + (0.35f * tank->fRect.w);
+    x2 = tank->fRect.x + (0.65f * tank->fRect.w);
+    y1 = (float)terrain->groundLevel[(int)x1];
+    y2 = (float)terrain->groundLevel[(int)x2];
 
     if (y1 == y2)
     {
@@ -356,7 +356,7 @@ static void calculateTankAngle(tank_s* tank, terrain_s* terrain)
     }
     else
     {
-        angle = (int)(atan((double)(y1 - y2) / (double)(x2 - x1)) * 180 / M_PI);
+        angle = atan((double)((y1 - y2) / (x2 - x1))) * 180 / M_PI;
         if (y1 > y2) // Going uphill
         {
             tank->angle = -(float)angle;
