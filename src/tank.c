@@ -21,7 +21,7 @@ void initTank(SDL_Renderer** ren, textures_s* textures, int id)
     SDL_Surface* buffer;
     if (id == 0)
     {
-        buffer = SDL_LoadBMP("../resources/images/red_tank.bmp");
+        buffer = SDL_LoadBMP("../resources/images/red_tank_4x.bmp");
         if (buffer == NULL)
         {
             printf("Failed to load red_tank.bmp: %s\n", SDL_GetError());
@@ -29,7 +29,7 @@ void initTank(SDL_Renderer** ren, textures_s* textures, int id)
     }
     else if (id == 1)
     {
-        buffer = SDL_LoadBMP("../resources/images/blue_tank.bmp");
+        buffer = SDL_LoadBMP("../resources/images/blue_tank_4x.bmp");
         if (buffer == NULL)
         {
             printf("Failed to load blue_tank.bmp: %s\n", SDL_GetError());
@@ -37,7 +37,7 @@ void initTank(SDL_Renderer** ren, textures_s* textures, int id)
     }
     else if (id == 2)
     {
-        buffer = SDL_LoadBMP("../resources/images/green_tank.bmp");
+        buffer = SDL_LoadBMP("../resources/images/green_tank_4x.bmp");
         if (buffer == NULL)
         {
             printf("Failed to load green_tank.bmp: %s\n", SDL_GetError());
@@ -45,7 +45,7 @@ void initTank(SDL_Renderer** ren, textures_s* textures, int id)
     }
     else if (id == 3)
     {
-        buffer = SDL_LoadBMP("../resources/images/yellow_tank.bmp");
+        buffer = SDL_LoadBMP("../resources/images/yellow_tank_4x.bmp");
         if (buffer == NULL)
         {
             printf("Failed to load yellow_tank.bmp: %s\n", SDL_GetError());
@@ -59,12 +59,12 @@ void initTank(SDL_Renderer** ren, textures_s* textures, int id)
 
     textures->tank[id].baseTexture = SDL_CreateTextureFromSurface(*ren, buffer);
     SDL_FreeSurface(buffer);
-    SDL_QueryTexture(textures->tank[id].baseTexture, NULL, NULL, &textures->tank[id].rect.w, &textures->tank[id].rect.h);
+    //SDL_QueryTexture(textures->tank[id].baseTexture, NULL, NULL, &textures->tank[id].rect.w, &textures->tank[id].rect.h);
     textures->tank[id].rect.x = 0;
     textures->tank[id].rect.y = 0;
     textures->tank[id].angle = 0;
-    textures->tank[id].fRect.w = (float)textures->tank[id].rect.w * resolutionScale;
-    textures->tank[id].fRect.h = (float)textures->tank[id].rect.h * resolutionScale;
+    textures->tank[id].fRect.w = 45 * resolutionScale;
+    textures->tank[id].fRect.h = 45 * resolutionScale;
     textures->tank[id].fRect.x = 0;
     textures->tank[id].fRect.y = 0;
     textures->tank[id].health = 100;
