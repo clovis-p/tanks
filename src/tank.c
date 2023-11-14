@@ -186,12 +186,6 @@ void rotateGunCounterClockwise(gun_s* gun)
         if (gun->angle < -90)
         {
             gun->angle = -90;
-            gun->angle = (int)gun->angle;
-        }
-        else
-        {
-
-            gun->angle = (int)gun->angle;
         }
     }
 }
