@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     Uint32 ticks = 0;
 
     resolutionScale = (float)RESOLUTION_X / 1280;
-    if (resolutionScale != (float)RESOLUTION_X / 1280)
+    if (resolutionScale != (float)RESOLUTION_Y / 720)
     {
         printf("Warning: resolution not 16:9\n");
     }
