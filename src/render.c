@@ -21,8 +21,6 @@ static void matchIntegerRectToFloatRect(SDL_Rect* intRect, SDL_FRect* floatRect)
 
 void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s* textures)
 {
-    printf("%d %f\n", textures->tank[0].rect.x, textures->tank[0].fRect.x);
-
     // The game works with float coords, but SDL works with integer coords
     matchAllIntegerRectsToFloatRects(textures);
 
