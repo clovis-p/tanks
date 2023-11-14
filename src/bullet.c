@@ -25,8 +25,10 @@ void initBullet(bullet_s* bullet)
     bullet->active = 0;
     bullet->speedX = 1;
     bullet->speedY = 1;
-    bullet->fPoint.x = 0;
-    bullet->fPoint.y = 0;
+    bullet->fRect.x = 0;
+    bullet->fRect.y = 0;
+    bullet->fRect.w = 3 * resolutionScale;
+    bullet->fRect.h = 3 * resolutionScale;
     bullet->harmlessToShooter = 1;
 }
 
@@ -52,9 +54,6 @@ void updateBullet(textures_s* textures, terrain_s* terrain)
         {
             updateBulletPos(textures);
         }
-
-        textures->bullet.rect.x = (int)textures->bullet.fPoint.x;
-        textures->bullet.rect.y = (int)textures->bullet.fPoint.y;
     }
     else
     {
@@ -67,10 +66,8 @@ static void deactivateBullet(textures_s* textures)
     // Runs once when bullet goes out of bounds or hits the ground
 
     textures->bullet.active = 0;
-    textures->bullet.rect.x = -1;
-    textures->bullet.rect.y = -1;
-    textures->bullet.fPoint.x = -1;
-    textures->bullet.fPoint.y = -1;
+    textures->bullet.fRect.x = -1;
+    textures->bullet.fRect.y = -1;
 
     resetAllTanksHitboxStates(textures->tank);
 }
@@ -78,26 +75,25 @@ static void deactivateBullet(textures_s* textures)
 static void calculateBulletOriginPoint(bullet_s* bullet, tank_s* tank)
 {
     // Set to center point of tank rotation
-    bullet->fPoint.x = (float)(tank->rect.x + tank->rect.w / 2.0);
-    bullet->fPoint.y = (float)(tank->rect.y + tank->rect.h);
+    bullet->fRect.x = tank->fRect.x + tank->fRect.w / 2;
+    bullet->fRect.y = tank->fRect.y + tank->fRect.h;
 
     // Adjust for tank angle
-    bullet->fPoint.x += 18.0f * (float)sin(degToRad(tank->angle));
-    bullet->fPoint.y += -18.0f * (float)cos(degToRad(tank->angle));
+    bullet->fRect.x += 18.0f * resolutionScale * (float)sin(degToRad(tank->angle));
+    bullet->fRect.y += -18.0f * resolutionScale * (float)cos(degToRad(tank->angle));
 
     // Adjust for the tip of the gun
-    bullet->fPoint.x += -13.0f * (float)cos(degToRad(90 + tank->gun.angle + tank->angle));
-    bullet->fPoint.y += -13.0f * (float)sin(degToRad(90 + tank->gun.angle + tank->angle));
-
-    bullet->rect.x = (int)bullet->fPoint.x;
-    bullet->rect.y = (int)bullet->fPoint.y;
+    bullet->fRect.x += -13.0f * (float)cos(degToRad(90 + tank->gun.angle + tank->angle));
+    bullet->fRect.y += -13.0f * (float)sin(degToRad(90 + tank->gun.angle + tank->angle));
 }
 
 static void updateBulletPos(textures_s* textures)
 {
-    textures->bullet.fPoint.x += textures->bullet.speedX;
-    textures->bullet.fPoint.y += textures->bullet.speedY;
-    textures->bullet.speedY += 0.0003f;
+    const float GRAVITY_CONST = 0.0003f;
+
+    textures->bullet.fRect.x += textures->bullet.speedX * resolutionScale;
+    textures->bullet.fRect.y += textures->bullet.speedY * resolutionScale;
+    textures->bullet.speedY += GRAVITY_CONST;
 
     for (int i = 0; i < playerCount; i++)
     {
@@ -123,8 +119,8 @@ static void updateBulletPos(textures_s* textures)
 
 static int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain)
 {
-    if (bullet->rect.x < 0 || bullet->rect.x > RESOLUTION_X ||
-        bullet->rect.y + bullet->rect.h > terrain->groundLevel[bullet->rect.x + bullet->rect.w / 2])
+    if (bullet->fRect.x < 0 || bullet->fRect.x > (float)RESOLUTION_X ||
+        bullet->fRect.y + bullet->fRect.h > (float)terrain->groundLevel[(int)(bullet->fRect.x + bullet->fRect.w / 2)])
     {
         return 1;
     }
@@ -144,7 +140,7 @@ static void calculateBulletXYSpeed(bullet_s *bullet, tank_s *tank, float speed)
     //printf("angle: %d, tank angle: %d, speedX: %f, speedY: %f\n", tank->gun.angle, tank->angle, bullet->speedX, bullet->speedY);
 }
 
-double degToRad(int deg)
+double degToRad(float deg)
 {
     return (double)deg * M_PI / 180;
 }

@@ -14,7 +14,7 @@ void moveTank(tank_s* tank, float amount, terrain_s* terrain);
 void updateTankGunAngle(tank_s* tank);
 void rotateGunClockwise(gun_s* gun);
 void rotateGunCounterClockwise(gun_s* gun);
-void teleportTank(tank_s* tank, int x, terrain_s* terrain);
+void teleportTank(tank_s* tank, float x, terrain_s* terrain);
 void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet);
 void resetAllTanksHitboxStates(tank_s tanks[]);
 void applyDamageToTank(tank_s* tank, int damage);

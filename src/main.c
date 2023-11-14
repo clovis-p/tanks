@@ -19,6 +19,8 @@ Uint32 deltaTime = 0;
 int turn = 0;
 int playerCount = 2;
 
+float resolutionScale;
+
 int main(int argc, char *argv[])
 {
     setbuf(stdout, NULL);
@@ -28,6 +30,14 @@ int main(int argc, char *argv[])
 
     textures_s textures;
     Uint32 ticks = 0;
+
+    resolutionScale = (float)RESOLUTION_X / 1280;
+    if (resolutionScale != (float)RESOLUTION_X / 1280)
+    {
+        printf("Warning: resolution not 16:9\n");
+    }
+
+    printf("resolutionScale: %f\n", resolutionScale);
 
     int quit = 0;
 
@@ -83,19 +93,19 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     // Set tank spawn points
     if (playerCount >= 1)
     {
-        teleportTank(&textures->tank[0], RESOLUTION_X / 5, *terrain);
+        teleportTank(&textures->tank[0], (float)RESOLUTION_X / 5, *terrain);
     }
     if (playerCount >= 2)
     {
-        teleportTank(&textures->tank[1], RESOLUTION_X / 5 * 4, *terrain);
+        teleportTank(&textures->tank[1], (float)RESOLUTION_X / 5 * 4, *terrain);
     }
     if (playerCount >= 3)
     {
-        teleportTank(&textures->tank[2], RESOLUTION_X / 5 * 2, *terrain);
+        teleportTank(&textures->tank[2], (float)RESOLUTION_X / 5 * 2, *terrain);
     }
     if (playerCount >= 4)
     {
-        teleportTank(&textures->tank[3], RESOLUTION_X / 5 * 3, *terrain);
+        teleportTank(&textures->tank[3], (float)RESOLUTION_X / 5 * 3, *terrain);
     }
 }
 
@@ -130,7 +140,7 @@ static int initSDL(SDL_Window** win, SDL_Renderer** ren)
         return -1;
     }
 
-    *ren = SDL_CreateRenderer(*win, -1, 0);
+    *ren = SDL_CreateRenderer(*win, -1, SDL_RENDERER_ACCELERATED);
 
     if (!*ren)
     {

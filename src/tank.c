@@ -63,8 +63,10 @@ void initTank(SDL_Renderer** ren, textures_s* textures, int id)
     textures->tank[id].rect.x = 0;
     textures->tank[id].rect.y = 0;
     textures->tank[id].angle = 0;
-    textures->tank[id].fPoint.x = 0;
-    textures->tank[id].fPoint.y = 0;
+    textures->tank[id].fRect.w = (float)textures->tank[id].rect.w * resolutionScale;
+    textures->tank[id].fRect.h = (float)textures->tank[id].rect.h * resolutionScale;
+    textures->tank[id].fRect.x = 0;
+    textures->tank[id].fRect.y = 0;
     textures->tank[id].health = 100;
     textures->tank[id].isInvincible = 0;
     textures->tank[id].id = id;
@@ -74,8 +76,8 @@ void initTank(SDL_Renderer** ren, textures_s* textures, int id)
     textures->tank[id].combinedTexture = SDL_CreateTexture(*ren,
                                                           SDL_PIXELFORMAT_RGBA8888,
                                                           SDL_TEXTUREACCESS_TARGET,
-                                                          textures->tank[id].rect.w,
-                                                          textures->tank[id].rect.h);
+                                                           (int)textures->tank[id].fRect.w,
+                                                           (int)textures->tank[id].fRect.h);
     SDL_SetTextureBlendMode(textures->tank[id].combinedTexture, SDL_BLENDMODE_BLEND);
     SDL_SetTextureAlphaMod(textures->tank[id].combinedTexture, 255);
 
@@ -88,18 +90,21 @@ void initTank(SDL_Renderer** ren, textures_s* textures, int id)
     textures->tank[id].gun.texture = SDL_CreateTextureFromSurface(*ren, buffer);
     SDL_FreeSurface(buffer);
     SDL_QueryTexture(textures->tank[id].gun.texture, NULL, NULL, &textures->tank[id].gun.rect.w, &textures->tank[id].gun.rect.h);
+    textures->tank[id].gun.fRect.w = (float)textures->tank[id].gun.rect.w * resolutionScale;
+    textures->tank[id].gun.fRect.h = (float)textures->tank[id].gun.rect.h * resolutionScale;
     textures->tank[id].gun.rect.x = 0;
     textures->tank[id].gun.rect.y = 6;
+    textures->tank[id].gun.fRect.x = 0;
+    textures->tank[id].gun.fRect.y = (float)textures->tank[id].gun.rect.y * resolutionScale;
     textures->tank[id].gun.angle = 80;
-    textures->tank[id].gun.fAngle = (float)textures->tank[id].gun.angle;
 }
 
 void initHealthBars(healthBar_s* healthBar)
 {
-    healthBar->fRect.w = 30;
-    healthBar->fRect.h = 8;
     healthBar->rect.w = 30;
     healthBar->rect.h = 8;
+    healthBar->fRect.w = (float)healthBar->rect.w * resolutionScale;
+    healthBar->fRect.h = (float)healthBar->rect.h * resolutionScale;
 }
 
 void initAllTanksHitboxes(tank_s tanks[])
@@ -107,15 +112,13 @@ void initAllTanksHitboxes(tank_s tanks[])
     resetAllTanksHitboxStates(tanks);
 }
 
-void teleportTank(tank_s* tank, int x, terrain_s* terrain)
+void teleportTank(tank_s* tank, float x, terrain_s* terrain)
 {
     // set x coordinate
-    tank->fPoint.x = (float)x - tank->rect.w / 2;
-    tank->rect.x = (int)tank->fPoint.x;
+    tank->fRect.x = x - tank->fRect.w / 2.0f;
 
     // update y position
-    tank->fPoint.y = (float)(terrain->groundLevel[tank->rect.x + tank->rect.w / 2] - tank->rect.h);
-    tank->rect.y = (int)tank->fPoint.y;
+    tank->fRect.y = (float)terrain->groundLevel[(int)(tank->fRect.x + tank->fRect.w / 2)] - tank->fRect.h;
 
     // tank angle according to terrain
     calculateTankAngle(tank, terrain);
@@ -129,20 +132,18 @@ void teleportTank(tank_s* tank, int x, terrain_s* terrain)
 
 void moveTank(tank_s* tank, float amount, terrain_s* terrain)
 {
-    if (tank->fPoint.x + (float)amount < (float)tank->rect.w / 2 && amount < 0 || // tank is too far left and going left or
-        tank->fPoint.x + (float)tank->rect.w + (float)amount > RESOLUTION_X - ((float)tank->rect.w / 2) && amount > 0) // tank is too far right and going right
+    if (tank->fRect.x + amount < tank->fRect.w / 2 && amount < 0 || // tank is too far left and going left or
+        tank->fRect.x + tank->fRect.w + amount > RESOLUTION_X - (tank->fRect.w / 2) && amount > 0) // tank is too far right and going right
     {
         return;
     }
 
     // move according to angle
-    float speed = (float)amount * (float)cos(tank->angle * M_PI / 180);
-    tank->fPoint.x += speed * (float)deltaTime;
-    tank->rect.x = (int)tank->fPoint.x;
+    float speed = amount * (float)cos(tank->angle * M_PI / 180);
+    tank->fRect.x += speed * (float)deltaTime;
 
     // update y position
-    tank->fPoint.y = (float)(terrain->groundLevel[tank->rect.x + tank->rect.w / 2] - tank->rect.h);
-    tank->rect.y = (int)tank->fPoint.y;
+    tank->fRect.y = (float)(terrain->groundLevel[(int)(tank->fRect.x + tank->fRect.w / 2)] - tank->rect.h);
 
     // tank angle according to terrain
     calculateTankAngle(tank, terrain);
@@ -165,37 +166,32 @@ void applyDamageToTank(tank_s* tank, int damage)
 
 void rotateGunClockwise(gun_s* gun)
 {
-    if (gun->fAngle < 90)
+    if (gun->angle < 90)
     {
-        gun->fAngle += 0.1f * (float)deltaTime;
+        gun->angle += 0.1f * (float)deltaTime;
 
-        if (gun->fAngle > 90)
+        if (gun->angle > 90)
         {
-            gun->fAngle = 90;
-            gun->angle = (int)gun->fAngle;
-        }
-        else
-        {
-            gun->angle = (int)gun->fAngle;
+            gun->angle = 90;
         }
     }
 }
 
 void rotateGunCounterClockwise(gun_s* gun)
 {
-    if (gun->fAngle > -90)
+    if (gun->angle > -90)
     {
-        gun->fAngle -= 0.1f * (float)deltaTime;
+        gun->angle -= 0.1f * (float)deltaTime;
 
-        if (gun->fAngle < -90)
+        if (gun->angle < -90)
         {
-            gun->fAngle = -90;
-            gun->angle = (int)gun->fAngle;
+            gun->angle = -90;
+            gun->angle = (int)gun->angle;
         }
         else
         {
 
-            gun->angle = (int)gun->fAngle;
+            gun->angle = (int)gun->angle;
         }
     }
 }
@@ -204,7 +200,7 @@ void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet)
 {
     if (tank->angle == 0)
     {
-        if (bullet->fPoint.x + (float)bullet->rect.w > tank->hitBox.topLeft.x)
+        if (bullet->fRect.x + bullet->fRect.w > tank->hitBox.topLeft.x)
         {
             tank->hitBox.leftColConditionMet = 1;
         }
@@ -213,7 +209,7 @@ void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet)
             tank->hitBox.leftColConditionMet = 0;
         }
 
-        if (bullet->fPoint.x < tank->hitBox.topRight.x)
+        if (bullet->fRect.x < tank->hitBox.topRight.x)
         {
             tank->hitBox.rightColConditionMet = 1;
         }
@@ -222,7 +218,7 @@ void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet)
             tank->hitBox.rightColConditionMet = 0;
         }
 
-        if (bullet->fPoint.y + (float)bullet->rect.h > tank->hitBox.topLeft.y)
+        if (bullet->fRect.y + bullet->fRect.h > tank->hitBox.topLeft.y)
         {
             tank->hitBox.topColConditionMet = 1;
         }
@@ -231,7 +227,7 @@ void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet)
             tank->hitBox.topColConditionMet = 0;
         }
 
-        if (bullet->fPoint.y < tank->hitBox.bottomLeft.y)
+        if (bullet->fRect.y < tank->hitBox.bottomLeft.y)
         {
             tank->hitBox.bottomColConditionMet = 1;
         }
@@ -242,7 +238,7 @@ void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet)
     }
     else if (tank->angle > 0)
     {
-        if (bullet->fPoint.y >= tank->hitBox.leftSlope * bullet->fPoint.x + tank->hitBox.leftOffset)
+        if (bullet->fRect.y >= tank->hitBox.leftSlope * bullet->fRect.x + tank->hitBox.leftOffset)
         {
             tank->hitBox.leftColConditionMet = 1;
         }
@@ -251,7 +247,7 @@ void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet)
             tank->hitBox.leftColConditionMet = 0;
         }
 
-        if (bullet->fPoint.y + (float)bullet->rect.h <= tank->hitBox.rightSlope * bullet->fPoint.x + tank->hitBox.rightOffset)
+        if (bullet->fRect.y + bullet->fRect.h <= tank->hitBox.rightSlope * bullet->fRect.x + tank->hitBox.rightOffset)
         {
             tank->hitBox.rightColConditionMet = 1;
         }
@@ -260,7 +256,7 @@ void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet)
             tank->hitBox.rightColConditionMet = 0;
         }
 
-        if (bullet->fPoint.x <= (bullet->fPoint.y - tank->hitBox.topOffset) / tank->hitBox.topSlope)
+        if (bullet->fRect.x <= (bullet->fRect.y - tank->hitBox.topOffset) / tank->hitBox.topSlope)
         {
             tank->hitBox.topColConditionMet = 1;
         }
@@ -269,7 +265,7 @@ void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet)
             tank->hitBox.topColConditionMet = 0;
         }
 
-        if (bullet->fPoint.x + (float)bullet->rect.w >= (bullet->fPoint.y - tank->hitBox.bottomOffset) / tank->hitBox.bottomSlope)
+        if (bullet->fRect.x + bullet->fRect.w >= (bullet->fRect.y - tank->hitBox.bottomOffset) / tank->hitBox.bottomSlope)
         {
             tank->hitBox.bottomColConditionMet = 1;
         }
@@ -280,7 +276,7 @@ void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet)
     }
     else if (tank->angle < 0)
     {
-        if (bullet->fPoint.y + (float)bullet->rect.h <= tank->hitBox.leftSlope * bullet->fPoint.x + tank->hitBox.leftOffset)
+        if (bullet->fRect.y + bullet->fRect.h <= tank->hitBox.leftSlope * bullet->fRect.x + tank->hitBox.leftOffset)
         {
             tank->hitBox.leftColConditionMet = 1;
         }
@@ -289,7 +285,7 @@ void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet)
             tank->hitBox.leftColConditionMet = 0;
         }
 
-        if (bullet->fPoint.y >= tank->hitBox.rightSlope * bullet->fPoint.x + tank->hitBox.rightOffset)
+        if (bullet->fRect.y >= tank->hitBox.rightSlope * bullet->fRect.x + tank->hitBox.rightOffset)
         {
             tank->hitBox.rightColConditionMet = 1;
         }
@@ -298,7 +294,7 @@ void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet)
             tank->hitBox.rightColConditionMet = 0;
         }
 
-        if (bullet->fPoint.x + (float)bullet->rect.w >= (bullet->fPoint.y - tank->hitBox.topOffset) / tank->hitBox.topSlope)
+        if (bullet->fRect.x + bullet->fRect.w >= (bullet->fRect.y - tank->hitBox.topOffset) / tank->hitBox.topSlope)
         {
             tank->hitBox.topColConditionMet = 1;
         }
@@ -307,7 +303,7 @@ void checkTankCollisionWithBullet(tank_s* tank, bullet_s* bullet)
             tank->hitBox.topColConditionMet = 0;
         }
 
-        if (bullet->fPoint.x <= (bullet->fPoint.y - tank->hitBox.bottomOffset) / tank->hitBox.bottomSlope)
+        if (bullet->fRect.x <= (bullet->fRect.y - tank->hitBox.bottomOffset) / tank->hitBox.bottomSlope)
         {
             tank->hitBox.bottomColConditionMet = 1;
         }
@@ -344,16 +340,10 @@ void resetAllTanksHitboxStates(tank_s tanks[])
 static void updateTankHealthBar(tank_s* tank)
 {
     tank->healthBar.fRect.x = tank->bottomCenter.x + 9.0f * (float)sin(degToRad(tank->angle)) - tank->healthBar.fRect.w / 2;
-    tank->healthBar.fRect.y = (float)tank->rect.y;
-    tank->healthBar.rect.x = (int)tank->healthBar.fRect.x;
-    tank->healthBar.rect.y = (int)tank->healthBar.fRect.y;
+    tank->healthBar.fRect.y = tank->fRect.y;
 
     tank->healthBar.filledFRect = tank->healthBar.fRect;
     tank->healthBar.filledFRect.w = (float)tank->health / 100.0f * tank->healthBar.fRect.w;
-    tank->healthBar.filledRect.x = (int)tank->healthBar.filledFRect.x;
-    tank->healthBar.filledRect.y = (int)tank->healthBar.filledFRect.y;
-    tank->healthBar.filledRect.w = (int)tank->healthBar.filledFRect.w;
-    tank->healthBar.filledRect.h = (int)tank->healthBar.filledFRect.h;
 }
 
 static void calculateTankAngle(tank_s* tank, terrain_s* terrain)
@@ -375,23 +365,23 @@ static void calculateTankAngle(tank_s* tank, terrain_s* terrain)
         angle = (int)(atan((double)(y1 - y2) / (double)(x2 - x1)) * 180 / M_PI);
         if (y1 > y2) // Going uphill
         {
-            tank->angle = -(int)angle;
+            tank->angle = -(float)angle;
         }
         else // Going downhill
         {
-            tank->angle = 360 - (int)angle;
+            tank->angle = 360 - (float)angle;
         }
 
-        tank->angle %= 360;
+        //tank->angle %= 360;
     }
 
-    tank->bottomCenter.x = (float)(tank->rect.x + tank->rect.w / 2.0);
-    tank->bottomCenter.y = (float)(tank->rect.y + tank->rect.h);
+    tank->bottomCenter.x = tank->fRect.x + tank->fRect.w / 2;
+    tank->bottomCenter.y = tank->fRect.y + tank->fRect.h;
 }
 
 static void updateTankHitbox(tank_s* tank)
 {
-    const float HITBOX_HEIGHT = 20.0f;
+    const float HITBOX_HEIGHT = 20 * resolutionScale;
 
     tankHitBox_s untranslatedHitBox;
 
@@ -400,19 +390,19 @@ static void updateTankHitbox(tank_s* tank)
     untranslatedHitBox.bottomCenter.y = 0;
 
     // top left
-    untranslatedHitBox.topLeft.x = -(float)tank->rect.w / 2;
+    untranslatedHitBox.topLeft.x = -tank->fRect.w / 2;
     untranslatedHitBox.topLeft.y = -HITBOX_HEIGHT;
 
     // top right
-    untranslatedHitBox.topRight.x = (float)tank->rect.w / 2;
+    untranslatedHitBox.topRight.x = tank->fRect.w / 2;
     untranslatedHitBox.topRight.y = -HITBOX_HEIGHT;
 
     // bottom left
-    untranslatedHitBox.bottomLeft.x = -(float)tank->rect.w / 2;
+    untranslatedHitBox.bottomLeft.x = -tank->fRect.w / 2;
     untranslatedHitBox.bottomLeft.y = 0;
 
     // bottom right
-    untranslatedHitBox.bottomRight.x = (float)tank->rect.w / 2;
+    untranslatedHitBox.bottomRight.x = tank->fRect.w / 2;
     untranslatedHitBox.bottomRight.y = 0;
 
     // Convert tank angle to radians

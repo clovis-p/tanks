@@ -16,9 +16,16 @@ static void renderTankHealthBar(SDL_Renderer** ren, tank_s* tank);
 static void renderTank(SDL_Renderer** ren, tank_s* tank);
 static void renderTerrain(SDL_Renderer** ren, terrain_s* terrain);
 static void renderDebugInfo(SDL_Renderer** ren, terrain_s* terrain, textures_s* textures);
+static void matchAllIntegerRectsToFloatRects(textures_s* textures);
+static void matchIntegerRectToFloatRect(SDL_Rect* intRect, SDL_FRect* floatRect);
 
 void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s* textures)
 {
+    printf("%d %f\n", textures->tank[0].rect.x, textures->tank[0].fRect.x);
+
+    // The game works with float coords, but SDL works with integer coords
+    matchAllIntegerRectsToFloatRects(textures);
+
     // sky
     SDL_SetRenderDrawColor(*ren, 135, 206, 235, 255);
     SDL_RenderClear(*ren);
@@ -94,7 +101,7 @@ static void renderTank(SDL_Renderer** ren, tank_s* tank)
     SDL_Point tankCenterPoint = {tank->rect.w / 2, tank->rect.h};
 
     // Render whole tank to window
-    SDL_RenderCopyEx(*ren,tank->combinedTexture,NULL,&tank->rect,tank->angle,&tankCenterPoint,SDL_FLIP_NONE);
+    SDL_RenderCopyEx(*ren, tank->combinedTexture, NULL, &tank->rect, tank->angle, &tankCenterPoint, SDL_FLIP_NONE);
 }
 
 static void renderTankHealthBar(SDL_Renderer** ren, tank_s* tank)
@@ -226,4 +233,25 @@ static void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x
             }
         }
     }
+}
+
+static void matchAllIntegerRectsToFloatRects(textures_s* textures)
+{
+    matchIntegerRectToFloatRect(&textures->bullet.rect, &textures->bullet.fRect);
+
+    for (int i = 0; i < playerCount; i++)
+    {
+        matchIntegerRectToFloatRect(&textures->tank[i].rect, &textures->tank[i].fRect);
+        matchIntegerRectToFloatRect(&textures->tank[i].healthBar.rect, &textures->tank[i].healthBar.fRect);
+        matchIntegerRectToFloatRect(&textures->tank[i].healthBar.filledRect, &textures->tank[i].healthBar.filledFRect);
+        matchIntegerRectToFloatRect(&textures->tank[i].gun.rect, &textures->tank[i].gun.fRect);
+    }
+}
+
+static void matchIntegerRectToFloatRect(SDL_Rect* intRect, SDL_FRect* floatRect)
+{
+    intRect->x = (int)floatRect->x;
+    intRect->y = (int)floatRect->y;
+    intRect->w = (int)floatRect->w;
+    intRect->h = (int)floatRect->h;
 }

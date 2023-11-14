@@ -13,6 +13,6 @@
 void initBullet(bullet_s* bullet);
 void fireBullet(bullet_s* bullet, tank_s* tank);
 void updateBullet(textures_s* textures, terrain_s* terrain);
-double degToRad(int deg);
+double degToRad(float deg);
 
 #endif //TANKS_BULLET_H

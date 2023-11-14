@@ -40,11 +40,11 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     {
         if (keyStates[SDL_SCANCODE_D])
         {
-            moveTank(&textures->tank[turn], 0.075f, terrain); // move right
+            moveTank(&textures->tank[turn], 0.075f * resolutionScale, terrain); // move right
         }
         if (keyStates[SDL_SCANCODE_A])
         {
-            moveTank(&textures->tank[turn], -0.075f, terrain); // move left
+            moveTank(&textures->tank[turn], -0.075f * resolutionScale, terrain); // move left
         }
         if (keyStates[SDL_SCANCODE_W])
         {

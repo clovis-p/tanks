@@ -7,20 +7,22 @@
 
 #include <SDL2/SDL.h>
 
-#define RESOLUTION_X 1920
-#define RESOLUTION_Y 1080
+#define RESOLUTION_X 1280
+#define RESOLUTION_Y 720
 
 extern Uint32 deltaTime;
 
 extern int turn;
 extern int playerCount;
 
+extern float resolutionScale;
+
 typedef struct gun_s
 {
     SDL_Texture* texture;
     SDL_Rect rect;
-    int angle;
-    float fAngle;
+    SDL_FRect fRect;
+    double angle;
     int relativePosY; // Y position relative to the tank
     // (relative X position is always 0)
 } gun_s;
@@ -28,7 +30,7 @@ typedef struct gun_s
 typedef struct bullet_s
 {
     SDL_Rect rect;
-    SDL_FPoint fPoint;
+    SDL_FRect fRect;
     int active;
     float speedX;
     float speedY;
@@ -76,9 +78,9 @@ typedef struct tank_s
     SDL_Texture* baseTexture; // Texture for the tank without the gun
     SDL_Texture* combinedTexture; // Texture for the tank and gun combined
     SDL_Rect rect;
-    SDL_FPoint fPoint;
+    SDL_FRect fRect;
     SDL_FPoint bottomCenter;
-    int angle;
+    float angle;
     gun_s gun;
     int health;
     int collidesWithBullet;
