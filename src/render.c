@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
+#include <SDL2/SDL2_gfxPrimitives.h>
+
 #include "main.h"
 #include "render.h"
 #include "terrain/terrain.h"
@@ -75,6 +77,7 @@ static void renderDebugInfo(SDL_Renderer** ren, terrain_s* terrain, textures_s* 
 
 static void renderTerrain(SDL_Renderer** ren, terrain_s* terrain)
 {
+    SDL_RenderCopy(*ren, terrain->antiAliasingTexture, NULL, NULL);
     SDL_SetRenderDrawColor(*ren, 34, 139, 34, 255);
     SDL_RenderDrawPoints(*ren, terrain->sdlGroundPoints, terrain->groundPointsCount);
 }

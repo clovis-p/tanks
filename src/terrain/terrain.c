@@ -4,10 +4,14 @@
 
 #include "terrain.h"
 
-terrain_s* generateTerrain(int width, int height, int type)
+terrain_s* generateTerrain(SDL_Renderer* ren, int width, int height, int type)
 {
+    terrain_s *terrain;
+
     if (type == TERRAIN_TYPE_MIDPOINT)
     {
-        return generateMidpointTerrain(width, height, 6);
+        terrain = generateMidpointTerrain(ren, width, height, 6);
     }
+
+    return terrain;
 }

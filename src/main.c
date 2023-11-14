@@ -17,7 +17,7 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
 Uint32 deltaTime = 0;
 
 int turn = 0;
-int playerCount = 2;
+int playerCount = 4;
 
 float resolutionScale;
 
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 
 static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
 {
-    *terrain = generateTerrain(RESOLUTION_X, RESOLUTION_Y, TERRAIN_TYPE_MIDPOINT);
+    *terrain = generateTerrain(*ren, RESOLUTION_X, RESOLUTION_Y, TERRAIN_TYPE_MIDPOINT);
 
     for (int i = 0; i < playerCount; i++)
     {

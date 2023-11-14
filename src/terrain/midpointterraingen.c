@@ -11,15 +11,19 @@
 #include <time.h>
 #include <math.h>
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
+
 #include "terrain.h"
 
+static SDL_Texture* generateAntiAliasingTexture(SDL_Renderer* ren, terrain_s* terrain);
 static int generateRandomNumber(int min, int max);
 static int getCenterMidpointNumber(int midpointCount);
 static int isOdd(int number);
 static int calculateMidpointNumber(int index, int highestIndex, int k);
 static double calculateLinearSlope(int y2, int y1, int x2, int x1);
 
-terrain_s* generateMidpointTerrain(int width, int height, int precision)
+terrain_s* generateMidpointTerrain(SDL_Renderer* ren, int width, int height, int precision)
 {
     terrain_s* terrain;
 
@@ -256,7 +260,46 @@ terrain_s* generateMidpointTerrain(int width, int height, int precision)
             currentMidpointNumber++;
         }
     }
+
+    terrain->antiAliasingTexture = generateAntiAliasingTexture(ren, terrain);
+
     return terrain;
+}
+
+static SDL_Texture* generateAntiAliasingTexture(SDL_Renderer* ren, terrain_s* terrain)
+{
+    SDL_Texture* antiAliasingTexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, RESOLUTION_X, RESOLUTION_Y);
+    SDL_SetTextureBlendMode(antiAliasingTexture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(antiAliasingTexture, 255);
+
+    SDL_SetRenderTarget(ren, antiAliasingTexture);
+
+    SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
+    SDL_RenderClear(ren);
+
+    for (int i = 0; i < RESOLUTION_X - 5; i++)
+    {
+        aalineRGBA(ren,
+                   (Sint16)i,
+                   (Sint16)(terrain->groundLevel[i] - 1),
+                   (Sint16)(i + 5),
+                   (Sint16)(terrain->groundLevel[i + 5] - 1),
+                   34, 139, 34, 255);
+    }
+
+    for (int i = 0; i < RESOLUTION_X - 5; i++)
+    {
+        aalineRGBA(ren,
+                   (Sint16)i,
+                   (Sint16)(terrain->groundLevel[i] - 2),
+                   (Sint16)(i + 5),
+                   (Sint16)(terrain->groundLevel[i + 5] - 2),
+                   34, 139, 34, 40);
+    }
+
+    SDL_SetRenderTarget(ren, NULL);
+
+    return antiAliasingTexture;
 }
 
 static int generateRandomNumber(int min, int max)

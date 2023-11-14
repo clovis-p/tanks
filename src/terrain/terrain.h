@@ -15,15 +15,16 @@
 typedef struct terrain_s
 {
     SDL_Point sdlGroundPoints[RESOLUTION_X * RESOLUTION_Y];
+    int groundPointsCount;
     int terrainArray[RESOLUTION_X][RESOLUTION_Y];
     int groundLevel[RESOLUTION_X];
-    int groundPointsCount;
     SDL_Point debugPoints[RESOLUTION_X * RESOLUTION_Y];
     int debugPointsCount;
+    SDL_Texture* antiAliasingTexture;
 } terrain_s;
 
-terrain_s* generateTerrain(int width, int height, int type);
-terrain_s* generateMidpointTerrain(int width, int height, int precision);
+terrain_s* generateTerrain(SDL_Renderer* ren, int width, int height, int type);
+terrain_s* generateMidpointTerrain(SDL_Renderer* ren, int width, int height, int precision);
 terrain_s* generateSineTerrain(int width, int height);
 
 
