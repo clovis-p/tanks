@@ -70,6 +70,7 @@ void initTank(SDL_Renderer** ren, textures_s* textures, int id)
     textures->tank[id].health = 100;
     textures->tank[id].isInvincible = 0;
     textures->tank[id].id = id;
+    textures->tank[id].ticksAtLastHit = 0;
 
 
     // init tank[id] combined texture
@@ -160,6 +161,7 @@ void applyDamageToTank(tank_s* tank, int damage)
     if (!tank->isInvincible && tank->health > 0)
     {
         tank->health -= damage;
+        tank->ticksAtLastHit = SDL_GetTicks();
         updateTankHealthBar(tank);
     }
 }

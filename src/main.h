@@ -88,6 +88,7 @@ typedef struct tank_s
     int isInvincible;
     int id;
     healthBar_s healthBar;
+    Uint32 ticksAtLastHit; // The number of ticks at the time damage was taken
 } tank_s;
 
 typedef struct textures_s

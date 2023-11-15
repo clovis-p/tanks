@@ -11,6 +11,7 @@
 #include "render.h"
 #include "terrain/terrain.h"
 #include "events.h"
+#include "vfx.h"
 
 static void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x, int y, int width, int height, SDL_Color fg, SDL_Color bg);
 static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank);
@@ -56,6 +57,12 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     for (int i = 0; i < playerCount; i++)
     {
         renderTankHealthBar(ren, &textures->tank[i]);
+    }
+
+    // Render damage effect
+    if (isTankHitEffectActive(textures) >= 0)
+    {
+        updateAndRenderTankHitEffect(*ren, textures);
     }
 
     SDL_RenderPresent(*ren);
