@@ -86,8 +86,9 @@ terrain_s* generateMidpointTerrain(SDL_Renderer* ren, int width, int height, int
         midpoint[midpointCount - 1].index = 0;
         midpoint[midpointCount - 1].isGenerated = 1;
 
-        // Making sure the first and last midpoints are far apart enough, otherwise start over
-        if (midpoint[0].y - midpoint[midpointCount - 1].y > 100 || midpoint[0].y - midpoint[midpointCount - 1].y < -100)
+        // Making sure the first and last midpoints are far apart enough and not too high, otherwise start over
+        if (((float)(midpoint[0].y - midpoint[midpointCount - 1].y) > 200 * resolutionScale || (float)(midpoint[0].y - midpoint[midpointCount - 1].y) < -200 * resolutionScale) &&
+            !(midpoint[0].y < RESOLUTION_Y / 2 && midpoint[midpointCount - 1].y < RESOLUTION_Y / 2))
         { // this is stupid but it works
             finished = 1;
         }
