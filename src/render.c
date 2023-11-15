@@ -78,8 +78,7 @@ static void renderDebugInfo(SDL_Renderer** ren, terrain_s* terrain, textures_s* 
 static void renderTerrain(SDL_Renderer** ren, terrain_s* terrain)
 {
     SDL_RenderCopy(*ren, terrain->antiAliasingTexture, NULL, NULL);
-    SDL_SetRenderDrawColor(*ren, 34, 139, 34, 255);
-    SDL_RenderDrawPoints(*ren, terrain->sdlGroundPoints, terrain->groundPointsCount);
+    SDL_RenderCopy(*ren, terrain->texture, NULL, NULL);
 }
 
 static void renderTank(SDL_Renderer** ren, tank_s* tank)

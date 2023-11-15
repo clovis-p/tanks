@@ -55,7 +55,12 @@ int main(int argc, char *argv[])
 
         printf("deltaTime: %d, %d fps         \r", deltaTime, (int)(1000 / (float)deltaTime));
 
-        SDL_Delay(5);
+        // Cap framerate to 250fps
+        int delay = 5 - (int)deltaTime;
+        if (delay > 0)
+        {
+            SDL_Delay(delay);
+        }
 
         updateBullet(&textures, terrain);
 

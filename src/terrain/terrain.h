@@ -20,6 +20,7 @@ typedef struct terrain_s
     int groundLevel[RESOLUTION_X];
     SDL_Point debugPoints[RESOLUTION_X * RESOLUTION_Y];
     int debugPointsCount;
+    SDL_Texture* texture;
     SDL_Texture* antiAliasingTexture;
 } terrain_s;
 
