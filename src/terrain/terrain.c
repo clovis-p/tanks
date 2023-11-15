@@ -12,7 +12,7 @@ terrain_s* generateTerrain(SDL_Renderer* ren, int width, int height, int type)
 
     if (type == TERRAIN_TYPE_MIDPOINT)
     {
-        terrain = generateMidpointTerrain(ren, width, height, 7);
+        terrain = generateMidpointTerrain(ren, width, height, 6);
     }
 
     terrain->texture = SDL_CreateTexture(ren,

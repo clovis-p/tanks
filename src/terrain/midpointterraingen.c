@@ -69,6 +69,7 @@ terrain_s* generateMidpointTerrain(SDL_Renderer* ren, int width, int height, int
         midpoint[i].isGenerated = 0;
     }
 
+    // Generate the first and last midpoints first
     int finished = 0;
     while (!finished)
     {
@@ -92,6 +93,27 @@ terrain_s* generateMidpointTerrain(SDL_Renderer* ren, int width, int height, int
         { // this is stupid but it works
             finished = 1;
         }
+    }
+
+    // Lower the first and last midpoints that were just generated unless at least one of them is low enough
+    // This ensures the terrain takes less space on the screen so less space is wasted
+    const int LOW_POINT = (int)(RESOLUTION_Y - 100 * resolutionScale);
+    if (midpoint[0].y < LOW_POINT && midpoint[midpointCount - 1].y < LOW_POINT)
+    {
+        int diff;
+
+        // If the first midpoint is the lowest
+        if (midpoint[0].y > midpoint[midpointCount - 1].y)
+        {
+            diff = LOW_POINT - midpoint[0].y;
+        }
+        else // If the last midpoint is the lowest or if the terrain is flat
+        {
+            diff = LOW_POINT - midpoint[midpointCount - 1].y;
+        }
+
+        midpoint[0].y += diff;
+        midpoint[midpointCount - 1].y += diff;
     }
 
     int totalGeneratedMidpoints = 2; // Start at 2 because the first and last points are already done
