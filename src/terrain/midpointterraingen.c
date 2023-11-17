@@ -16,7 +16,6 @@
 
 #include "terrain.h"
 
-static SDL_Texture* generateAntiAliasingTexture(SDL_Renderer* ren, terrain_s* terrain);
 static int generateRandomNumber(int min, int max);
 static int getCenterMidpointNumber(int midpointCount);
 static int isOdd(int number);
@@ -289,7 +288,7 @@ terrain_s* generateMidpointTerrain(SDL_Renderer* ren, int width, int height, int
     return terrain;
 }
 
-static SDL_Texture* generateAntiAliasingTexture(SDL_Renderer* ren, terrain_s* terrain)
+SDL_Texture* generateAntiAliasingTexture(SDL_Renderer* ren, terrain_s* terrain)
 {
     SDL_Texture* antiAliasingTexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, RESOLUTION_X, RESOLUTION_Y);
     SDL_SetTextureBlendMode(antiAliasingTexture, SDL_BLENDMODE_BLEND);

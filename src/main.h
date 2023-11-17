@@ -36,6 +36,7 @@ typedef struct bullet_s
     float speedY;
     int harmlessToShooter;
     int shooterId;
+    int makeCrater;
 } bullet_s;
 
 typedef struct tankHitBox_s

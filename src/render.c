@@ -39,6 +39,10 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     }
 
     // ground
+    if (terrain->refreshNeeded)
+    {
+        refreshTerrain(*ren, terrain);
+    }
     renderTerrain(ren, terrain);
 
     // debug, showDebug = 1 while left shift and left alt are held down, otherwise showDebug = 0

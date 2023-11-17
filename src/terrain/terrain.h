@@ -22,10 +22,14 @@ typedef struct terrain_s
     int debugPointsCount;
     SDL_Texture* texture;
     SDL_Texture* antiAliasingTexture;
+    int refreshNeeded;
 } terrain_s;
 
+SDL_Texture* generateAntiAliasingTexture(SDL_Renderer* ren, terrain_s* terrain);
 terrain_s* generateTerrain(SDL_Renderer* ren, int width, int height, int type);
 terrain_s* generateMidpointTerrain(SDL_Renderer* ren, int width, int height, int precision);
+void refreshTerrain(SDL_Renderer* ren, terrain_s* terrain);
+void drawCrater(terrain_s* terrain, int x, int y, int radius);
 terrain_s* generateSineTerrain(int width, int height);
 
 

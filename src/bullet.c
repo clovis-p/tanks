@@ -45,6 +45,7 @@ void updateBullet(textures_s* textures, terrain_s* terrain)
 {
     if (bulletIsOutOfBounds(&textures->bullet, terrain) && textures->bullet.active)
     {
+        drawCrater(terrain, (int)textures->bullet.fRect.x, (int)textures->bullet.fRect.y, 10);
         deactivateBullet(textures);
     }
 
