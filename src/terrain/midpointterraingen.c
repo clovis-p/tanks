@@ -22,7 +22,7 @@ static int isOdd(int number);
 static int calculateMidpointNumber(int index, int highestIndex, int k);
 static double calculateLinearSlope(int y2, int y1, int x2, int x1);
 
-terrain_s* generateMidpointTerrain(SDL_Renderer* ren, int width, int height, int precision)
+terrain_s *generateMidpointTerrain(SDL_Renderer *ren, int width, int height, int precision, int seed)
 {
     terrain_s* terrain;
 
@@ -38,7 +38,7 @@ terrain_s* generateMidpointTerrain(SDL_Renderer* ren, int width, int height, int
         }
     }
 
-    srand(time(NULL));
+    srand(seed);
 
     struct midpoint_s
     {

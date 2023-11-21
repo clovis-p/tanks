@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 
 static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
 {
-    *terrain = generateTerrain(*ren, RESOLUTION_X, RESOLUTION_Y, TERRAIN_TYPE_MIDPOINT);
+    *terrain = generateTerrain(*ren, RESOLUTION_X, RESOLUTION_Y, TERRAIN_TYPE_MIDPOINT, (int)time(NULL));
 
     for (int i = 0; i < playerCount; i++)
     {
