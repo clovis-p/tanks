@@ -37,6 +37,8 @@ typedef struct bullet_s
     int harmlessToShooter;
     int shooterId;
     int makeCrater;
+    Uint32 ticksAtLastCrater;
+    SDL_Point lastCraterPos;
 } bullet_s;
 
 typedef struct tankHitBox_s

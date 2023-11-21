@@ -5,9 +5,12 @@
 #include <stdio.h>
 
 #include <SDL2/SDL.h>
+#include <SDL2_gfxPrimitives.h>
 
 #include "main.h"
 #include "vfx.h"
+
+static void renderAAFilledCircle(SDL_Renderer* ren, int x, int y, int radius, int r, int g, int b, int a);
 
 int isTankHitEffectActive(textures_s* textures)
 {
@@ -43,4 +46,56 @@ void updateAndRenderTankHitEffect(SDL_Renderer* ren, textures_s* textures)
 
     SDL_SetRenderDrawColor(ren, 255, 255, 255, (int)alpha);
     SDL_RenderFillRect(ren, &hitEffectRect);
+}
+
+int isBulletGroundImpactEffectActive(bullet_s* bullet)
+{
+    Uint32 currentTicks = SDL_GetTicks();
+
+    // If it has been less than 1000ms since a crater was made
+    if (currentTicks - bullet->ticksAtLastCrater < 1000)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+void updateAndRenderBulletGroundImpactEffect(SDL_Renderer* ren, textures_s* textures)
+{
+    float alpha = 128;
+    Uint32 currentTicks = SDL_GetTicks();
+    for (int i = 0; i < playerCount; i++)
+    {
+        // If it has been less than 1000ms since tank[i] got hit
+        if (currentTicks - textures->bullet.ticksAtLastCrater < 1000)
+        {
+            alpha = 255 - (float)(currentTicks - textures->bullet.ticksAtLastCrater) / 1000 * 255;
+        }
+    }
+
+    renderAAFilledCircle(ren, textures->bullet.lastCraterPos.x, textures->bullet.lastCraterPos.y, (int)(20 * resolutionScale), 255, 0, 0, (int)alpha);
+}
+
+static void renderAAFilledCircle(SDL_Renderer* ren, int x, int y, int radius, int r, int g, int b, int a)
+{
+    SDL_Rect circleRect = {x - radius, y - radius, radius * 2, radius * 2};
+    SDL_Texture* circle = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, circleRect.w, circleRect.h);
+    SDL_SetTextureBlendMode(circle, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(circle, a);
+
+    SDL_SetRenderTarget(ren, circle);
+
+    SDL_SetRenderDrawColor(ren, 0, 0, 0, 0); // set transparent background
+    SDL_RenderClear(ren);
+
+    aacircleRGBA(ren, (Sint16)radius, (Sint16)radius, (Sint16)(radius - 1), (Uint8)r, (Uint8)g, (Uint8)b, 255);
+    aacircleRGBA(ren, (Sint16)radius, (Sint16)radius, (Sint16)(radius - 2), (Uint8)r, (Uint8)g, (Uint8)b, 255);
+    filledCircleRGBA(ren, (Sint16)radius, (Sint16)radius, (Sint16)(radius - 2), (Uint8)r, (Uint8)g, (Uint8)b, 255);
+
+    SDL_SetRenderTarget(ren, NULL);
+
+    SDL_RenderCopy(ren, circle, NULL, &circleRect);
+    printf("rendered circle at %d, %d, %d, %d\n", circleRect.x, circleRect.y, circleRect.w, circleRect.h);
+    SDL_DestroyTexture(circle);
 }

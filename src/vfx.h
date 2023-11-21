@@ -12,5 +12,8 @@
 
 int isTankHitEffectActive(textures_s* textures);
 void updateAndRenderTankHitEffect(SDL_Renderer* ren, textures_s* textures);
+int isBulletGroundImpactEffectActive(bullet_s* bullet);
+void updateAndRenderBulletGroundImpactEffect(SDL_Renderer* ren, textures_s* textures);
+
 
 #endif //TANKS_VFX_H

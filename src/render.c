@@ -63,6 +63,12 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
         renderTankHealthBar(ren, &textures->tank[i]);
     }
 
+    // Render bullet ground impact effect
+    if (isBulletGroundImpactEffectActive(&textures->bullet))
+    {
+        updateAndRenderBulletGroundImpactEffect(*ren, textures);
+    }
+
     // Render damage effect
     if (isTankHitEffectActive(textures) >= 0)
     {

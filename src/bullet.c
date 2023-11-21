@@ -46,6 +46,9 @@ void updateBullet(textures_s* textures, terrain_s* terrain)
     if (bulletIsOutOfBounds(&textures->bullet, terrain) && textures->bullet.active)
     {
         drawCrater(terrain, (int)textures->bullet.fRect.x, (int)textures->bullet.fRect.y, (int)(20 * resolutionScale));
+        textures->bullet.ticksAtLastCrater = SDL_GetTicks();
+        textures->bullet.lastCraterPos.x = (int)textures->bullet.fRect.x;
+        textures->bullet.lastCraterPos.y = (int)textures->bullet.fRect.y;
         deactivateBullet(textures);
     }
 
