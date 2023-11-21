@@ -3,18 +3,19 @@
 //
 
 #include <SDL2/SDL.h>
+#include <time.h>
 
 #include "terrain.h"
 
-terrain_s* generateTerrain(SDL_Renderer* ren, int width, int height, int type)
+terrain_s *generateTerrain(SDL_Renderer *ren, int width, int height, int type, int seed)
 {
-    int startTime = SDL_GetTicks();
+    Uint32 startTime = SDL_GetTicks();
 
     terrain_s *terrain;
 
     if (type == TERRAIN_TYPE_MIDPOINT)
     {
-        terrain = generateMidpointTerrain(ren, width, height, 6);
+        terrain = generateMidpointTerrain(ren, width, height, 6, seed);
     }
 
     terrain->texture = SDL_CreateTexture(ren,
