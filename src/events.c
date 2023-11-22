@@ -13,6 +13,7 @@
 #include "bullet.h"
 
 int showDebug;
+int debugMode;
 
 void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
 {
@@ -71,7 +72,7 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
         turn %= playerCount;
     }
 
-    // toggle debug mode
+    // toggle debug overlay
     static int lockF3 = 0;
 
     if (keyStates[SDL_SCANCODE_F3] && !lockF3)
@@ -84,6 +85,22 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     {
         // Once the key is released, unlock it so debug mode can be toggled again
         lockF3 = 0;
+    }
+
+    // debugMode can be used to change the game's behavior in various ways
+    static int lockF4 = 0;
+
+    if (keyStates[SDL_SCANCODE_F4] && !lockF4)
+    {
+        debugMode++;
+        debugMode %= 10;
+        printf("debugMode: %d\n", debugMode);
+        lockF4 = 1;
+    }
+    else if (!keyStates[SDL_SCANCODE_F4])
+    {
+        // Once the key is released, unlock it so debug mode can be toggled again
+        lockF4 = 0;
     }
 
     /*
