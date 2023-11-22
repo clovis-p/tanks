@@ -43,13 +43,22 @@ void fireBullet(bullet_s* bullet, tank_s* tank)
 
 void updateBullet(textures_s* textures, terrain_s* terrain)
 {
-    if (bulletIsOutOfBounds(&textures->bullet, terrain) && textures->bullet.active)
+    if (textures->bullet.active)
     {
-        drawCrater(terrain, (int)textures->bullet.fRect.x, (int)textures->bullet.fRect.y, (int)(20 * resolutionScale));
-        textures->bullet.ticksAtLastCrater = SDL_GetTicks();
-        textures->bullet.lastCraterPos.x = (int)textures->bullet.fRect.x;
-        textures->bullet.lastCraterPos.y = (int)textures->bullet.fRect.y;
-        deactivateBullet(textures);
+        if (bulletIsOutOfBounds(&textures->bullet, terrain))
+        {
+            deactivateBullet(textures);
+        }
+
+        // Check if the bullet hit the ground
+        if (terrain->terrainArray[(int)(textures->bullet.fRect.x + textures->bullet.fRect.w / 2)][(int)(textures->bullet.fRect.y + textures->bullet.fRect.h / 2)])
+        {
+            drawCrater(terrain, (int)textures->bullet.fRect.x, (int)textures->bullet.fRect.y, (int)(20 * resolutionScale));
+            textures->bullet.ticksAtLastCrater = SDL_GetTicks();
+            textures->bullet.lastCraterPos.x = (int)textures->bullet.fRect.x;
+            textures->bullet.lastCraterPos.y = (int)textures->bullet.fRect.y;
+            deactivateBullet(textures);
+        }
     }
 
     if (textures->bullet.active)
@@ -123,8 +132,7 @@ static void updateBulletPos(textures_s* textures)
 
 static int bulletIsOutOfBounds(bullet_s* bullet, terrain_s* terrain)
 {
-    if (bullet->fRect.x < 0 || bullet->fRect.x > (float)RESOLUTION_X ||
-        bullet->fRect.y + bullet->fRect.h > (float)terrain->groundLevel[(int)(bullet->fRect.x + bullet->fRect.w / 2)])
+    if (bullet->fRect.x < 0 || bullet->fRect.x + bullet->fRect.w > (float)RESOLUTION_X)
     {
         return 1;
     }
