@@ -331,31 +331,7 @@ static int generateRandomNumber(int min, int max)
 
 static int getCenterMidpointNumber(int midpointCount)
 {
-    switch (midpointCount)
-    {
-        case 3:
-            return 1;
-        case 5:
-            return 2;
-        case 9:
-            return 4;
-        case 17:
-            return 8;
-        case 33:
-            return 16;
-        case 65:
-            return 32;
-        case 129:
-            return 64;
-        case 257:
-            return 128;
-        case 513:
-            return 256;
-        case 1025:
-            return 512;
-        default:
-            return 0;
-    }
+    return (midpointCount - 1) / 2;
 }
 
 static int isOdd(int number)
