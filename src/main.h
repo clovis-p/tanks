@@ -17,6 +17,8 @@ extern int playerCount;
 
 extern float resolutionScale;
 
+extern int debugMode;
+
 typedef struct gun_s
 {
     SDL_Texture* texture;
