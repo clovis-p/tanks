@@ -125,7 +125,7 @@ static void updateBulletPos(textures_s* textures)
         if (textures->tank[i].collidesWithBullet && !textures->tank[i].isInvincible)
         {
             deactivateBullet(textures);
-            applyDamageToTank(&textures->tank[i], 10);
+            applyDamageToTank(textures->tank, i, 10);
         }
     }
 }

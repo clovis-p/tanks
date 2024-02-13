@@ -31,21 +31,19 @@ int isTankHitEffectActive(textures_s* textures)
 
 void updateAndRenderTankHitEffect(SDL_Renderer* ren, textures_s* textures)
 {
-    SDL_Rect hitEffectRect = {0, 0, RESOLUTION_X, RESOLUTION_Y};
-
-    float alpha = 128;
+    int alpha = 128;
     Uint32 currentTicks = SDL_GetTicks();
     for (int i = 0; i < playerCount; i++)
     {
         // If it has been less than 1000ms since tank[i] got hit
-        if (currentTicks - textures->tank[i].ticksAtLastHit < 1000)
+        if (currentTicks - textures->tank[i].ticksAtLastHit < 1000 && textures->tank[i].isLatestHit)
         {
-            alpha = 128 - (float)(currentTicks - textures->tank[i].ticksAtLastHit) / 1000 * 128;
+            alpha = (int)(128.0f - (float)(currentTicks - textures->tank[i].ticksAtLastHit) / 1000.0f * 128.0f);
         }
     }
 
-    SDL_SetRenderDrawColor(ren, 255, 255, 255, (int)alpha);
-    SDL_RenderFillRect(ren, &hitEffectRect);
+    SDL_SetRenderDrawColor(ren, 255, 255, 255, alpha);
+    SDL_RenderFillRect(ren, NULL);
 }
 
 int isBulletGroundImpactEffectActive(bullet_s* bullet)
@@ -96,6 +94,5 @@ static void renderAAFilledCircle(SDL_Renderer* ren, int x, int y, int radius, in
     SDL_SetRenderTarget(ren, NULL);
 
     SDL_RenderCopy(ren, circle, NULL, &circleRect);
-    printf("rendered circle at %d, %d, %d, %d\n", circleRect.x, circleRect.y, circleRect.w, circleRect.h);
     SDL_DestroyTexture(circle);
 }

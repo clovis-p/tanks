@@ -156,13 +156,25 @@ void moveTank(tank_s* tank, float amount, terrain_s* terrain)
     updateTankHealthBar(tank);
 }
 
-void applyDamageToTank(tank_s* tank, int damage)
+void applyDamageToTank(tank_s tanks[], int tankIndex, int damage)
 {
-    if (!tank->isInvincible && tank->health > 0)
+    if (!tanks[tankIndex].isInvincible && tanks[tankIndex].health > 0)
     {
-        tank->health -= damage;
-        tank->ticksAtLastHit = SDL_GetTicks();
-        updateTankHealthBar(tank);
+        tanks[tankIndex].health -= damage;
+        tanks[tankIndex].ticksAtLastHit = SDL_GetTicks();
+        updateTankHealthBar(&tanks[tankIndex]);
+
+        for (int i = 0; i < playerCount; i++)
+        {
+            if (i != tankIndex)
+            {
+                tanks[i].isLatestHit = 0;
+            }
+            else
+            {
+                tanks[i].isLatestHit = 1;
+            }
+        }
     }
 }
 

@@ -94,6 +94,7 @@ typedef struct tank_s
     int id;
     healthBar_s healthBar;
     Uint32 ticksAtLastHit; // The number of ticks at the time damage was taken
+    int isLatestHit; // 1 if the tank was the last tank that got hit, 0 otherwise
 } tank_s;
 
 typedef struct textures_s
