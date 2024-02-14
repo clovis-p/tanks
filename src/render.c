@@ -16,6 +16,7 @@
 static void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x, int y, int width, int height, SDL_Color fg, SDL_Color bg);
 static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank);
 static void renderTankHealthBar(SDL_Renderer** ren, tank_s* tank);
+static void renderTanks(SDL_Renderer** ren, textures_s* textures);
 static void renderTank(SDL_Renderer** ren, tank_s* tank);
 static void renderTerrain(SDL_Renderer** ren, terrain_s* terrain);
 static void renderDebugInfo(SDL_Renderer** ren, terrain_s* terrain, textures_s* textures);
@@ -52,16 +53,9 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     }
 
     // Render tanks
-    for (int i = 0; i < playerCount; i++)
-    {
-        renderTank(ren, &textures->tank[i]);
-    }
+    renderTanks(ren, textures);
 
-    // Render health bars
-    for (int i = 0; i < playerCount; i++)
-    {
-        renderTankHealthBar(ren, &textures->tank[i]);
-    }
+    SDL_SetRenderDrawBlendMode(*ren, SDL_BLENDMODE_BLEND);
 
     // Render bullet ground impact effect
     if (isBulletGroundImpactEffectActive(&textures->bullet))
@@ -98,6 +92,21 @@ static void renderTerrain(SDL_Renderer** ren, terrain_s* terrain)
     SDL_RenderCopy(*ren, terrain->texture, NULL, NULL);
 }
 
+// Renders all living tanks and their health bars
+static void renderTanks(SDL_Renderer** ren, textures_s* textures)
+{
+    for (int i = 0; i < playerCount; i++)
+    {
+        renderTank(ren, &textures->tank[i]);
+    }
+
+    for (int i = 0; i < playerCount; i++)
+    {
+        renderTankHealthBar(ren, &textures->tank[i]);
+    }
+}
+
+// Renders a tank (just the tank)
 static void renderTank(SDL_Renderer** ren, tank_s* tank)
 {
     // Set render target to tank texture
