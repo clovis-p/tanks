@@ -98,10 +98,6 @@ static void renderTanks(SDL_Renderer** ren, textures_s* textures)
     for (int i = 0; i < playerCount; i++)
     {
         renderTank(ren, &textures->tank[i]);
-    }
-
-    for (int i = 0; i < playerCount; i++)
-    {
         renderTankHealthBar(ren, &textures->tank[i]);
     }
 }
