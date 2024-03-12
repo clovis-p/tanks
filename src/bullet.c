@@ -122,7 +122,7 @@ static void updateBulletPos(textures_s* textures)
             textures->bullet.harmlessToShooter = 0;
         }
 
-        if (textures->tank[i].collidesWithBullet && !textures->tank[i].isInvincible)
+        if (textures->tank[i].collidesWithBullet && !textures->tank[i].isInvincible && textures->tank[i].isAlive)
         {
             deactivateBullet(textures);
             applyDamageToTank(textures->tank, i, 10);

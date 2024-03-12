@@ -71,6 +71,7 @@ void initTank(SDL_Renderer** ren, textures_s* textures, int id)
     textures->tank[id].isInvincible = 0;
     textures->tank[id].id = id;
     textures->tank[id].ticksAtLastHit = 0;
+    textures->tank[id].isAlive = 1;
 
 
     // init tank[id] combined texture
@@ -158,6 +159,8 @@ void moveTank(tank_s* tank, float amount, terrain_s* terrain)
 
 void applyDamageToTank(tank_s tanks[], int tankIndex, int damage)
 {
+    int preDamageHealth = tanks[tankIndex].health;
+
     if (!tanks[tankIndex].isInvincible && tanks[tankIndex].health > 0)
     {
         tanks[tankIndex].health -= damage;
@@ -175,6 +178,11 @@ void applyDamageToTank(tank_s tanks[], int tankIndex, int damage)
                 tanks[i].isLatestHit = 1;
             }
         }
+    }
+
+    if (preDamageHealth > 0 && tanks[tankIndex].health <= 0)
+    {
+        tanks[tankIndex].isAlive = 0;
     }
 }
 

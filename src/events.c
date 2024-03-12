@@ -57,17 +57,25 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
         }
     }
 
-    // bullet
+    // bullet and turns
     static int fire = 0;
 
     if (keyStates[SDL_SCANCODE_SPACE] && !textures->bullet.active)
     {
         fire = 1;
     }
-    else if (fire)
-    {
+    else if (fire) {
         fireBullet(&textures->bullet, &textures->tank[turn]);
         fire = 0;
+
+        turn++;
+        turn %= playerCount;
+    }
+
+    // At any time, if it's a dead player's turn, skip before any other events are checked. This is necessary since the
+    // turns are otherwise only updated when a bullet is shot, not when damage is done.
+    while (!textures->tank[turn].isAlive)
+    {
         turn++;
         turn %= playerCount;
     }
