@@ -42,6 +42,7 @@ void updateAndRenderTankHitEffect(SDL_Renderer* ren, textures_s* textures)
         }
     }
 
+    SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(ren, 255, 255, 255, alpha);
     SDL_RenderFillRect(ren, NULL);
 }
@@ -72,6 +73,7 @@ void updateAndRenderBulletGroundImpactEffect(SDL_Renderer* ren, textures_s* text
         }
     }
 
+    SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND);
     renderAAFilledCircle(ren, textures->bullet.lastCraterPos.x, textures->bullet.lastCraterPos.y, (int)(20 * resolutionScale), 255, 0, 0, (int)alpha);
 }
 

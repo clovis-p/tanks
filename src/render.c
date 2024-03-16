@@ -55,8 +55,6 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     // Render tanks
     renderTanks(ren, textures);
 
-    SDL_SetRenderDrawBlendMode(*ren, SDL_BLENDMODE_BLEND);
-
     // Render bullet ground impact effect
     if (isBulletGroundImpactEffectActive(&textures->bullet))
     {
