@@ -123,10 +123,10 @@ void handleGameEvents(terrain_s* terrain, textures_s *textures)
     if (keyStates[SDL_SCANCODE_ESCAPE] && !lockEsc)
     {
         gameState = 0;
-
         lockEsc = 1;
     }
-    else if (!keyStates[SDL_SCANCODE_ESCAPE]) {
+    else if (!keyStates[SDL_SCANCODE_ESCAPE])
+    {
         lockEsc = 0;
     }
 
@@ -140,4 +140,19 @@ void handleGameEvents(terrain_s* terrain, textures_s *textures)
         SDL_Delay(10);
     }
     */
+}
+
+void handleMenuEvents()
+{
+    static int lockEnter = 0;
+
+    if (keyStates[SDL_SCANCODE_RETURN] && !lockEnter)
+    {
+        gameState = 1;
+
+        lockEnter = 1;
+    }
+    else if (!keyStates[SDL_SCANCODE_RETURN]) {
+        lockEnter = 0;
+    }
 }

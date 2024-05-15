@@ -10,10 +10,12 @@
 #include "terrain/terrain.h"
 #include "bullet.h"
 #include "tank.h"
+#include "ui.h"
 
 static int initSDL(SDL_Window** win, SDL_Renderer** ren);
 static void quitSDL(SDL_Window** win, SDL_Renderer** ren);
-static void quitGame(textures_s* textures, terrain_s** terrain);
+static void quitGame(textures_s* textures, menutextures_s* menuTextures, terrain_s** terrain);
+static void initMenu(SDL_Renderer* ren, menutextures_s* menuTextures);
 static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures);
 
 Uint32 deltaTime = 0;
@@ -21,7 +23,7 @@ Uint32 deltaTime = 0;
 int turn = 0;
 int playerCount = 4;
 
-int gameState = 0; // 0 = main menu, 1 = game
+int gameState = 0; // 0 = main menu, 1 = game initializing, 2 = game in progress
 
 float resolutionScale;
 
@@ -33,6 +35,7 @@ int main(int argc, char *argv[])
     terrain_s *terrain;
 
     textures_s textures;
+    menutextures_s menuTextures;
     Uint32 ticks = 0;
 
     resolutionScale = (float)RESOLUTION_X / 1280;
@@ -50,46 +53,51 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    initMenu(ren, &menuTextures);
     initGame(&ren, &terrain, &textures);
 
     while (!quit)
     {
+        deltaTime = SDL_GetTicks() - ticks;
+        ticks = SDL_GetTicks();
+
+        // Cap framerate to 250fps
+        int delay = 5 - (int)deltaTime;
+        if (delay > 0)
+        {
+            SDL_Delay(delay);
+        }
+
         handleGlobalEvents(&quit);
 
         if (gameState == 0)
         {
+            handleMenuEvents();
+            renderMenu(&win, &ren, &menuTextures);
+        }
+        else if (gameState == 1)
+        {
             initGame(&ren, &terrain, &textures);
+        }
+        else if (gameState == 2)
+        {
+            updateBullet(&textures, terrain);
+            render(&win, &ren, terrain, &textures);
+            handleGameEvents(terrain, &textures);
         }
         else
         {
-            deltaTime = SDL_GetTicks() - ticks;
-            ticks = SDL_GetTicks();
-
-            // Cap framerate to 250fps
-            int delay = 5 - (int)deltaTime;
-            if (delay > 0)
-            {
-                SDL_Delay(delay);
-            }
-
-            updateBullet(&textures, terrain);
-
-            render(&win, &ren, terrain, &textures);
-
-            handleGameEvents(terrain, &textures);
-
+            printf("Something went horribly wrong! (invalid game state)");
         }
     }
 
-    quitGame(&textures, &terrain);
+    quitGame(&textures, &menuTextures, &terrain);
     quitSDL(&win, &ren);
     return 0;
 }
 
 static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
 {
-    gameState = 1;
-
     *terrain = generateTerrain(*ren, RESOLUTION_X, RESOLUTION_Y, TERRAIN_TYPE_MIDPOINT, (int)time(NULL));
 
     for (int i = 0; i < playerCount; i++)
@@ -126,10 +134,23 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     {
         teleportTank(&textures->tank[3], (float)RESOLUTION_X / 5 * 3, *terrain);
     }
+
+    gameState = 2;
 }
 
-static void quitGame(textures_s* textures, terrain_s** terrain)
+static void initMenu(SDL_Renderer* ren, menutextures_s* menuTextures)
 {
+    TTF_Font* titleFont = TTF_OpenFont("../resources/fonts/DeltaBlock-Regular.ttf", RESOLUTION_Y / 4);
+    SDL_Color white = {255, 255, 255, 255};
+    createTextTexture(&menuTextures->title, &menuTextures->titleRect, ren, "TANKS", titleFont, white);
+    menuTextures->titleRect.x = RESOLUTION_X / 2 - menuTextures->titleRect.w / 2;
+    menuTextures->titleRect.y = RESOLUTION_Y / 4.0 - menuTextures->titleRect.h / 2;
+}
+
+static void quitGame(textures_s* textures, menutextures_s* menuTextures, terrain_s** terrain)
+{
+    SDL_DestroyTexture(menuTextures->title);
+
     SDL_DestroyTexture(textures->tank[0].baseTexture);
     SDL_DestroyTexture(textures->tank[1].baseTexture);
     SDL_DestroyTexture(textures->tank[0].combinedTexture);

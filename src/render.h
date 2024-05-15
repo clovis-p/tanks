@@ -6,7 +6,9 @@
 #define SDLTEST_RENDER_H
 
 #include "terrain/terrain.h"
+#include "ui.h"
 
 void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s* textures);
+void renderMenu(SDL_Window** win, SDL_Renderer** ren, menutextures_s* menuTextures);
 
 #endif //SDLTEST_RENDER_H

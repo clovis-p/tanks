@@ -9,6 +9,7 @@
 
 void handleGlobalEvents(int *quit);
 void handleGameEvents(terrain_s* terrain, textures_s* textures);
+void handleMenuEvents();
 
 extern int showDebug;
 

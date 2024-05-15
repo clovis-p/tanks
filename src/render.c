@@ -12,6 +12,7 @@
 #include "terrain/terrain.h"
 #include "events.h"
 #include "vfx.h"
+#include "ui.h"
 
 static void renderArray(SDL_Window** win, SDL_Renderer** ren, int** array, int x, int y, int width, int height, SDL_Color fg, SDL_Color bg);
 static void renderTankHitboxes(SDL_Renderer** ren, tank_s* tank);
@@ -69,6 +70,16 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     }
 
     renderBottomBar(*ren, textures);
+
+    SDL_RenderPresent(*ren);
+}
+
+void renderMenu(SDL_Window** win, SDL_Renderer** ren, menutextures_s* menuTextures)
+{
+    SDL_SetRenderDrawColor(*ren, 0, 0, 0, 255);
+    SDL_RenderClear(*ren);
+
+    SDL_RenderCopy(*ren, menuTextures->title, NULL, &menuTextures->titleRect);
 
     SDL_RenderPresent(*ren);
 }
