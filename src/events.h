@@ -7,7 +7,8 @@
 
 #include "terrain/terrain.h"
 
-void handleEvents(int* quit, terrain_s* terrain, textures_s* textures);
+void handleGlobalEvents(int *quit);
+void handleGameEvents(terrain_s* terrain, textures_s* textures);
 
 extern int showDebug;
 

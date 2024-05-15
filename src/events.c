@@ -15,11 +15,13 @@
 int showDebug;
 int debugMode;
 
-void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
-{
-    static SDL_Event event;
+static SDL_Event event;
 
-    const Uint8 *keyStates = SDL_GetKeyboardState(NULL);
+const Uint8 *keyStates;
+
+void handleGlobalEvents(int *quit)
+{
+    keyStates = SDL_GetKeyboardState(NULL);
 
     // For some reason the keyboard keystates "stick", meaning the tank sometimes keeps moving
     // for a second after the key is released, and for some reason, calling SDL_PumpEvents() fixes this
@@ -30,11 +32,16 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
     {
         *quit = 1;
     }
+}
 
+void handleGameEvents(terrain_s* terrain, textures_s *textures)
+{
+    /*
     if (showDebug)
     {
-        //printf("tank[0] angle: %d\n", textures->tank[0].angle);
+        printf("tank[0] angle: %d\n", textures->tank[0].angle);
     }
+     */
 
     // tank
     if (!textures->bullet.active)

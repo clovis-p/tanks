@@ -54,29 +54,30 @@ int main(int argc, char *argv[])
 
     while (!quit)
     {
-        deltaTime = SDL_GetTicks() - ticks;
-        ticks = SDL_GetTicks();
-
-        //printf("deltaTime: %d, %d fps         \r", deltaTime, (int)(1000 / (float)deltaTime));
-
-        //printf("%d - ", textures.tank[0].isAlive);
-
-        // Cap framerate to 250fps
-        int delay = 5 - (int)deltaTime;
-        if (delay > 0)
-        {
-            SDL_Delay(delay);
-        }
-
-        updateBullet(&textures, terrain);
-
-        render(&win, &ren, terrain, &textures);
-
-        handleEvents(&quit, terrain, &textures);
+        handleGlobalEvents(&quit);
 
         if (gameState == 0)
         {
             initGame(&ren, &terrain, &textures);
+        }
+        else
+        {
+            deltaTime = SDL_GetTicks() - ticks;
+            ticks = SDL_GetTicks();
+
+            // Cap framerate to 250fps
+            int delay = 5 - (int)deltaTime;
+            if (delay > 0)
+            {
+                SDL_Delay(delay);
+            }
+
+            updateBullet(&textures, terrain);
+
+            render(&win, &ren, terrain, &textures);
+
+            handleGameEvents(terrain, &textures);
+
         }
     }
 
