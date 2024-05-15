@@ -111,6 +111,18 @@ void handleEvents(int *quit, terrain_s* terrain, textures_s *textures)
         lockF4 = 0;
     }
 
+    static int lockEsc = 0;
+
+    if (keyStates[SDL_SCANCODE_ESCAPE] && !lockEsc)
+    {
+        gameState = 0;
+
+        lockEsc = 1;
+    }
+    else if (!keyStates[SDL_SCANCODE_ESCAPE]) {
+        lockEsc = 0;
+    }
+
     /*
     if (keyStates[SDL_SCANCODE_T])
     {

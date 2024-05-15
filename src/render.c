@@ -22,6 +22,7 @@ static void renderTerrain(SDL_Renderer** ren, terrain_s* terrain);
 static void renderDebugInfo(SDL_Renderer** ren, terrain_s* terrain, textures_s* textures);
 static void matchAllIntegerRectsToFloatRects(textures_s* textures);
 static void matchIntegerRectToFloatRect(SDL_Rect* intRect, SDL_FRect* floatRect);
+static void renderBottomBar(SDL_Renderer* ren, textures_s* textures);
 
 void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s* textures)
 {
@@ -66,6 +67,8 @@ void render(SDL_Window** win, SDL_Renderer** ren, terrain_s* terrain, textures_s
     {
         updateAndRenderTankHitEffect(*ren, textures);
     }
+
+    renderBottomBar(*ren, textures);
 
     SDL_RenderPresent(*ren);
 }
@@ -277,4 +280,33 @@ static void matchIntegerRectToFloatRect(SDL_Rect* intRect, SDL_FRect* floatRect)
     intRect->y = (int)floatRect->y;
     intRect->w = (int)floatRect->w;
     intRect->h = (int)floatRect->h;
+}
+
+static void renderBottomBar(SDL_Renderer* ren, textures_s* textures)
+{
+    int bottomBarTurn;
+
+    if (textures->bullet.active)
+    {
+        if (turn == 0)
+        {
+            bottomBarTurn = playerCount;
+        }
+        else
+        {
+            bottomBarTurn = turn - 1;
+        }
+    }
+    else
+    {
+        bottomBarTurn = turn;
+    }
+
+    //SDL_Rect bottomBarTankRect = {0, RESOLUTION_Y - textures->tank[bottomBarTurn].rect.h, textures->tank[bottomBarTurn].rect.w, textures->tank[turn].rect.h};
+    SDL_Rect bottomBarTankRect;
+    bottomBarTankRect.x = 0;
+    bottomBarTankRect.y = RESOLUTION_Y - textures->tank[bottomBarTurn].rect.h;
+    bottomBarTankRect.h = textures->tank[bottomBarTurn].rect.w;
+    bottomBarTankRect.w = textures->tank[bottomBarTurn].rect.h;
+    //SDL_RenderCopy(ren, textures->tank[bottomBarTurn].combinedTexture, NULL, &bottomBarTankRect);
 }

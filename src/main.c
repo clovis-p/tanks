@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <time.h>
 
 #include "main.h"
@@ -19,6 +20,8 @@ Uint32 deltaTime = 0;
 
 int turn = 0;
 int playerCount = 4;
+
+int gameState = 0; // 0 = main menu, 1 = game
 
 float resolutionScale;
 
@@ -54,7 +57,9 @@ int main(int argc, char *argv[])
         deltaTime = SDL_GetTicks() - ticks;
         ticks = SDL_GetTicks();
 
-        printf("deltaTime: %d, %d fps         \r", deltaTime, (int)(1000 / (float)deltaTime));
+        //printf("deltaTime: %d, %d fps         \r", deltaTime, (int)(1000 / (float)deltaTime));
+
+        //printf("%d - ", textures.tank[0].isAlive);
 
         // Cap framerate to 250fps
         int delay = 5 - (int)deltaTime;
@@ -68,6 +73,11 @@ int main(int argc, char *argv[])
         render(&win, &ren, terrain, &textures);
 
         handleEvents(&quit, terrain, &textures);
+
+        if (gameState == 0)
+        {
+            initGame(&ren, &terrain, &textures);
+        }
     }
 
     quitGame(&textures, &terrain);
@@ -77,6 +87,8 @@ int main(int argc, char *argv[])
 
 static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
 {
+    gameState = 1;
+
     *terrain = generateTerrain(*ren, RESOLUTION_X, RESOLUTION_Y, TERRAIN_TYPE_MIDPOINT, (int)time(NULL));
 
     for (int i = 0; i < playerCount; i++)
@@ -134,6 +146,12 @@ static int initSDL(SDL_Window** win, SDL_Renderer** ren)
         return -1;
     }
 
+    if (TTF_Init() < 0)
+    {
+        printf("Failed to init SDL_ttf: %s\n", TTF_GetError());
+        return -1;
+    }
+
     *win = SDL_CreateWindow("tanks",
                             SDL_WINDOWPOS_CENTERED,
                             SDL_WINDOWPOS_CENTERED,
@@ -164,5 +182,7 @@ static void quitSDL(SDL_Window** win, SDL_Renderer** ren)
 {
     SDL_DestroyRenderer(*ren);
     SDL_DestroyWindow(*win);
+
+    TTF_Quit();
     SDL_Quit();
 }

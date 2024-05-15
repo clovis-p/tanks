@@ -7,8 +7,8 @@
 
 #include <SDL2/SDL.h>
 
-#define RESOLUTION_X 1280
-#define RESOLUTION_Y 720
+#define RESOLUTION_X 1920
+#define RESOLUTION_Y 1080
 
 extern Uint32 deltaTime;
 
@@ -18,6 +18,8 @@ extern int playerCount;
 extern float resolutionScale;
 
 extern int debugMode;
+
+extern int gameState;
 
 typedef struct gun_s
 {
