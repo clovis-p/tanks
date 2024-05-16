@@ -7,8 +7,10 @@
 
 #include <SDL2/SDL.h>
 
-#define RESOLUTION_X 1920
-#define RESOLUTION_Y 1080
+//#define RESOLUTION_X 1920
+//#define RESOLUTION_Y 1080
+#define RESOLUTION_X 1280
+#define RESOLUTION_Y 720
 
 extern Uint32 deltaTime;
 

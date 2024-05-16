@@ -140,16 +140,21 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
 
 static void initMenu(SDL_Renderer* ren, menutextures_s* menuTextures)
 {
-    TTF_Font* titleFont = TTF_OpenFont("../resources/fonts/DeltaBlock-Regular.ttf", RESOLUTION_Y / 4);
     SDL_Color white = {255, 255, 255, 255};
+    SDL_Color black = {0, 0, 0, 255};
+
+    TTF_Font* titleFont = TTF_OpenFont("../resources/fonts/DeltaBlock-Regular.ttf", RESOLUTION_Y / 4);
     createTextTexture(&menuTextures->title, &menuTextures->titleRect, ren, "TANKS", titleFont, white);
     menuTextures->titleRect.x = RESOLUTION_X / 2 - menuTextures->titleRect.w / 2;
     menuTextures->titleRect.y = RESOLUTION_Y / 4.0 - menuTextures->titleRect.h / 2;
+
+    menuTextures->startButton = createStartButton(ren, white, black, RESOLUTION_X / 2, RESOLUTION_Y / 8 * 5, RESOLUTION_X / 7, RESOLUTION_X / 7);
 }
 
 static void quitGame(textures_s* textures, menutextures_s* menuTextures, terrain_s** terrain)
 {
     SDL_DestroyTexture(menuTextures->title);
+    destroyButton(menuTextures->startButton);
 
     SDL_DestroyTexture(textures->tank[0].baseTexture);
     SDL_DestroyTexture(textures->tank[1].baseTexture);

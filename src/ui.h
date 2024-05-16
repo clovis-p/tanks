@@ -7,14 +7,27 @@
 
 #include <SDL2/SDL_ttf.h>
 
+typedef struct button_s
+{
+    SDL_Texture* textTexture;
+    SDL_Texture* buttonTexture;
+    SDL_Rect rect;
+    SDL_Rect textRect;
+    int actionFlag;
+    int pressed;
+} button_s;
+
 typedef struct menutextures_s
 {
     SDL_Texture* title;
     SDL_Rect titleRect;
-    SDL_Texture* startButton;
+    button_s* startButton;
     SDL_Texture* background;
 } menutextures_s;
 
 void createTextTexture(SDL_Texture** textTexture, SDL_Rect* textRect, SDL_Renderer* ren, char text[], TTF_Font* font, SDL_Color color);
+button_s* createButton(SDL_Renderer* ren, char text[], TTF_Font* font, SDL_Color bg, SDL_Color fg, int x, int y, int w, int h);
+button_s* createStartButton(SDL_Renderer* ren, SDL_Color bg, SDL_Color fg, int x, int y, int w, int h);
+void destroyButton(button_s* button);
 
 #endif //TANKS_UI_H

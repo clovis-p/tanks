@@ -80,8 +80,19 @@ void renderMenu(SDL_Window** win, SDL_Renderer** ren, menutextures_s* menuTextur
     SDL_RenderClear(*ren);
 
     SDL_RenderCopy(*ren, menuTextures->title, NULL, &menuTextures->titleRect);
+    renderButton(*ren, menuTextures->startButton);
 
     SDL_RenderPresent(*ren);
+}
+
+void renderButton(SDL_Renderer* ren, button_s* button)
+{
+    SDL_RenderCopy(ren, button->buttonTexture, NULL, &button->rect);
+
+    if (button->textTexture != NULL)
+    {
+        SDL_RenderCopy(ren, button->textTexture, NULL, &button->textRect);
+    }
 }
 
 static void renderDebugInfo(SDL_Renderer** ren, terrain_s* terrain, textures_s* textures)
