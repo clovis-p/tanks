@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
 
     initMenu(ren, &menuTextures);
     initGame(&ren, &terrain, &textures);
+    gameState = 0;
 
     while (!quit)
     {
