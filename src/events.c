@@ -37,13 +37,6 @@ void handleGlobalEvents(int *quit)
 
 void handleGameEvents(terrain_s* terrain, textures_s *textures)
 {
-    /*
-    if (showDebug)
-    {
-        printf("tank[0] angle: %d\n", textures->tank[0].angle);
-    }
-     */
-
     // tank
     if (!textures->bullet.active)
     {
@@ -72,7 +65,8 @@ void handleGameEvents(terrain_s* terrain, textures_s *textures)
     {
         fire = 1;
     }
-    else if (fire) {
+    else if (fire)
+    {
         fireBullet(&textures->bullet, &textures->tank[turn]);
         fire = 0;
 
@@ -130,17 +124,6 @@ void handleGameEvents(terrain_s* terrain, textures_s *textures)
     {
         lockEsc = 0;
     }
-
-    /*
-    if (keyStates[SDL_SCANCODE_T])
-    {
-        SDL_Delay(50);
-    }
-    else
-    {
-        SDL_Delay(10);
-    }
-    */
 }
 
 void handleMenuEvents(menutextures_s* menuTextures)
@@ -152,10 +135,10 @@ void handleMenuEvents(menutextures_s* menuTextures)
     if (keyStates[SDL_SCANCODE_RETURN] && !lockEnter)
     {
         gameState = 1;
-
         lockEnter = 1;
     }
-    else if (!keyStates[SDL_SCANCODE_RETURN]) {
+    else if (!keyStates[SDL_SCANCODE_RETURN])
+    {
         lockEnter = 0;
     }
 }
