@@ -8,7 +8,7 @@
 #include "terrain/terrain.h"
 #include "ui.h"
 
-void handleGlobalEvents(int *quit);
+void handleEvents(int *quit, terrain_s* terrain, textures_s* textures, menutextures_s* menuTextures);
 void handleGameEvents(terrain_s* terrain, textures_s* textures);
 void handleMenuEvents(menutextures_s* menuTextures);
 

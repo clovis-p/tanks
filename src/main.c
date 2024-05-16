@@ -68,11 +68,10 @@ int main(int argc, char *argv[])
             SDL_Delay(delay);
         }
 
-        handleGlobalEvents(&quit);
+        handleEvents(&quit, terrain, &textures, &menuTextures);
 
         if (gameState == 0)
         {
-            handleMenuEvents(&menuTextures);
             renderMenu(&win, &ren, &menuTextures);
         }
         else if (gameState == 1)
@@ -83,7 +82,6 @@ int main(int argc, char *argv[])
         {
             updateBullet(&textures, terrain);
             render(&win, &ren, terrain, &textures);
-            handleGameEvents(terrain, &textures);
         }
         else
         {

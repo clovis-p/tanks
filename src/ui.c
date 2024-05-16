@@ -86,9 +86,14 @@ void destroyButton(button_s* button)
     free(button);
 }
 
-void updateButton(button_s* button)
+void updateButton(SDL_Event* event, button_s* button)
 {
     button->isHovered = isButtonHovered(button);
+
+    if (event->button.type == SDL_MOUSEBUTTONDOWN && event->button.which == 0 && button->isHovered)
+    {
+        button->actionFlag = 1;
+    }
 }
 
 static int isButtonHovered(button_s* button)

@@ -20,7 +20,7 @@ static SDL_Event event;
 
 const Uint8 *keyStates;
 
-void handleGlobalEvents(int *quit)
+void handleEvents(int *quit, terrain_s* terrain, textures_s* textures, menutextures_s* menuTextures)
 {
     keyStates = SDL_GetKeyboardState(NULL);
 
@@ -32,6 +32,15 @@ void handleGlobalEvents(int *quit)
     if (event.type == SDL_QUIT || (keyStates[SDL_SCANCODE_LALT] && keyStates[SDL_SCANCODE_F4]))
     {
         *quit = 1;
+    }
+
+    if (gameState == 0)
+    {
+        handleMenuEvents(menuTextures);
+    }
+    else
+    {
+        handleGameEvents(terrain, textures);
     }
 }
 
@@ -128,7 +137,7 @@ void handleGameEvents(terrain_s* terrain, textures_s *textures)
 
 void handleMenuEvents(menutextures_s* menuTextures)
 {
-    updateButton(menuTextures->startButton);
+    updateButton(&event, menuTextures->startButton);
 
     static int lockEnter = 0;
 
@@ -140,5 +149,11 @@ void handleMenuEvents(menutextures_s* menuTextures)
     else if (!keyStates[SDL_SCANCODE_RETURN])
     {
         lockEnter = 0;
+    }
+
+    if (menuTextures->startButton->actionFlag)
+    {
+        menuTextures->startButton->actionFlag = 0;
+        gameState = 1;
     }
 }

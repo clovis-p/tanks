@@ -30,6 +30,6 @@ void createTextTexture(SDL_Texture** textTexture, SDL_Rect* textRect, SDL_Render
 button_s* createButton(SDL_Renderer* ren, char text[], TTF_Font* font, SDL_Color bg, SDL_Color fg, int x, int y, int w, int h);
 button_s* createStartButton(SDL_Renderer* ren, SDL_Color bg, SDL_Color fg, int x, int y, int w, int h);
 void destroyButton(button_s* button);
-void updateButton(button_s* button);
+void updateButton(SDL_Event* event, button_s* button);
 
 #endif //TANKS_UI_H
