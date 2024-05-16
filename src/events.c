@@ -139,18 +139,6 @@ void handleMenuEvents(menutextures_s* menuTextures)
 {
     updateButton(&event, menuTextures->startButton);
 
-    static int lockEnter = 0;
-
-    if (keyStates[SDL_SCANCODE_RETURN] && !lockEnter)
-    {
-        gameState = 1;
-        lockEnter = 1;
-    }
-    else if (!keyStates[SDL_SCANCODE_RETURN])
-    {
-        lockEnter = 0;
-    }
-
     if (menuTextures->startButton->actionFlag)
     {
         menuTextures->startButton->actionFlag = 0;
