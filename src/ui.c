@@ -8,6 +8,8 @@
 #include "main.h"
 #include "ui.h"
 
+static int isButtonHovered(button_s* button);
+
 void createTextTexture(SDL_Texture** textTexture, SDL_Rect* textRect, SDL_Renderer* ren, char text[], TTF_Font* font, SDL_Color color)
 {
     SDL_Surface* textSurface = TTF_RenderText_Blended(font, text, color);
@@ -47,6 +49,10 @@ button_s* createStartButton(SDL_Renderer* ren, SDL_Color bg, SDL_Color fg, int c
     startButton->rect.w = w;
     startButton->rect.h = h;
 
+    startButton->isHovered = 0;
+    startButton->actionFlag = 0;
+    startButton->pressed = 0;
+
     SDL_SetRenderTarget(ren, startButton->buttonTexture);
     SDL_SetRenderDrawColor(ren, bg.r, bg.g, bg.b, bg.a);
 
@@ -78,4 +84,25 @@ void destroyButton(button_s* button)
     }
 
     free(button);
+}
+
+void updateButton(button_s* button)
+{
+    button->isHovered = isButtonHovered(button);
+}
+
+static int isButtonHovered(button_s* button)
+{
+    int ret = 0;
+
+    int mx, my;
+    SDL_GetMouseState(&mx, &my);
+
+    if (mx >= button->rect.x && mx <= button->rect.x + button->rect.w &&
+        my >= button->rect.y && my <= button->rect.y + button->rect.h)
+    {
+        ret = 1;
+    }
+
+    return ret;
 }

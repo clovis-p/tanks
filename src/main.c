@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 
         if (gameState == 0)
         {
-            handleMenuEvents();
+            handleMenuEvents(&menuTextures);
             renderMenu(&win, &ren, &menuTextures);
         }
         else if (gameState == 1)

@@ -6,10 +6,11 @@
 #define TANKS_EVENTS_H
 
 #include "terrain/terrain.h"
+#include "ui.h"
 
 void handleGlobalEvents(int *quit);
 void handleGameEvents(terrain_s* terrain, textures_s* textures);
-void handleMenuEvents();
+void handleMenuEvents(menutextures_s* menuTextures);
 
 extern int showDebug;
 

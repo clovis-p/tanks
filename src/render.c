@@ -93,6 +93,15 @@ void renderButton(SDL_Renderer* ren, button_s* button)
     {
         SDL_RenderCopy(ren, button->textTexture, NULL, &button->textRect);
     }
+
+    if (button->isHovered)
+    {
+        SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND);
+
+        SDL_SetRenderDrawColor(ren, 255, 255, 255, 128);
+        SDL_RenderFillRect(ren, &button->rect);
+        SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
+    }
 }
 
 static void renderDebugInfo(SDL_Renderer** ren, terrain_s* terrain, textures_s* textures)

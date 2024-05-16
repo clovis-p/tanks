@@ -11,6 +11,7 @@
 #include "terrain/terrain.h"
 #include "tank.h"
 #include "bullet.h"
+#include "ui.h"
 
 int showDebug;
 int debugMode;
@@ -142,8 +143,10 @@ void handleGameEvents(terrain_s* terrain, textures_s *textures)
     */
 }
 
-void handleMenuEvents()
+void handleMenuEvents(menutextures_s* menuTextures)
 {
+    updateButton(menuTextures->startButton);
+
     static int lockEnter = 0;
 
     if (keyStates[SDL_SCANCODE_RETURN] && !lockEnter)
