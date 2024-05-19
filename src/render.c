@@ -81,6 +81,10 @@ void renderMenu(SDL_Window** win, SDL_Renderer** ren, menutextures_s* menuTextur
 
     SDL_RenderCopy(*ren, menuTextures->title, NULL, &menuTextures->titleRect);
     renderButton(*ren, menuTextures->startButton);
+    renderButton(*ren, menuTextures->decreasePlayerCountButton);
+    renderButton(*ren, menuTextures->increasePlayerCountButton);
+    updatePlayerCountDisplay(*ren, menuTextures);
+    SDL_RenderCopy(*ren, menuTextures->playerCountDisplay, NULL, &menuTextures->playerCountDisplayRect);
 
     SDL_RenderPresent(*ren);
 }

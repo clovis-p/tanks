@@ -10,15 +10,16 @@
 
 static int isButtonHovered(button_s* button);
 
-void createTextTexture(SDL_Texture** textTexture, SDL_Rect* textRect, SDL_Renderer* ren, char text[], TTF_Font* font, SDL_Color color)
+SDL_Texture* createTextTexture(SDL_Rect* textRect, SDL_Renderer* ren, char text[], TTF_Font* font, SDL_Color color)
 {
     SDL_Surface* textSurface = TTF_RenderText_Blended(font, text, color);
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(ren, textSurface);
 
-    *textTexture = SDL_CreateTextureFromSurface(ren, textSurface);
-
-    SDL_QueryTexture(*textTexture, NULL, NULL, &textRect->w, &textRect->h);
+    SDL_QueryTexture(textTexture, NULL, NULL, &textRect->w, &textRect->h);
 
     SDL_FreeSurface(textSurface);
+
+    return textTexture;
 }
 
 button_s* createButton(SDL_Renderer* ren, char text[], TTF_Font* font, SDL_Color bg, SDL_Color fg, int x, int y, int w, int h)
@@ -93,6 +94,22 @@ void updateButton(SDL_Event* event, button_s* button)
     if (event->button.type == SDL_MOUSEBUTTONDOWN && event->button.which == 0 && button->isHovered)
     {
         button->actionFlag = 1;
+    }
+}
+
+void updatePlayerCountDisplay(SDL_Renderer* ren, menutextures_s* menuTextures)
+{
+    if (menuTextures->updatePlayerCount)
+    {
+        char buf[2];
+        if (playerCount <= 4)
+        {
+            sprintf(buf, "%d", playerCount);
+        }
+
+        SDL_DestroyTexture(menuTextures->playerCountDisplay);
+        menuTextures->playerCountDisplay = createTextTexture(&menuTextures->playerCountDisplayRect,
+                                                             ren, buf, menuTextures->freeSans, menuTextures->uiFg);
     }
 }
 

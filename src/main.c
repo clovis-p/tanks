@@ -97,6 +97,8 @@ int main(int argc, char *argv[])
 
 static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textures)
 {
+    turn = 0;
+
     *terrain = generateTerrain(*ren, RESOLUTION_X, RESOLUTION_Y, TERRAIN_TYPE_MIDPOINT, (int)time(NULL));
 
     for (int i = 0; i < playerCount; i++)
@@ -139,22 +141,54 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
 
 static void initMenu(SDL_Renderer* ren, menutextures_s* menuTextures)
 {
-    SDL_Color white = {255, 255, 255, 255};
-    SDL_Color black = {0, 0, 0, 255};
+    menuTextures->uiBg.r = 0;
+    menuTextures->uiBg.g = 0;
+    menuTextures->uiBg.b = 0;
+    menuTextures->uiBg.a = 255;
 
-    TTF_Font* titleFont = TTF_OpenFont("../resources/fonts/DeltaBlock-Regular.ttf", RESOLUTION_Y / 4);
-    createTextTexture(&menuTextures->title, &menuTextures->titleRect, ren, "TANKS", titleFont, white);
+    menuTextures->uiFg.r = 255;
+    menuTextures->uiFg.g = 255;
+    menuTextures->uiFg.b = 255;
+    menuTextures->uiFg.a = 255;
+
+    menuTextures->titleFont = TTF_OpenFont("../resources/fonts/DeltaBlock/DeltaBlock-Regular.ttf", RESOLUTION_Y / 4);
+    menuTextures->freeSans = TTF_OpenFont("../resources/fonts/freefont/FreeSans.ttf", RESOLUTION_Y / 10);
+    menuTextures->title = createTextTexture(&menuTextures->titleRect, ren, "TANKS",
+                                            menuTextures->titleFont, menuTextures->uiFg);
     menuTextures->titleRect.x = RESOLUTION_X / 2 - menuTextures->titleRect.w / 2;
     menuTextures->titleRect.y = RESOLUTION_Y / 4 - menuTextures->titleRect.h / 2;
 
-    menuTextures->startButton = createArrowButton(ren, white, black, RESOLUTION_X / 2, RESOLUTION_Y / 8 * 5,
+    menuTextures->startButton = createArrowButton(ren, menuTextures->uiFg, menuTextures->uiBg, RESOLUTION_X / 2, RESOLUTION_Y / 8 * 5,
                                                   RESOLUTION_X / 7, RESOLUTION_X / 7);
+
+    char buf[2];
+    if (playerCount <= 4)
+    {
+        sprintf(buf, "%d", playerCount);
+    }
+    menuTextures->playerCountDisplay = createTextTexture(&menuTextures->playerCountDisplayRect,
+                                                         ren, buf, menuTextures->freeSans, menuTextures->uiFg);
+    menuTextures->playerCountDisplayRect.x = RESOLUTION_X / 4 - menuTextures->playerCountDisplayRect.w / 2;
+    menuTextures->playerCountDisplayRect.y = RESOLUTION_Y / 2 - menuTextures->playerCountDisplayRect.h / 2;
+
+    menuTextures->increasePlayerCountButton = createArrowButton(ren, menuTextures->uiFg, menuTextures->uiBg,
+                                                                RESOLUTION_X / 4,
+                                                                RESOLUTION_Y / 2 - RESOLUTION_X / 14,
+                                                                RESOLUTION_X / 14, RESOLUTION_X / 14);
+    menuTextures->decreasePlayerCountButton = createArrowButton(ren, menuTextures->uiFg, menuTextures->uiBg,
+                                                                RESOLUTION_X / 4,
+                                                                RESOLUTION_Y / 2 + RESOLUTION_X / 14,
+                                                                RESOLUTION_X / 14, RESOLUTION_X / 14);
+    menuTextures->updatePlayerCount = 0;
 }
 
 static void quitGame(textures_s* textures, menutextures_s* menuTextures, terrain_s** terrain)
 {
     SDL_DestroyTexture(menuTextures->title);
+    SDL_DestroyTexture(menuTextures->playerCountDisplay);
     destroyButton(menuTextures->startButton);
+    destroyButton(menuTextures->increasePlayerCountButton);
+    destroyButton(menuTextures->decreasePlayerCountButton);
 
     SDL_DestroyTexture(textures->tank[0].baseTexture);
     SDL_DestroyTexture(textures->tank[1].baseTexture);

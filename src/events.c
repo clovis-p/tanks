@@ -144,4 +144,22 @@ void handleMenuEvents(menutextures_s* menuTextures)
         menuTextures->startButton->actionFlag = 0;
         gameState = 1;
     }
+
+    updateButton(&event, menuTextures->increasePlayerCountButton);
+
+    if (menuTextures->increasePlayerCountButton->actionFlag && playerCount < 4)
+    {
+        menuTextures->increasePlayerCountButton->actionFlag = 0;
+        playerCount++;
+        menuTextures->updatePlayerCount = 1;
+    }
+
+    updateButton(&event, menuTextures->decreasePlayerCountButton);
+
+    if (menuTextures->decreasePlayerCountButton->actionFlag && playerCount > 1)
+    {
+        menuTextures->decreasePlayerCountButton->actionFlag = 0;
+        playerCount--;
+        menuTextures->updatePlayerCount = 1;
+    }
 }
