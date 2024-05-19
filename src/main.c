@@ -190,12 +190,12 @@ static void quitGame(textures_s* textures, menutextures_s* menuTextures, terrain
     destroyButton(menuTextures->increasePlayerCountButton);
     destroyButton(menuTextures->decreasePlayerCountButton);
 
-    SDL_DestroyTexture(textures->tank[0].baseTexture);
-    SDL_DestroyTexture(textures->tank[1].baseTexture);
-    SDL_DestroyTexture(textures->tank[0].combinedTexture);
-    SDL_DestroyTexture(textures->tank[1].combinedTexture);
-    SDL_DestroyTexture(textures->tank[0].gun.texture);
-    SDL_DestroyTexture(textures->tank[1].gun.texture);
+    for (int i = 0; i < 4; i++)
+    {
+        SDL_DestroyTexture(textures->tank[i].baseTexture);
+        SDL_DestroyTexture(textures->tank[i].combinedTexture);
+        SDL_DestroyTexture(textures->tank[i].gun.texture);
+    }
     free(*terrain);
 }
 
