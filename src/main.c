@@ -145,9 +145,10 @@ static void initMenu(SDL_Renderer* ren, menutextures_s* menuTextures)
     TTF_Font* titleFont = TTF_OpenFont("../resources/fonts/DeltaBlock-Regular.ttf", RESOLUTION_Y / 4);
     createTextTexture(&menuTextures->title, &menuTextures->titleRect, ren, "TANKS", titleFont, white);
     menuTextures->titleRect.x = RESOLUTION_X / 2 - menuTextures->titleRect.w / 2;
-    menuTextures->titleRect.y = RESOLUTION_Y / 4.0 - menuTextures->titleRect.h / 2;
+    menuTextures->titleRect.y = RESOLUTION_Y / 4 - menuTextures->titleRect.h / 2;
 
-    menuTextures->startButton = createStartButton(ren, white, black, RESOLUTION_X / 2, RESOLUTION_Y / 8 * 5, RESOLUTION_X / 7, RESOLUTION_X / 7);
+    menuTextures->startButton = createArrowButton(ren, white, black, RESOLUTION_X / 2, RESOLUTION_Y / 8 * 5,
+                                                  RESOLUTION_X / 7, RESOLUTION_X / 7);
 }
 
 static void quitGame(textures_s* textures, menutextures_s* menuTextures, terrain_s** terrain)

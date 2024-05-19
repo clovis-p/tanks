@@ -38,7 +38,7 @@ button_s* createButton(SDL_Renderer* ren, char text[], TTF_Font* font, SDL_Color
     return button;
 }
 
-button_s* createStartButton(SDL_Renderer* ren, SDL_Color bg, SDL_Color fg, int centerX, int centerY, int w, int h)
+button_s* createArrowButton(SDL_Renderer* ren, SDL_Color bg, SDL_Color fg, int centerX, int centerY, int w, int h)
 {
     button_s* startButton = (button_s*)malloc(sizeof(button_s));
     startButton->textTexture = NULL;
