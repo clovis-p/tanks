@@ -96,7 +96,13 @@ button_s* createArrowButton(SDL_Renderer* ren, SDL_Color bg, SDL_Color fg, int c
             y3 = (Sint16)(h / 4.0);
             break;
         default:
-            return NULL; //todo?
+            // Draw a right arrow if the specified direction is invalid
+            x1 = (Sint16)(w / 4.0);
+            y1 = (Sint16)(h / 4.0);
+            x2 = (Sint16)(w / 4.0);
+            y2 = (Sint16)(h / 4.0 * 3);
+            x3 = (Sint16)(w / 4.0 * 3);
+            y3 = (Sint16)(h / 2.0);
     }
 
     aatrigonRGBA(ren, x1, y1, x2, y2, x3, y3, fg.r, fg.b, fg.b, fg.a);
