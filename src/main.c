@@ -119,21 +119,10 @@ static void initGame(SDL_Renderer** ren, terrain_s** terrain, textures_s* textur
     }
 
     // Set tank spawn points
-    if (playerCount >= 1)
+    float spaceBetweenTanks = (float)RESOLUTION_X / ((float)playerCount + 1);
+    for (int i = 0; i < playerCount; i++)
     {
-        teleportTank(&textures->tank[0], (float)RESOLUTION_X / 5, *terrain);
-    }
-    if (playerCount >= 2)
-    {
-        teleportTank(&textures->tank[1], (float)RESOLUTION_X / 5 * 4, *terrain);
-    }
-    if (playerCount >= 3)
-    {
-        teleportTank(&textures->tank[2], (float)RESOLUTION_X / 5 * 2, *terrain);
-    }
-    if (playerCount >= 4)
-    {
-        teleportTank(&textures->tank[3], (float)RESOLUTION_X / 5 * 3, *terrain);
+        teleportTank(&textures->tank[i], (float)(i + 1) * spaceBetweenTanks, *terrain);
     }
 
     gameState = 2;
