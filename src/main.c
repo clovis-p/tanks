@@ -159,7 +159,7 @@ static void initMenu(SDL_Renderer* ren, menutextures_s* menuTextures)
     menuTextures->titleRect.y = RESOLUTION_Y / 4 - menuTextures->titleRect.h / 2;
 
     menuTextures->startButton = createArrowButton(ren, menuTextures->uiFg, menuTextures->uiBg, RESOLUTION_X / 2, RESOLUTION_Y / 8 * 5,
-                                                  RESOLUTION_X / 7, RESOLUTION_X / 7);
+                                                  RESOLUTION_X / 7, RESOLUTION_X / 7, ARROW_DIRECTION_RIGHT);
 
     char buf[2];
     if (playerCount <= 4)
@@ -174,11 +174,13 @@ static void initMenu(SDL_Renderer* ren, menutextures_s* menuTextures)
     menuTextures->increasePlayerCountButton = createArrowButton(ren, menuTextures->uiFg, menuTextures->uiBg,
                                                                 RESOLUTION_X / 4,
                                                                 RESOLUTION_Y / 2 - RESOLUTION_X / 14,
-                                                                RESOLUTION_X / 14, RESOLUTION_X / 14);
+                                                                RESOLUTION_X / 14, RESOLUTION_X / 14,
+                                                                ARROW_DIRECTION_UP);
     menuTextures->decreasePlayerCountButton = createArrowButton(ren, menuTextures->uiFg, menuTextures->uiBg,
                                                                 RESOLUTION_X / 4,
                                                                 RESOLUTION_Y / 2 + RESOLUTION_X / 14,
-                                                                RESOLUTION_X / 14, RESOLUTION_X / 14);
+                                                                RESOLUTION_X / 14, RESOLUTION_X / 14,
+                                                                ARROW_DIRECTION_DOWN);
     menuTextures->updatePlayerCount = 0;
 }
 

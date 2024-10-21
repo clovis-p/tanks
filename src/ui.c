@@ -39,7 +39,7 @@ button_s* createButton(SDL_Renderer* ren, char text[], TTF_Font* font, SDL_Color
     return button;
 }
 
-button_s* createArrowButton(SDL_Renderer* ren, SDL_Color bg, SDL_Color fg, int centerX, int centerY, int w, int h)
+button_s* createArrowButton(SDL_Renderer* ren, SDL_Color bg, SDL_Color fg, int centerX, int centerY, int w, int h, int direction)
 {
     button_s* startButton = (button_s*)malloc(sizeof(button_s));
     startButton->textTexture = NULL;
@@ -59,15 +59,48 @@ button_s* createArrowButton(SDL_Renderer* ren, SDL_Color bg, SDL_Color fg, int c
 
     SDL_RenderClear(ren);
 
-    aatrigonRGBA(ren, (Sint16)(w / 4.0), (Sint16)(h / 4.0),
-                 (Sint16)(w / 4.0), (Sint16)(h / 4.0 * 3),
-                 (Sint16)(w / 4.0 * 3), (Sint16)(h / 2),
-                 fg.r, fg.b, fg.b, fg.a);
+    Sint16 x1, y1, x2, y2, x3, y3;
 
-    filledTrigonRGBA(ren, (Sint16)(w / 4.0), (Sint16)(h / 4.0),
-                 (Sint16)(w / 4.0), (Sint16)(h / 4.0 * 3),
-                 (Sint16)(w / 4.0 * 3), (Sint16)(h / 2),
-                 fg.r, fg.b, fg.b, fg.a);
+    switch (direction)
+    {
+        case ARROW_DIRECTION_RIGHT:
+            x1 = (Sint16)(w / 4.0);
+            y1 = (Sint16)(h / 4.0);
+            x2 = (Sint16)(w / 4.0);
+            y2 = (Sint16)(h / 4.0 * 3);
+            x3 = (Sint16)(w / 4.0 * 3);
+            y3 = (Sint16)(h / 2.0);
+            break;
+        case ARROW_DIRECTION_DOWN:
+            x1 = (Sint16)(w / 4.0);
+            y1 = (Sint16)(h / 4.0);
+            x2 = (Sint16)(w / 4.0 * 3);
+            y2 = (Sint16)(h / 4.0);
+            x3 = (Sint16)(w / 2.0);
+            y3 = (Sint16)(h / 4.0 * 3);
+            break;
+        case ARROW_DIRECTION_LEFT:
+            x1 = (Sint16)(w / 4.0 * 3);
+            y1 = (Sint16)(h / 4.0);
+            x2 = (Sint16)(w / 4.0 * 3);
+            y2 = (Sint16)(h / 4.0 * 3);
+            x3 = (Sint16)(w / 4.0);
+            y3 = (Sint16)(h / 2.0);
+            break;
+        case ARROW_DIRECTION_UP:
+            x1 = (Sint16)(w / 4.0);
+            y1 = (Sint16)(h / 4.0 * 3);
+            x2 = (Sint16)(w / 4.0 * 3);
+            y2 = (Sint16)(h / 4.0 * 3);
+            x3 = (Sint16)(w / 2.0);
+            y3 = (Sint16)(h / 4.0);
+            break;
+        default:
+            return NULL; //todo?
+    }
+
+    aatrigonRGBA(ren, x1, y1, x2, y2, x3, y3, fg.r, fg.b, fg.b, fg.a);
+    filledTrigonRGBA(ren, x1, y1, x2, y2, x3, y3, fg.r, fg.b, fg.b, fg.a);
 
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
     SDL_SetRenderTarget(ren, NULL);

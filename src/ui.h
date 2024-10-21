@@ -7,6 +7,11 @@
 
 #include <SDL2/SDL_ttf.h>
 
+#define ARROW_DIRECTION_UP 0
+#define ARROW_DIRECTION_RIGHT 1
+#define ARROW_DIRECTION_DOWN 2
+#define ARROW_DIRECTION_LEFT 3
+
 typedef struct button_s
 {
     SDL_Texture* textTexture;
@@ -39,7 +44,7 @@ typedef struct menutextures_s
 
 SDL_Texture* createTextTexture(SDL_Rect* textRect, SDL_Renderer* ren, char text[], TTF_Font* font, SDL_Color color);
 button_s* createButton(SDL_Renderer* ren, char text[], TTF_Font* font, SDL_Color bg, SDL_Color fg, int x, int y, int w, int h);
-button_s* createArrowButton(SDL_Renderer* ren, SDL_Color bg, SDL_Color fg, int centerX, int centerY, int w, int h);
+button_s* createArrowButton(SDL_Renderer* ren, SDL_Color bg, SDL_Color fg, int centerX, int centerY, int w, int h, int direction);
 void destroyButton(button_s* button);
 void updateButton(SDL_Event* event, button_s* button);
 void updatePlayerCountDisplay(SDL_Renderer* ren, menutextures_s* menuTextures);
