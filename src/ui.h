@@ -7,6 +7,11 @@
 
 #include <SDL2/SDL_ttf.h>
 
+#define ARROW_DIRECTION_UP 0
+#define ARROW_DIRECTION_RIGHT 1
+#define ARROW_DIRECTION_DOWN 2
+#define ARROW_DIRECTION_LEFT 3
+
 typedef struct button_s
 {
     SDL_Texture* textTexture;
